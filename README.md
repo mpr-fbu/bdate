@@ -27,3 +27,35 @@ This leads to camera screen or settings screen
 
 Settings screen (does it need ot be implemented?):
 Basic configs
+
+Evaluating Product Ideas
+What makes for a "good" app idea? When evaluating projects, be sure to consider the following five elements:
+
+Mobile: How uniquely mobile is the product experience?
+What makes your app more than a glorified website?
+Try for 2 or more of these: maps, camera, location, audio, sensors, push, real-time, etc
+
+Story: How compelling is the story around this app once completed?
+How clear is the value of this app to your audience?
+How well would your friends or peers respond to this product idea?
+
+Market: How large or unique is the market for this app?
+What's the size and scale of your potential user base?
+Does this app provide huge value to a niche group of people?
+Do you have a well-defined audience of people for this app?
+
+Habit: How habit-forming or addictive is this app?
+How frequently would an average user open and use this app?
+Does an average user just consume your app or do they create?
+
+Scope: How well-formed is the scope for this app?
+How technically challenging will it be to complete this app by the end of the program?
+Is a stripped-down version of this app still interesting to build?
+How clearly defined is the product you want to build?
+
+Good reads:
+https://www.huffingtonpost.com/david-wygant/the-shocking-truth-about-_3_b_4967472.html
+https://www.esquire.com/uk/life/sex-relationships/news/a6170/7-alternatives-dating-apps-to-tinder/
+https://www.elitedaily.com/dating/use-tinder-for-same-reason-not-dating/1839174
+https://theoutline.com/post/3402/tinder-is-not-actually-for-meeting-anyone?zd=1&zi=s5q3wkak
+https://www.theodysseyonline.com/7-reasons-why-tinder-is-bad-idea
