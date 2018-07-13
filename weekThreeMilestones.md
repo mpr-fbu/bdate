@@ -19,13 +19,12 @@ What technical features do you need help or resources for?
 
 ## REQUIRED USER STORIES
 
-Activities/fragments that are required:
-- Log in and sign up
+### Log in and sign up
 Tasks:
 - Setup a Parse Server
 - Create UI
 
-- Chats Actitivy
+### Chats Actitivy
 Tasks:
 - Setup fragments for active chats list and the fragment for specific chats
 - Setup models for chats
@@ -36,7 +35,7 @@ Tasks:
 - Navigation bar
 - Logout button (ActionBar)
 
-- Specific chat screen
+### Specific chat screen
 Tasks:
 - Text bar for input and send button
 - RecyclerView with Adapter to display messages
@@ -47,8 +46,6 @@ Tasks:
 
 ## OPTIONAL STUFF
 
-- Other users profile fragment
-Tasks:
 - Choose from Library/Take Profile Pic
 - Display points between users
 - Show categories to unlock and its buttons
