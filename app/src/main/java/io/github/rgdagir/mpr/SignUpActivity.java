@@ -33,19 +33,19 @@ public class SignUpActivity extends AppCompatActivity {
         etPasswordSignUp = findViewById(R.id.passwordSignUp);
         signupBtn = findViewById(R.id.signUpBtn);
 
-        // Create the ParseUser
-        final ParseUser user = new ParseUser();
-        // Set core properties
-        user.setUsername(etEmailSignUp.toString());
-        user.setPassword(etPasswordSignUp.toString());
-        user.setEmail(etEmailSignUp.toString());
-        // Set custom properties
-        user.put("firstName", etFirstNameSignUp.toString());
-        user.put("lastName", etLastNameSignUp.toString());
         // Invoke signUpInBackground when user clicks the button
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Create the ParseUser
+                ParseUser user = new ParseUser();
+                // Set core properties
+                user.setUsername(etEmailSignUp.getText().toString());
+                user.setPassword(etPasswordSignUp.getText().toString());
+                user.setEmail(etEmailSignUp.getText().toString());
+                // Set custom properties
+                user.put("firstName", etFirstNameSignUp.getText().toString());
+                user.put("lastName", etLastNameSignUp.getText().toString());
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
