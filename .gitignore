@@ -131,5 +131,6 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 .DS_Store
 secrets.xml
+workspace.xml
 
 # End of https://www.gitignore.io/api/androidstudio
