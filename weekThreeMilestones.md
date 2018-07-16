@@ -1,8 +1,11 @@
 # FBU - WEEK THREE MILESTONES
 
 ## CONSIDERATIONS
-What is your product pitch?
+- What is your product pitch?
+X is a new Android app to help you connect with people through menaingful conversations in a seemingly shallow digital world, without giving out your personal information to complete strangers. Sign up now! 
+
 Start with a problem statement and follow up with a solution.
+
 Focus on engaging your audience with a relatable need.
 Who are the key stakeholders for this app?
 Who will be using this?
