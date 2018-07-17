@@ -35,6 +35,5 @@ dependencies {
     implementation "com.android.support:support-v4:${supportLibVersion}"
     implementation 'com.parse.bolts:bolts-android:1.4.0'
     implementation 'com.parse:parse-android:1.17.3'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
-    // for logging API calls to LogCat
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1' // for logging API calls to LogCat
 }
