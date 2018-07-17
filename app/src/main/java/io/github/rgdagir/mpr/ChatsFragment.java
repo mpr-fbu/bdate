@@ -1,4 +1,6 @@
 package io.github.rgdagir.mpr;
 
-public class ChatsFragment {
+import android.support.v4.app.Fragment;
+
+public class ChatsFragment extends Fragment {
 }

@@ -1,5 +1,6 @@
 package io.github.rgdagir.mpr;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,6 +51,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (user != null) {
                             // Launch app
                             Log.d(ACTIVITY_TAG, "Login success!");
+                            final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
                         } else {
                             // Signup failed. Look at the ParseException to see what happened.
                             Log.d(ACTIVITY_TAG, "Login failed :(");
