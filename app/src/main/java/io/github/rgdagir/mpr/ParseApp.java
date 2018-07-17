@@ -1,6 +1,8 @@
 package io.github.rgdagir.mpr;
 
 import android.app.Application;
+import android.content.Context;
+import android.util.Log;
 
 import com.parse.Parse;
 
@@ -8,6 +10,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class ParseApp extends Application {
+
+//    private String parseAppId = this.getResources().getString(R.string.parseAppId);
+//    private String parseServer = this.getResources().getString(R.string.parseServer);
     @Override
     public void onCreate() {
         super.onCreate();
@@ -26,10 +31,12 @@ public class ParseApp extends Application {
         // set applicationId, and server server based on the values in the Heroku settings.
         // clientKey is not needed unless explicitly configured
         // any network interceptors must be added with the Configuration Builder given this syntax
+        Log.d("ParseApp", this.getString(R.string.parseAppId));
+        Log.d("ParseApp", this.getString(R.string.parseServer));
         Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("mpr-fbu") // should correspond to APP_ID env variable
+                .applicationId(this.getString(R.string.parseAppId)) // should correspond to APP_ID env variable
                 .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server
                 .clientBuilder(builder)
-                .server("http://fbu-bdate.herokuapp.com/parse").build());
+                .server(this.getString(R.string.parseServer)).build());
     }
 }

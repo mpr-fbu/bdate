@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Mpr</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login">Log in</string>
+    <string name="signup">Sign Up</string>
+    <string name="firstName">First name...</string>
+    <string name="lastName">Last name...</string>
+    <string name="password">Password...</string>
+    <string name="confirmPassword">Confirm password...</string>
+    <string name="email">Email...</string>
 </resources>
