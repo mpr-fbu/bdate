@@ -14,21 +14,31 @@
         app:srcCompat="@android:color/darker_gray" />
 
     <TextView
-        android:id="@+id/tvComment"
+        android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/ivProfilePic"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/ivProfilePic"
-        android:text="Beginnging" />
+        android:textStyle="bold"
+        android:text="username" />
 
     <TextView
-        android:id="@+id/tvTimeStamp"
+        android:id="@+id/tvConversation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvComment"
-        android:layout_below="@+id/tvComment"
+        android:layout_alignLeft="@+id/tvUsername"
+        android:layout_below="@+id/tvUsername"
         android:layout_marginTop="5dp"
-        android:text="June 5" />
+        android:text="Hi! How are you..." />
+
+    <TextView
+        android:id="@+id/tvTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:text="1 hr ago" />
 
 </RelativeLayout>
