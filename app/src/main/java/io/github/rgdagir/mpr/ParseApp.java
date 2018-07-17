@@ -1,7 +1,6 @@
 package io.github.rgdagir.mpr;
 
 import android.app.Application;
-import android.content.Context;
 import android.util.Log;
 
 import com.parse.Parse;
