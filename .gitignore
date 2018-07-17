@@ -132,5 +132,7 @@ fabric.properties
 .DS_Store
 secrets.xml
 workspace.xml
+local.properties
+
 
 # End of https://www.gitignore.io/api/androidstudio
