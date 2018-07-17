@@ -27,9 +27,9 @@ public class ParseApp extends Application {
         // clientKey is not needed unless explicitly configured
         // any network interceptors must be added with the Configuration Builder given this syntax
         Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("@secrets/parseAppId") // should correspond to APP_ID env variable
+                .applicationId("mpr-fbu") // should correspond to APP_ID env variable
                 .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server
                 .clientBuilder(builder)
-                .server("@secrets/parseServer").build());
+                .server("http://fbu-bdate.herokuapp.com/parse").build());
     }
 }
