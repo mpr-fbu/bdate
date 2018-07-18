@@ -7,9 +7,7 @@ import com.parse.ParseUser;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 @ParseClassName("Conversation")
@@ -61,14 +59,6 @@ public class Conversation extends ParseObject {
         public Conversation.Query withUser() {
             include(KEY_USER1);
             include(KEY_USER2);
-            return this;
-        }
-
-        public Conversation.Query bothUsers(Conversation.Query query1, Conversation.Query query2) {
-            List<ParseQuery<Conversation>> queries = new ArrayList<>();
-            queries.add(query1);
-            queries.add(query2);
-            or(queries);
             return this;
         }
     }
