@@ -16,6 +16,7 @@ import java.util.Locale;
 public class Conversation extends ParseObject {
     private static final String KEY_USER1 = "user1";
     private static final String KEY_USER2 = "user2";
+    private static final String KEY_FULL = "full";
 
     public ParseUser getUser1() {
         return getParseUser(KEY_USER1);
@@ -47,6 +48,10 @@ public class Conversation extends ParseObject {
         DateFormat df2 = new SimpleDateFormat("hh:mm aaa", Locale.getDefault());
         return df.format(date) + " at " + df2.format(date);
     }
+
+    public Boolean getFull() {return getBoolean(KEY_FULL);}
+
+    public void setFull(Boolean full) {put(KEY_FULL, full);}
 
     public static class Query extends ParseQuery<Conversation> {
         public Query() {

@@ -4,12 +4,26 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.github.rgdagir.mpr.models.Conversation;
 
 public class SearchFragment extends Fragment {
     private SearchFragment.OnFragmentInteractionListener mListener;
+    private Button searchButton;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -25,6 +39,20 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        // Setup any handles to view objects here
+        // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
+        searchButton = view.findViewById(R.id.btnSearch);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchForOpenConvos();
+            }
+        });
     }
 
     @Override
@@ -47,6 +75,121 @@ public class SearchFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // Placeholder, to be inserted when clicking is introduced
         void onFragmentInteraction(Uri uri);
+    }
+
+    //searches for convos that have only one user and matches current user to other user if they're not already matched
+    //if all convos are full creates a new convo with only the current user
+    //a new convo must only have User1; User2 should be null
+    //users cannot open more than one new convo; somehow convo must delete itself after a time period or immediately before log out
+    public void searchForOpenConvos() {
+        final ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            final Conversation.Query convosQuery = new Conversation.Query();
+            convosQuery.findInBackground(new FindCallback<Conversation>() {
+                @Override
+                public void done(List<Conversation> objects, ParseException e) {
+                    if (e == null) {
+                        List<Conversation> openConvos = listOpenConvos(objects);
+                        List<Conversation> fullConvos = listFullConvos(objects);
+                        //first check user does not already have an open convo
+                        if (hasOpenConvo(currentUser, openConvos)) {
+                            Toast.makeText(getActivity(), "Already searching...", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        for (int i = 0; i < openConvos.size(); i++) {
+                            if (checkNotAlreadyMatched(openConvos.get(i).getUser1(), listAlreadyMatched(currentUser, fullConvos))) {
+                                //possible to get first/last name?
+                                Toast.makeText(getActivity(), "Match found! " + openConvos.get(i).getUser1().getUsername(), Toast.LENGTH_LONG).show();
+                                openConvos.get(i).setUser2(currentUser);
+                                openConvos.get(i).setFull(true);
+                                //start chat activity between currentUser and objects.get(i).getUser1()
+                                //other user gets notif and chat opens for them as well
+                            }
+                        }
+                        //open new convo if there does not already exist open convo with only current user
+                        Toast.makeText(getActivity(), "Match not found... continuing to search...", Toast.LENGTH_LONG).show();
+                        createConversation(currentUser, false);
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            Log.e("SearchFragment", "Current user is somehow null");
+        }
+    }
+
+    private void createConversation(ParseUser currentUser, boolean full) {
+        final Conversation newConvo = new Conversation();
+        newConvo.setUser1(currentUser);
+        newConvo.setFull(false);
+
+        newConvo.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("SearchFragment", "Create conversation success!");
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    //returns true if current user has open convo, otherwise returns false
+    public boolean hasOpenConvo(ParseUser currentUser, List<Conversation> openConvos) {
+        for (int i = 0; i < openConvos.size(); i++) {
+            if (openConvos.get(i).getUser1() == currentUser) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //goes through full conversations and returns a list of users already matched with the current user
+    public List<ParseUser> listAlreadyMatched(ParseUser currentUser, List<Conversation> fullConvos) {
+        List<ParseUser> currentMatches = new ArrayList<>();
+
+        for (int i = 0; i < fullConvos.size(); i++) {
+            if (fullConvos.get(i).getUser1() == currentUser) {
+                currentMatches.add(fullConvos.get(i).getUser2());
+            } else if (fullConvos.get(i).getUser2() == currentUser) {
+                currentMatches.add(fullConvos.get(i).getUser1());
+            }
+        }
+        return currentMatches;
+    }
+
+    //returns true if the users are not already matched, otherwise returns false
+    public boolean checkNotAlreadyMatched(ParseUser otherUser, List<ParseUser> currentMatches) {
+        for (int i = 0; i < currentMatches.size(); i++) {
+            if (otherUser == currentMatches.get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<Conversation> listOpenConvos(List<Conversation> allConvos) {
+        List<Conversation> openConvos = new ArrayList<>();
+
+        for (int i = 0; i < allConvos.size(); i++) {
+            if (!allConvos.get(i).getFull()) {
+                openConvos.add(allConvos.get(i));
+            }
+        }
+        return openConvos;
+    }
+
+    public List<Conversation> listFullConvos(List<Conversation> allConvos) {
+        List<Conversation> fullConvos = new ArrayList<>();
+
+        for (int i = 0; i < allConvos.size(); i++) {
+            if (allConvos.get(i).getFull()) {
+                fullConvos.add(allConvos.get(i));
+            }
+        }
+        return fullConvos;
     }
 
 }
