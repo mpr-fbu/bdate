@@ -44,16 +44,22 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         if (convo.getUser2() != null) {
             if (currentUser.getObjectId().equals(convo.getUser1().getObjectId())) {
                 holder.tvUsername.setText(convo.getUser2().getUsername());
-                Glide.with(context)
-                        .load(convo.getUser2().getParseFile("profilePic").getUrl())
-                        .centerCrop()
-                        .into(holder.ivProfilePic);
+                if (convo.getUser2().getParseFile("profilePic") != null) {
+                    Glide.with(context)
+                            .load(convo.getUser2().getParseFile("profilePic").getUrl())
+                            .placeholder(R.drawable.ic_action_name)
+                            .centerCrop()
+                            .into(holder.ivProfilePic);
+                }
             } else {
                 holder.tvUsername.setText(convo.getUser1().getUsername());
-                Glide.with(context)
-                        .load(convo.getUser1().getParseFile("profilePic").getUrl())
-                        .centerCrop()
-                        .into(holder.ivProfilePic);
+                if (convo.getUser1().getParseFile("profilePic") != null) {
+                    Glide.with(context)
+                            .load(convo.getUser1().getParseFile("profilePic").getUrl())
+                            .placeholder(R.drawable.ic_action_name)
+                            .centerCrop()
+                            .into(holder.ivProfilePic);
+                }
             }
         }
         holder.tvTimestamp.setText(convo.getTimestamp());

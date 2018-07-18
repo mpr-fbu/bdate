@@ -7,15 +7,14 @@ import com.parse.ParseUser;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 @ParseClassName("Conversation")
 public class Conversation extends ParseObject {
     private static final String KEY_USER1 = "user1";
     private static final String KEY_USER2 = "user2";
+    private static final String KEY_FULL = "full";
 
     public ParseUser getUser1() {
         return getParseUser(KEY_USER1);
@@ -48,6 +47,10 @@ public class Conversation extends ParseObject {
         return df.format(date) + " at " + df2.format(date);
     }
 
+    public Boolean getFull() {return getBoolean(KEY_FULL);}
+
+    public void setFull(Boolean full) {put(KEY_FULL, full);}
+
     public static class Query extends ParseQuery<Conversation> {
         public Query() {
             super(Conversation.class);
@@ -56,14 +59,6 @@ public class Conversation extends ParseObject {
         public Conversation.Query withUser() {
             include(KEY_USER1);
             include(KEY_USER2);
-            return this;
-        }
-
-        public Conversation.Query bothUsers(Conversation.Query query1, Conversation.Query query2) {
-            List<ParseQuery<Conversation>> queries = new ArrayList<>();
-            queries.add(query1);
-            queries.add(query2);
-            or(queries);
             return this;
         }
     }

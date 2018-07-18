@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -95,18 +96,18 @@ public class ChatsFragment extends Fragment {
     }
 
     private void populateConversations() {
-        final Conversation.Query convosQuery1 = new Conversation.Query();
         ParseUser currUser = ParseUser.getCurrentUser();
+        final ParseQuery<Conversation> convosQuery1 = new Conversation.Query();
         convosQuery1.whereEqualTo("user1", currUser);
-        final Conversation.Query convosQuery2 = new Conversation.Query();
+        final ParseQuery<Conversation> convosQuery2 = new Conversation.Query();
         convosQuery2.whereEqualTo("user2", currUser);
 
-        final Conversation.Query convosQuery = new Conversation.Query();
-        convosQuery.withUser().bothUsers(convosQuery1, convosQuery2).addDescendingOrder("updatedAt");
+        List<ParseQuery<Conversation>> queries = new ArrayList<>();
+        queries.add(convosQuery1);
+        queries.add(convosQuery2);
 
-        /* final Conversation.Query convosQuery = new Conversation.Query();
-        ParseUser currUser = ParseUser.getCurrentUser();
-        convosQuery.withUser().whereEqualTo("user1", currUser).orderByDescending("updatedAt"); */
+        final ParseQuery<Conversation> convosQuery = ParseQuery.or(queries).whereExists("user2").addDescendingOrder("updatedAt");
+        convosQuery.include("user1").include("user2");
         convosQuery.findInBackground(new FindCallback<Conversation>() {
             @Override
             public void done(List<Conversation> objects, ParseException e) {
