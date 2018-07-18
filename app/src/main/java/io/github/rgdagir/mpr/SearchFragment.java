@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -84,33 +85,20 @@ public class SearchFragment extends Fragment {
     public void searchForOpenConvos() {
         final ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
-            final Conversation.Query convosQuery = new Conversation.Query();
-            convosQuery.findInBackground(new FindCallback<Conversation>() {
+            final Conversation.Query openConvosQuery = new Conversation.Query();
+            openConvosQuery.whereDoesNotExist("user2");
+            openConvosQuery.findInBackground(new FindCallback<Conversation>() {
                 @Override
-                public void done(List<Conversation> objects, ParseException e) {
+                public void done(final List<Conversation> objects, ParseException e) {
                     if (e == null) {
-                        List<Conversation> openConvos = listOpenConvos(objects);
-                        List<Conversation> fullConvos = listFullConvos(objects);
-                        //first check user does not already have an open convo
-                        if (hasOpenConvo(currentUser, openConvos)) {
+                        //objects has list of open conversations
+                        if (hasOpenConvo(currentUser, objects)) {
                             Toast.makeText(getActivity(), "Already searching...", Toast.LENGTH_LONG).show();
                             return;
                         }
-                        for (int i = 0; i < openConvos.size(); i++) {
-                            if (checkNotAlreadyMatched(openConvos.get(i).getUser1(), listAlreadyMatched(currentUser, fullConvos))) {
-                                //possible to get first/last name?
-                                Toast.makeText(getActivity(), "Match found! " + openConvos.get(i).getUser1().getUsername(), Toast.LENGTH_LONG).show();
-                                openConvos.get(i).setUser2(currentUser);
-                                openConvos.get(i).setFull(true);
-                                //start chat activity between currentUser and objects.get(i).getUser1()
-                                //other user gets notif and chat opens for them as well
-                            }
-                        }
-                        //open new convo if there does not already exist open convo with only current user
-                        Toast.makeText(getActivity(), "Match not found... continuing to search...", Toast.LENGTH_LONG).show();
-                        createConversation(currentUser, false);
+                        searchForMatches(objects, currentUser);
                     } else {
-                        e.printStackTrace();
+                        Log.e("SearchFragment", "Error querying for open conversations");
                     }
                 }
             });
@@ -119,10 +107,41 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    private void createConversation(ParseUser currentUser, boolean full) {
+    private void searchForMatches(final List<Conversation> openConvos, final ParseUser currentUser) {
+        ParseQuery<Conversation> fullConvosQuery1 = ParseQuery.getQuery("user1");
+        fullConvosQuery1.whereEqualTo("user1", currentUser);
+
+        ParseQuery<Conversation> fullConvosQuery2 = ParseQuery.getQuery("user2");
+        fullConvosQuery2.whereEqualTo("user2", currentUser);
+
+        List<ParseQuery<Conversation>> queries = new ArrayList<ParseQuery<Conversation>>();
+        queries.add(fullConvosQuery1);
+        queries.add(fullConvosQuery2);
+
+        ParseQuery<Conversation> mainQuery = ParseQuery.or(queries);
+        mainQuery.findInBackground(new FindCallback<Conversation>() {
+            public void done(List<Conversation> results, ParseException e) {
+                // results has the list of full conversations in which the current user is participating in
+                for (int i = 0; i < openConvos.size(); i++) {
+                    if (checkNotAlreadyMatched(openConvos.get(i).getUser1(), listAlreadyMatched(currentUser, results))) {
+                        //possible to get first/last name?
+                        Toast.makeText(getActivity(), "Match found! " + results.get(i).getUser1().getUsername(), Toast.LENGTH_LONG).show();
+                        results.get(i).setUser2(currentUser);
+                        //start chat activity between currentUser and objects.get(i).getUser1()
+                        //other user gets notif
+                        return;
+                    }
+                }
+                //open new convo if there does not already exist open convo with only current user
+                Toast.makeText(getActivity(), "Match not found... starting new conversation...", Toast.LENGTH_LONG).show();
+                createConversation(currentUser);
+            }
+        });
+    }
+
+    private void createConversation(ParseUser currentUser) {
         final Conversation newConvo = new Conversation();
         newConvo.setUser1(currentUser);
-        newConvo.setFull(false);
 
         newConvo.saveInBackground(new SaveCallback() {
             @Override
@@ -146,7 +165,7 @@ public class SearchFragment extends Fragment {
         return false;
     }
 
-    //goes through full conversations and returns a list of users already matched with the current user
+    //goes through full conversations containing current user and returns a list of users already matched with the current user
     public List<ParseUser> listAlreadyMatched(ParseUser currentUser, List<Conversation> fullConvos) {
         List<ParseUser> currentMatches = new ArrayList<>();
 
@@ -169,27 +188,4 @@ public class SearchFragment extends Fragment {
         }
         return true;
     }
-
-    public List<Conversation> listOpenConvos(List<Conversation> allConvos) {
-        List<Conversation> openConvos = new ArrayList<>();
-
-        for (int i = 0; i < allConvos.size(); i++) {
-            if (!allConvos.get(i).getFull()) {
-                openConvos.add(allConvos.get(i));
-            }
-        }
-        return openConvos;
-    }
-
-    public List<Conversation> listFullConvos(List<Conversation> allConvos) {
-        List<Conversation> fullConvos = new ArrayList<>();
-
-        for (int i = 0; i < allConvos.size(); i++) {
-            if (allConvos.get(i).getFull()) {
-                fullConvos.add(allConvos.get(i));
-            }
-        }
-        return fullConvos;
-    }
-
 }
