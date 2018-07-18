@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    tools:context=".ChatActivity">
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnReturn"
+        android:layout_toRightOf="@+id/btnReturn"
+        android:text="new bae"
+        android:layout_marginLeft="10dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+    <Button
+        android:id="@+id/btnReturn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="<- go bak" />
+
+    <EditText
+        android:id="@+id/etMessage"
+        android:layout_width="287dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:hint="Type message here..."
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/btnSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Send" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvMessages"
+        android:layout_width="match_parent"
+        android:layout_height="462dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/btnReturn" />
+
+</RelativeLayout>
