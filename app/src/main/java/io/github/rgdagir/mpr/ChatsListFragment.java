@@ -108,8 +108,8 @@ public class ChatsListFragment extends Fragment {
         queries.add(convosQuery1);
         queries.add(convosQuery2);
 
-        final ParseQuery<Conversation> convosQuery = ParseQuery.or(queries).whereExists("user2").addDescendingOrder("updatedAt");
-        convosQuery.include("user1").include("user2").include("lastMessage");
+        final ParseQuery<Conversation> convosQuery = ParseQuery.or(queries).whereExists("user2").whereExists("user1");
+        convosQuery.include("user1").include("user2").include("lastMessage").addDescendingOrder("updatedAt");
         convosQuery.findInBackground(new FindCallback<Conversation>() {
             @Override
             public void done(List<Conversation> objects, ParseException e) {
