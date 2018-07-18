@@ -25,7 +25,7 @@ import java.util.List;
 import io.github.rgdagir.mpr.models.Conversation;
 
 
-public class ChatsFragment extends Fragment {
+public class ChatsListFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
@@ -37,7 +37,7 @@ public class ChatsFragment extends Fragment {
     RecyclerView rvConversations;
     ArrayList<Conversation> conversations;
 
-    public ChatsFragment() {
+    public ChatsListFragment() {
         // Required empty public constructor
     }
 
@@ -58,10 +58,12 @@ public class ChatsFragment extends Fragment {
         tvNumConvos = view.findViewById(R.id.tvNumMsgs);
         rvConversations = view.findViewById(R.id.rvConversations);
 
-        Glide.with(this)
-                .load(currUser.getParseFile("profilePic").getUrl())
-                .centerCrop()
-                .into(ivProfilePic);
+        if (currUser.getParseFile("profilePic") != null) {
+            Glide.with(this)
+                    .load(currUser.getParseFile("profilePic").getUrl())
+                    .centerCrop()
+                    .into(ivProfilePic);
+        }
         tvUsername.setText(currUser.getString("firstName") + " " + currUser.getString("lastName"));
 
         conversations = new ArrayList<>();
@@ -107,7 +109,7 @@ public class ChatsFragment extends Fragment {
         queries.add(convosQuery2);
 
         final ParseQuery<Conversation> convosQuery = ParseQuery.or(queries).whereExists("user2").addDescendingOrder("updatedAt");
-        convosQuery.include("user1").include("user2");
+        convosQuery.include("user1").include("user2").include("lastMessage");
         convosQuery.findInBackground(new FindCallback<Conversation>() {
             @Override
             public void done(List<Conversation> objects, ParseException e) {

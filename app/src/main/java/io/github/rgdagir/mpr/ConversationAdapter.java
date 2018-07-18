@@ -62,8 +62,13 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                 }
             }
         }
-        holder.tvTimestamp.setText(convo.getTimestamp());
-        holder.tvText.setText("Some placeholder message for now");
+        if (convo.getLastMessage() == null) {
+            holder.tvText.setText("No messages yet! Start talking...");
+            holder.tvTimestamp.setText("");
+        } else {
+            holder.tvText.setText(convo.getLastMessage().getText());
+            holder.tvTimestamp.setText(convo.getTimestamp());
+        }
     }
 
     @Override

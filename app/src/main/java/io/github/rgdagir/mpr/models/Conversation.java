@@ -15,6 +15,7 @@ public class Conversation extends ParseObject {
     private static final String KEY_USER1 = "user1";
     private static final String KEY_USER2 = "user2";
     private static final String KEY_FULL = "full";
+    private static final String KEY_LAST_MSG = "lastMessage";
 
     public ParseUser getUser1() {
         return getParseUser(KEY_USER1);
@@ -41,7 +42,7 @@ public class Conversation extends ParseObject {
     }
 
     public String getTimestamp() {
-        Date date = getUpdatedAt();
+        Date date = getLastMessage().getCreatedAt();
         DateFormat df = new SimpleDateFormat("MMM d", Locale.getDefault());
         DateFormat df2 = new SimpleDateFormat("hh:mm aaa", Locale.getDefault());
         return df.format(date) + " at " + df2.format(date);
@@ -50,6 +51,14 @@ public class Conversation extends ParseObject {
     public Boolean getFull() {return getBoolean(KEY_FULL);}
 
     public void setFull(Boolean full) {put(KEY_FULL, full);}
+
+    public Message getLastMessage() {
+        return (Message) getParseObject(KEY_LAST_MSG);
+    }
+
+    public void setLastMessage(Message msg) {
+        put(KEY_LAST_MSG, msg);
+    }
 
     public static class Query extends ParseQuery<Conversation> {
         public Query() {

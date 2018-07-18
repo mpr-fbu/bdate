@@ -9,12 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements ChatsFragment.OnFragmentInteractionListener,
+public class MainActivity extends AppCompatActivity implements ChatsListFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener {
 
     //FragmentTransaction fragmentTransaction;
 
-    ChatsFragment fragment1 = new ChatsFragment();
+    ChatsListFragment fragment1 = new ChatsListFragment();
     SearchFragment fragment2 = new SearchFragment();
     ProfileFragment fragment3 = new ProfileFragment();
 
