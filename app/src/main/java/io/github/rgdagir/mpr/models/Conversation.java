@@ -5,6 +5,11 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 @ParseClassName("Conversation")
 public class Conversation extends ParseObject {
     private static final String KEY_USER1 = "user1";
@@ -24,6 +29,21 @@ public class Conversation extends ParseObject {
 
     public void setUser2(ParseUser user) {
         put(KEY_USER2, user);
+    }
+
+    public Date getLastUpdated() {
+        return getUpdatedAt();
+    }
+
+    public void setLastUpdated(Date date) {
+        setLastUpdated(date);
+    }
+
+    public String getTimestamp() {
+        Date date = getUpdatedAt();
+        DateFormat df = new SimpleDateFormat("MMM d", Locale.getDefault());
+        DateFormat df2 = new SimpleDateFormat("hh:mm aaa", Locale.getDefault());
+        return df.format(date) + " at " + df2.format(date);
     }
 
     public static class Query extends ParseQuery<Conversation> {
