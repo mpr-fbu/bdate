@@ -41,18 +41,20 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         // get data according to position
         final Conversation convo = mConvos.get(position);
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser.getObjectId().equals(convo.getUser1().getObjectId())) {
-            holder.tvUsername.setText(convo.getUser2().getUsername());
-            Glide.with(context)
-                    .load(convo.getUser2().getParseFile("profilePic").getUrl())
-                    .centerCrop()
-                    .into(holder.ivProfilePic);
-        } else {
-            holder.tvUsername.setText(convo.getUser1().getUsername());
-            Glide.with(context)
-                    .load(convo.getUser1().getParseFile("profilePic").getUrl())
-                    .centerCrop()
-                    .into(holder.ivProfilePic);
+        if (convo.getUser2() != null) {
+            if (currentUser.getObjectId().equals(convo.getUser1().getObjectId())) {
+                holder.tvUsername.setText(convo.getUser2().getUsername());
+                Glide.with(context)
+                        .load(convo.getUser2().getParseFile("profilePic").getUrl())
+                        .centerCrop()
+                        .into(holder.ivProfilePic);
+            } else {
+                holder.tvUsername.setText(convo.getUser1().getUsername());
+                Glide.with(context)
+                        .load(convo.getUser1().getParseFile("profilePic").getUrl())
+                        .centerCrop()
+                        .into(holder.ivProfilePic);
+            }
         }
         holder.tvTimestamp.setText(convo.getTimestamp());
         holder.tvText.setText("Some placeholder message for now");

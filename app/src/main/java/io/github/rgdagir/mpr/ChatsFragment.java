@@ -95,20 +95,18 @@ public class ChatsFragment extends Fragment {
     }
 
     private void populateConversations() {
-        /* final Conversation.Query convosQuery1 = new Conversation.Query();
+        final Conversation.Query convosQuery1 = new Conversation.Query();
         ParseUser currUser = ParseUser.getCurrentUser();
         convosQuery1.whereEqualTo("user1", currUser);
         final Conversation.Query convosQuery2 = new Conversation.Query();
         convosQuery2.whereEqualTo("user2", currUser);
 
-        List<Conversation.Query> queries = new ArrayList<>();
-        queries.add(convosQuery1);
-        queries.add(convosQuery2); */
-
-        // final Conversation.Query convosQuery = Conversation.Query.or(queries).orderByDescending("updatedAt");
         final Conversation.Query convosQuery = new Conversation.Query();
+        convosQuery.withUser().bothUsers(convosQuery1, convosQuery2).addDescendingOrder("updatedAt");
+
+        /* final Conversation.Query convosQuery = new Conversation.Query();
         ParseUser currUser = ParseUser.getCurrentUser();
-        convosQuery.withUser().whereEqualTo("user1", currUser).orderByDescending("updatedAt");
+        convosQuery.withUser().whereEqualTo("user1", currUser).orderByDescending("updatedAt"); */
         convosQuery.findInBackground(new FindCallback<Conversation>() {
             @Override
             public void done(List<Conversation> objects, ParseException e) {
@@ -117,7 +115,7 @@ public class ChatsFragment extends Fragment {
                         Conversation convo = objects.get(i);
                         conversations.add(convo);
                         conversationAdapter.notifyItemInserted(conversations.size() - 1);
-                        Log.d("Conversations", "a conversation has been loaded!");
+                        Log.d("Conversations", "a conversation has been loaded!" + convo.getUser1().getUsername());
                     }
                     tvNumConvos.setText(Integer.toString(conversations.size()));
                 } else {
