@@ -4,7 +4,10 @@ import android.app.Application;
 import android.util.Log;
 
 import com.parse.Parse;
+import com.parse.ParseObject;
 
+import io.github.rgdagir.mpr.models.Conversation;
+import io.github.rgdagir.mpr.models.Message;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -32,6 +35,8 @@ public class ParseApp extends Application {
         // any network interceptors must be added with the Configuration Builder given this syntax
         Log.d("ParseApp", this.getString(R.string.parseAppId));
         Log.d("ParseApp", this.getString(R.string.parseServer));
+        ParseObject.registerSubclass(Conversation.class);
+        ParseObject.registerSubclass(Message.class);
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(this.getString(R.string.parseAppId)) // should correspond to APP_ID env variable
                 .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server

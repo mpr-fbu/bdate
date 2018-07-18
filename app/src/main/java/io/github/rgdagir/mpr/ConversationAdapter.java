@@ -41,7 +41,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         // get data according to position
         final Conversation convo = mConvos.get(position);
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser.equals(convo.getUser1())) {
+        if (currentUser.getObjectId().equals(convo.getUser1().getObjectId())) {
             holder.tvUsername.setText(convo.getUser2().getUsername());
             Glide.with(context)
                     .load(convo.getUser2().getParseFile("profilePic").getUrl())

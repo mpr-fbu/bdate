@@ -51,14 +51,17 @@ public class ChatsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
         context = getActivity();
+        ParseUser currUser = ParseUser.getCurrentUser();
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         tvUsername = view.findViewById(R.id.tvUsername);
         tvNumConvos = view.findViewById(R.id.tvNumMsgs);
+        rvConversations = view.findViewById(R.id.rvConversations);
 
         Glide.with(this)
-                .load(ParseUser.getCurrentUser().getParseFile("profilePic").getUrl())
+                .load(currUser.getParseFile("profilePic").getUrl())
                 .centerCrop()
                 .into(ivProfilePic);
+        tvUsername.setText(currUser.getString("firstName") + " " + currUser.getString("lastName"));
 
         conversations = new ArrayList<>();
         conversationAdapter = new ConversationAdapter(conversations);
@@ -92,21 +95,31 @@ public class ChatsFragment extends Fragment {
     }
 
     private void populateConversations() {
+        /* final Conversation.Query convosQuery1 = new Conversation.Query();
+        ParseUser currUser = ParseUser.getCurrentUser();
+        convosQuery1.whereEqualTo("user1", currUser);
+        final Conversation.Query convosQuery2 = new Conversation.Query();
+        convosQuery2.whereEqualTo("user2", currUser);
+
+        List<Conversation.Query> queries = new ArrayList<>();
+        queries.add(convosQuery1);
+        queries.add(convosQuery2); */
+
+        // final Conversation.Query convosQuery = Conversation.Query.or(queries).orderByDescending("updatedAt");
         final Conversation.Query convosQuery = new Conversation.Query();
         ParseUser currUser = ParseUser.getCurrentUser();
-        convosQuery.whereEqualTo("user1", currUser).orderByDescending("updatedAt");
-        convosQuery.withUser().whereEqualTo("user2", currUser).orderByDescending("updatedAt");
-        convosQuery.findInBackground(
-        new FindCallback<Conversation>() {
+        convosQuery.withUser().whereEqualTo("user1", currUser).orderByDescending("updatedAt");
+        convosQuery.findInBackground(new FindCallback<Conversation>() {
             @Override
             public void done(List<Conversation> objects, ParseException e) {
                 if (e == null) {
-                for (int i = 0; i < objects.size(); ++i) {
-                    Conversation convo = objects.get(i);
-                    conversations.add(convo);
-                    conversationAdapter.notifyItemInserted(conversations.size() - 1);
-                    Log.d("Conversations", "a conversation has been loaded!");
-                }
+                    for (int i = 0; i < objects.size(); ++i) {
+                        Conversation convo = objects.get(i);
+                        conversations.add(convo);
+                        conversationAdapter.notifyItemInserted(conversations.size() - 1);
+                        Log.d("Conversations", "a conversation has been loaded!");
+                    }
+                    tvNumConvos.setText(Integer.toString(conversations.size()));
                 } else {
                     e.printStackTrace();
                 }
