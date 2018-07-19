@@ -1,76 +1,60 @@
 package io.github.rgdagir.mpr;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.parse.ParseUser;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.util.List;
 
 import io.github.rgdagir.mpr.models.Message;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Message> mMessages;
-    private Context mContext;
-    private String mUserId;
 
-    public MessageAdapter(Context context, String userId, List<Message> messages) {
+    public MessageAdapter(List<Message> messages) {
         mMessages = messages;
-        this.mUserId = userId;
-        mContext = context;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View contactView = inflater.inflate(R.layout.activity_chat, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(contactView);
-        return viewHolder;
+        switch (viewType) {
+            case 0:
+                View messageViewMe = inflater.inflate(R.layout.item_message_me, parent, false);
+                return new ViewHolderMe(messageViewMe);
+            case 1:
+                View messageViewOther = inflater.inflate(R.layout.item_message_other, parent, false);
+                return new ViewHolderOther(messageViewOther);
+        }
+        View messageViewMe = inflater.inflate(R.layout.item_message_me, parent, false);
+        return new ViewHolderMe(messageViewMe);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         Message message = mMessages.get(position);
-        final boolean isMe = message.getSender().getObjectId() != null && message.getSender().getObjectId().equals(mUserId);
-
-        if (isMe) {
-            holder.imageMe.setVisibility(View.VISIBLE);
-            holder.imageOther.setVisibility(View.GONE);
-            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
-        } else {
-            holder.imageOther.setVisibility(View.VISIBLE);
-            holder.imageMe.setVisibility(View.GONE);
-            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+        switch (holder.getItemViewType()) {
+            case 0:
+                ViewHolderMe viewHolderMe = (ViewHolderMe) holder;
+                viewHolderMe.mInfoMe.setText(message.getTimestamp());
+                viewHolderMe.mMessageMe.setText(message.getText());
+                break;
+            case 1:
+                ViewHolderOther viewHolderOther = (ViewHolderOther) holder;
+                viewHolderOther.mInfoOther.setText(message.getTimestamp());
+                viewHolderOther.mMessageOther.setText(message.getText());
+                break;
         }
-
-        final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
-        Glide.with(mContext).load(getProfileUrl(message.getUserId())).into(profileView);
-        holder.body.setText(message.getBody());
-    }
-
-    // Create a gravatar image based on the hash value obtained from userId
-    private static String getProfileUrl(final String userId) {
-        String hex = "";
-        try {
-            final MessageDigest digest = MessageDigest.getInstance("MD5");
-            final byte[] hash = digest.digest(userId.getBytes());
-            final BigInteger bigInt = new BigInteger(hash);
-            hex = bigInt.abs().toString(16);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "http://www.gravatar.com/avatar/" + hex + "?d=identicon";
     }
 
     @Override
@@ -78,16 +62,37 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         return mMessages.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageOther;
-        ImageView imageMe;
-        TextView body;
+    @Override
+    public int getItemViewType(int position) {
+        Message message = mMessages.get(position);
+        ParseUser sender = message.getSender();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (sender.getObjectId().equals(currentUser.getObjectId())) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
 
-        public ViewHolder(View itemView) {
+    public class ViewHolderMe extends RecyclerView.ViewHolder {
+        TextView mMessageMe;
+        TextView mInfoMe;
+
+        public ViewHolderMe(View itemView) {
             super(itemView);
-            imageOther = itemView.findViewById(R.id.ivProfileOther);
-            imageMe = itemView.findViewById(R.id.ivProfileMe);
-            body = itemView.findViewById(R.id.tvBody);
+            mMessageMe = itemView.findViewById(R.id.tvMessageMe);
+            mInfoMe = itemView.findViewById(R.id.tvInfoMe);
+        }
+    }
+
+    public class ViewHolderOther extends RecyclerView.ViewHolder {
+        TextView mMessageOther;
+        TextView mInfoOther;
+
+        public ViewHolderOther(View itemView) {
+            super(itemView);
+            mMessageOther = itemView.findViewById(R.id.tvMessageOther);
+            mInfoOther = itemView.findViewById(R.id.tvInfoOther);
         }
     }
 }
