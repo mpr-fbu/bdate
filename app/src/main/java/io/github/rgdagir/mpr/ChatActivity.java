@@ -50,7 +50,8 @@ public class ChatActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.btnSend);
         rvMessages = findViewById(R.id.rvMessages);
         currUser = ParseUser.getCurrentUser();
-        messageAdapter = new MessageAdapter(ChatActivity.this, currUser.getObjectId(), messages);
+        messages = new ArrayList<>();
+        messageAdapter = new MessageAdapter(messages);
         rvMessages.setAdapter(messageAdapter);
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
