@@ -105,6 +105,7 @@ public class ChatActivity extends AppCompatActivity {
                     Log.d("ChatActivity", "Sending message success!");
                     messages.add(0, newMessage);
                     messageAdapter.notifyItemInserted(0);
+                    //trying to fix github issue
                     rvMessages.scrollToPosition(0);
                 } else {
                     Log.e("ChatActivity", "Sending message failed :(");
