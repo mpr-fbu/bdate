@@ -59,11 +59,15 @@ public class ChatActivity extends AppCompatActivity {
         rvMessages.setLayoutManager(linearLayoutManager);
 
         if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
-            tvUsername.setText(conversation.getUser2().getUsername());
             otherUser = conversation.getUser2();
+            try {
+                tvUsername.setText(otherUser.fetchIfNeeded().getUsername());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         } else {
-            tvUsername.setText(conversation.getUser1().getUsername());
             otherUser = conversation.getUser1();
+            tvUsername.setText(otherUser.getUsername());
         }
 
         btnReturn.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +135,6 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-
     private int getNumberOfMessagesSentBy(ParseUser sender) {
         final int numberOfMessages;
         ParseQuery<Message> fetchNumberOfMessages = new Message.Query();
@@ -145,7 +148,4 @@ public class ChatActivity extends AppCompatActivity {
         });
         return numberOfMessages;
     }
-
-    
-
 }
