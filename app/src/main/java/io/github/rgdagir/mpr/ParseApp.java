@@ -1,7 +1,6 @@
 package io.github.rgdagir.mpr;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -33,8 +32,6 @@ public class ParseApp extends Application {
         // set applicationId, and server server based on the values in the Heroku settings.
         // clientKey is not needed unless explicitly configured
         // any network interceptors must be added with the Configuration Builder given this syntax
-        Log.d("ParseApp", this.getString(R.string.parseAppId));
-        Log.d("ParseApp", this.getString(R.string.parseServer));
         ParseObject.registerSubclass(Conversation.class);
         ParseObject.registerSubclass(Message.class);
         Parse.initialize(new Parse.Configuration.Builder(this)
