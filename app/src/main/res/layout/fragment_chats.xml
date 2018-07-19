@@ -31,17 +31,17 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvNumMsgs"
+            android:id="@+id/tvNumMessages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/tvUsername"
-            android:layout_toLeftOf="@+id/tvConvos"
+            android:layout_toLeftOf="@+id/tvConversations"
             android:text="123"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvConvos"
+            android:id="@+id/tvConversations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

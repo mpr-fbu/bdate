@@ -20,11 +20,11 @@ import java.util.List;
 import io.github.rgdagir.mpr.models.Conversation;
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder> {
-    List<Conversation> mConvos;
+    List<Conversation> mConversations;
     Context context;
 
-    public ConversationAdapter(List<Conversation> convos) {
-        mConvos = convos;
+    public ConversationAdapter(List<Conversation> conversations) {
+        mConversations = conversations;
     }
 
     // for each row, inflate layout and cache refs into ViewHolder
@@ -34,33 +34,33 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View convoView = inflater.inflate(R.layout.item_conversation, parent, false);
-        ConversationAdapter.ViewHolder viewHolder = new ConversationAdapter.ViewHolder(convoView);
+        View conversationView = inflater.inflate(R.layout.item_conversation, parent, false);
+        ConversationAdapter.ViewHolder viewHolder = new ConversationAdapter.ViewHolder(conversationView);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ConversationAdapter.ViewHolder holder, int position) {
         // get data according to position
-        final Conversation convo = mConvos.get(position);
+        final Conversation conversation = mConversations.get(position);
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser.getObjectId().equals(convo.getUser1().getObjectId())) {
-            setConversationDetails(convo.getUser2(), holder.tvUsername, holder.ivProfilePic);
+        if (currentUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
+            setConversationDetails(conversation.getUser2(), holder.tvUsername, holder.ivProfilePic);
         } else {
-            setConversationDetails(convo.getUser1(), holder.tvUsername, holder.ivProfilePic);
+            setConversationDetails(conversation.getUser1(), holder.tvUsername, holder.ivProfilePic);
         }
 
-        if (convo.getLastMessage() == null) {
+        if (conversation.getLastMessage() == null) {
             holder.tvText.setText("No messages yet! Start talking...");
             holder.tvTimestamp.setText("");
         } else {
-            holder.tvText.setText(convo.getLastMessage().getText());
-            holder.tvTimestamp.setText(convo.getTimestamp());
+            holder.tvText.setText(conversation.getLastMessage().getText());
+            holder.tvTimestamp.setText(conversation.getTimestamp());
         }
     }
 
     @Override
-    public int getItemCount() { return mConvos.size(); }
+    public int getItemCount() { return mConversations.size(); }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ParseImageView ivProfilePic;
@@ -85,9 +85,9 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         public void onClick(View v) {
             int pos = getAdapterPosition();
             if (pos != RecyclerView.NO_POSITION) {
-                Conversation convo = mConvos.get(pos);
+                Conversation conversation = mConversations.get(pos);
                 Intent intent = new Intent(context, ChatActivity.class);
-                intent.putExtra("conversation", Parcels.wrap(convo));
+                intent.putExtra("conversation", Parcels.wrap(conversation));
                 context.startActivity(intent);
             }
         }

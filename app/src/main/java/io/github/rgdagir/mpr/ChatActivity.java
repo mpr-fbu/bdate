@@ -12,7 +12,7 @@ import io.github.rgdagir.mpr.models.Conversation;
 
 public class ChatActivity extends AppCompatActivity {
 
-    Conversation convo;
+    Conversation conversation;
     private TextView tvUsername;
     ParseUser currUser;
 
@@ -21,13 +21,13 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        convo = Parcels.unwrap(getIntent().getParcelableExtra("conversation"));
+        conversation = Parcels.unwrap(getIntent().getParcelableExtra("conversation"));
         tvUsername = findViewById(R.id.tvUsername);
         currUser = ParseUser.getCurrentUser();
-        if (currUser.getObjectId().equals(convo.getUser1().getObjectId())) {
-            tvUsername.setText(convo.getUser2().getUsername());
+        if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
+            tvUsername.setText(conversation.getUser2().getUsername());
         } else {
-            tvUsername.setText(convo.getUser1().getUsername());
+            tvUsername.setText(conversation.getUser1().getUsername());
         }
 
         // Then do querying and stuff and actually get the messages

@@ -8,7 +8,7 @@ import com.parse.ParseUser;
 @ParseClassName("Message")
 public class Message extends ParseObject {
     private static final String KEY_SENDER = "sender";
-    private static final String KEY_CONVO = "conversation";
+    private static final String KEY_CONVERSATION = "conversation";
     private static final String KEY_TEXT = "text";
 
     public ParseUser getSender() {
@@ -20,11 +20,11 @@ public class Message extends ParseObject {
     }
 
     public Conversation getConversation() {
-        return (Conversation) getParseObject(KEY_CONVO);
+        return (Conversation) getParseObject(KEY_CONVERSATION);
     }
 
     public void setConversation(Conversation conversation) {
-        put(KEY_CONVO, conversation);
+        put(KEY_CONVERSATION, conversation);
     }
 
     public String getText() {
@@ -40,8 +40,8 @@ public class Message extends ParseObject {
             super(Message.class);
         }
 
-        public Message.Query withConvoSender() {
-            include(KEY_CONVO);
+        public Message.Query withConversationSender() {
+            include(KEY_CONVERSATION);
             include(KEY_SENDER);
             return this;
         }
