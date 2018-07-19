@@ -105,7 +105,6 @@ public class ChatActivity extends AppCompatActivity {
                     Log.d("ChatActivity", "Sending message success!");
                     messages.add(0, newMessage);
                     messageAdapter.notifyItemInserted(0);
-                    //trying to fix github issue
                     rvMessages.scrollToPosition(0);
                 } else {
                     Log.e("ChatActivity", "Sending message failed :(");
@@ -135,5 +134,19 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private int getNumberOfMessagesSentBy(ParseUser sender) {
+        final int numberOfMessages;
+        ParseQuery<Message> fetchNumberOfMessages = new Message.Query();
+        fetchNumberOfMessages.whereEqualTo("sender", sender.getUsername())
+                .whereEqualTo("conversation", conversation);
+        fetchNumberOfMessages.findInBackground(new FindCallback<Message>() {
+            @Override
+            public void done(List<Message> objects, ParseException e) {
+                numberOfMessages = objects.size();
+            }
+        });
+        return numberOfMessages;
     }
 }
