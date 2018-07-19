@@ -68,11 +68,12 @@ public class ChatActivity extends AppCompatActivity {
 
     private void sendMessage() {
         final Message newMessage = new Message();
-        String message = etMessage.getText().toString();
+        String messageText = etMessage.getText().toString();
 
         newMessage.setSender(currUser);
         newMessage.setConversation(conversation);
-        newMessage.setText(message);
+        newMessage.setText(messageText);
+        conversation.setLastMessage(newMessage);
 
         newMessage.saveInBackground(new SaveCallback() {
             @Override
