@@ -134,17 +134,17 @@ public class SearchFragment extends Fragment {
                             public void done(ParseException e) {
                                 if (e == null) {
                                     Log.d("SearchFragment", "You have joined the conversation!");
+                                    //start chat activity between currentUser and objects.get(i).getUser1()
+                                    //other user gets notif
                                 } else {
                                     Log.e("SearchFragment", "Error when joining conversation");
                                 }
                             }
                         });
-                        //start chat activity between currentUser and objects.get(i).getUser1()
-                        //other user gets notif
                         return;
                     }
                 }
-                //open new convo if there does not already exist open convo with only current user
+                //create new convo if there does not already exist open convo with only current user
                 Toast.makeText(getActivity(), "Match not found... starting new conversation...", Toast.LENGTH_LONG).show();
                 createConversation(currentUser);
             }
