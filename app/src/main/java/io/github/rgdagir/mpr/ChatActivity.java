@@ -99,6 +99,8 @@ public class ChatActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("ChatActivity", "Sending message success!");
+                    messages.add(newMessage);
+                    messageAdapter.notifyItemInserted(0);
                 } else {
                     Log.e("ChatActivity", "Sending message failed :(");
                 }
@@ -110,7 +112,7 @@ public class ChatActivity extends AppCompatActivity {
     private void populateMessages() {
         final ParseQuery<Message> messagesQuery = new Message.Query();
         messagesQuery.whereEqualTo("conversation", conversation);
-        messagesQuery.addDescendingOrder("updatedAt");
+        messagesQuery.addDescendingOrder("createdAt");
 
         messagesQuery.findInBackground(new FindCallback<Message>() {
             @Override
