@@ -182,9 +182,9 @@ public class SearchFragment extends Fragment {
         List<ParseUser> currentMatches = new ArrayList<>();
 
         for (int i = 0; i < fullConvos.size(); i++) {
-            if (fullConvos.get(i).getUser1() == currentUser) {
+            if (fullConvos.get(i).getUser1().getObjectId().equals(currentUser.getObjectId())) {
                 currentMatches.add(fullConvos.get(i).getUser2());
-            } else if (fullConvos.get(i).getUser2() == currentUser) {
+            } else if (fullConvos.get(i).getUser2().getObjectId().equals(currentUser.getObjectId())) {
                 currentMatches.add(fullConvos.get(i).getUser1());
             }
         }
@@ -194,7 +194,7 @@ public class SearchFragment extends Fragment {
     //returns true if the users are not already matched, otherwise returns false
     public boolean checkNotAlreadyMatched(ParseUser otherUser, List<ParseUser> currentMatches) {
         for (int i = 0; i < currentMatches.size(); i++) {
-            if (otherUser == currentMatches.get(i)) {
+            if (otherUser.getObjectId().equals(currentMatches.get(i).getObjectId())) {
                 return false;
             }
         }
