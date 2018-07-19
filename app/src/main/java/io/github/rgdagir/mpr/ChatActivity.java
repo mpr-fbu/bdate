@@ -98,9 +98,11 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
+                    //refreshMessages();
                     Log.d("ChatActivity", "Sending message success!");
-                    messages.add(newMessage);
+                    messages.add(0, newMessage);
                     messageAdapter.notifyItemInserted(0);
+                    rvMessages.scrollToPosition(0);
                 } else {
                     Log.e("ChatActivity", "Sending message failed :(");
                 }
@@ -130,4 +132,24 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+//    private void refreshMessages() {
+//        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+//        //query.setLimit(MAX_CHAT_MESSAGES_TO_SHOW);
+//        query.setLimit(1000);
+//        query.orderByDescending("createdAt");
+//        query.findInBackground(new FindCallback<Message>() {
+//            public void done(List<Message> messages, ParseException e) {
+//                if (e == null) {
+//                    messages.clear();
+//                    messages.addAll(messages);
+//                    messageAdapter.notifyDataSetChanged();
+//                    rvMessages.scrollToPosition(0);
+//                    Log.d("Refresh", "Refresh success!");
+//                } else {
+//                    Log.e("message", "Error Loading Messages" + e);
+//                }
+//            }
+//        });
+//    }
 }
