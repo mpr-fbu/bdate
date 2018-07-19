@@ -32,7 +32,7 @@ public class ChatsListFragment extends Fragment {
     private ParseImageView ivProfilePic;
     private Context context;
     private TextView tvUsername;
-    private TextView tvNumConvos;
+    private TextView tvNumConversations;
     private ConversationAdapter conversationAdapter;
     RecyclerView rvConversations;
     ArrayList<Conversation> conversations;
@@ -55,7 +55,7 @@ public class ChatsListFragment extends Fragment {
         ParseUser currUser = ParseUser.getCurrentUser();
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         tvUsername = view.findViewById(R.id.tvUsername);
-        tvNumConvos = view.findViewById(R.id.tvNumMsgs);
+        tvNumConversations = view.findViewById(R.id.tvNumMessages);
         rvConversations = view.findViewById(R.id.rvConversations);
 
         if (currUser.getParseFile("profilePic") != null) {
@@ -99,28 +99,28 @@ public class ChatsListFragment extends Fragment {
 
     private void populateConversations() {
         ParseUser currUser = ParseUser.getCurrentUser();
-        final ParseQuery<Conversation> convosQuery1 = new Conversation.Query();
-        convosQuery1.whereEqualTo("user1", currUser);
-        final ParseQuery<Conversation> convosQuery2 = new Conversation.Query();
-        convosQuery2.whereEqualTo("user2", currUser);
+        final ParseQuery<Conversation> conversationsQuery1 = new Conversation.Query();
+        conversationsQuery1.whereEqualTo("user1", currUser);
+        final ParseQuery<Conversation> conversationsQuery2 = new Conversation.Query();
+        conversationsQuery2.whereEqualTo("user2", currUser);
 
         List<ParseQuery<Conversation>> queries = new ArrayList<>();
-        queries.add(convosQuery1);
-        queries.add(convosQuery2);
+        queries.add(conversationsQuery1);
+        queries.add(conversationsQuery2);
 
-        final ParseQuery<Conversation> convosQuery = ParseQuery.or(queries).whereExists("user2").addDescendingOrder("updatedAt");
-        convosQuery.include("user1").include("user2").include("lastMessage");
-        convosQuery.findInBackground(new FindCallback<Conversation>() {
+        final ParseQuery<Conversation> conversationsQuery = ParseQuery.or(queries).whereExists("user2").whereExists("user1");
+        conversationsQuery.include("user1").include("user2").include("lastMessage").addDescendingOrder("updatedAt");
+        conversationsQuery.findInBackground(new FindCallback<Conversation>() {
             @Override
             public void done(List<Conversation> objects, ParseException e) {
                 if (e == null) {
                     for (int i = 0; i < objects.size(); ++i) {
-                        Conversation convo = objects.get(i);
-                        conversations.add(convo);
+                        Conversation conversation = objects.get(i);
+                        conversations.add(conversation);
                         conversationAdapter.notifyItemInserted(conversations.size() - 1);
-                        Log.d("Conversations", "a conversation has been loaded!" + convo.getUser1().getUsername());
+                        Log.d("Conversations", "a conversation has been loaded!" + conversation.getUser1().getUsername());
                     }
-                    tvNumConvos.setText(Integer.toString(conversations.size()));
+                    tvNumConversations.setText(Integer.toString(conversations.size()));
                 } else {
                     e.printStackTrace();
                 }

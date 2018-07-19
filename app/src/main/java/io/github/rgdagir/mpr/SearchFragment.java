@@ -86,12 +86,13 @@ public class SearchFragment extends Fragment {
         final ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
             final Conversation.Query openConvosQuery = new Conversation.Query();
-            openConvosQuery.whereDoesNotExist("user2");
+            openConvosQuery.whereDoesNotExist("user2").include("user1");
             openConvosQuery.findInBackground(new FindCallback<Conversation>() {
                 @Override
                 public void done(final List<Conversation> objects, ParseException e) {
                     if (e == null) {
                         //objects has list of open conversations
+                        boolean check = hasOpenConvo(currentUser, objects);
                         if (hasOpenConvo(currentUser, objects)) {
                             Toast.makeText(getActivity(), "Already searching...", Toast.LENGTH_LONG).show();
                             return;
@@ -108,25 +109,36 @@ public class SearchFragment extends Fragment {
     }
 
     private void searchForMatches(final List<Conversation> openConvos, final ParseUser currentUser) {
-        ParseQuery<Conversation> fullConvosQuery1 = ParseQuery.getQuery("user1");
+        final ParseQuery<Conversation> fullConvosQuery1 = new Conversation.Query();
         fullConvosQuery1.whereEqualTo("user1", currentUser);
 
-        ParseQuery<Conversation> fullConvosQuery2 = ParseQuery.getQuery("user2");
+        final ParseQuery<Conversation> fullConvosQuery2 = new Conversation.Query();
         fullConvosQuery2.whereEqualTo("user2", currentUser);
 
         List<ParseQuery<Conversation>> queries = new ArrayList<ParseQuery<Conversation>>();
         queries.add(fullConvosQuery1);
         queries.add(fullConvosQuery2);
 
-        ParseQuery<Conversation> mainQuery = ParseQuery.or(queries);
+        ParseQuery<Conversation> mainQuery = ParseQuery.or(queries).include("user1").include("user2");
         mainQuery.findInBackground(new FindCallback<Conversation>() {
             public void done(List<Conversation> results, ParseException e) {
                 // results has the list of full conversations in which the current user is participating in
                 for (int i = 0; i < openConvos.size(); i++) {
                     if (checkNotAlreadyMatched(openConvos.get(i).getUser1(), listAlreadyMatched(currentUser, results))) {
                         //possible to get first/last name?
-                        Toast.makeText(getActivity(), "Match found! " + results.get(i).getUser1().getUsername(), Toast.LENGTH_LONG).show();
-                        results.get(i).setUser2(currentUser);
+                        ParseUser check = openConvos.get(i).getUser1();
+                        Toast.makeText(getActivity(), "Match found! " + openConvos.get(i).getUser1().getUsername(), Toast.LENGTH_LONG).show();
+                        openConvos.get(i).setUser2(currentUser);
+                        openConvos.get(i).saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    Log.d("SearchFragment", "You have joined the conversation!");
+                                } else {
+                                    Log.e("SearchFragment", "Error when joining conversation");
+                                }
+                            }
+                        });
                         //start chat activity between currentUser and objects.get(i).getUser1()
                         //other user gets notif
                         return;
@@ -149,7 +161,7 @@ public class SearchFragment extends Fragment {
                 if (e == null) {
                     Log.d("SearchFragment", "Create conversation success!");
                 } else {
-                    e.printStackTrace();
+                    Log.e("SearchFragment", "Creating conversation failed :(");
                 }
             }
         });
@@ -158,7 +170,7 @@ public class SearchFragment extends Fragment {
     //returns true if current user has open convo, otherwise returns false
     public boolean hasOpenConvo(ParseUser currentUser, List<Conversation> openConvos) {
         for (int i = 0; i < openConvos.size(); i++) {
-            if (openConvos.get(i).getUser1() == currentUser) {
+            if (openConvos.get(i).getUser1().getObjectId().equals(currentUser.getObjectId())) {
                 return true;
             }
         }

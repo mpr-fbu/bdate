@@ -1,9 +1,8 @@
 package io.github.rgdagir.mpr;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -49,11 +48,7 @@ public class LoginActivity extends AppCompatActivity {
                 ParseUser.logInInBackground(etLoginEmail.getText().toString(), etLoginPassword.getText().toString(), new LogInCallback() {
                     public void done(ParseUser user, ParseException e) {
                         if (user != null) {
-                            // Launch app
-                            Log.d(ACTIVITY_TAG, "Login success!");
-                            final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            launchMainActivity();
                         } else {
                             // Signup failed. Look at the ParseException to see what happened.
                             Log.d(ACTIVITY_TAG, "Login failed :(");
@@ -66,5 +61,10 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
+    private void launchMainActivity() {
+        Log.d(ACTIVITY_TAG, "Login success!");
+        final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
