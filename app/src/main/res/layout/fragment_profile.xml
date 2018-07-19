@@ -35,20 +35,19 @@
                 <TextView
                     android:id="@+id/tvProfileName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/tvProfileAge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    />
 
                 <TextView
                     android:id="@+id/tvProfileGender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    />
 
                 <Button
                     android:id="@+id/editProfileButton"
@@ -63,13 +62,13 @@
             android:id="@+id/tvProfileBio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            />
 
         <TextView
             android:id="@+id/tvProfileWebpage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            />
 
         <Button
             android:id="@+id/logoutBtn"

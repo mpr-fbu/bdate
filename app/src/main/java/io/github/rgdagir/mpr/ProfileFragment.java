@@ -49,7 +49,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
         context = getActivity();
         final ParseUser currentUser = ParseUser.getCurrentUser();
         profileName = view.findViewById(R.id.tvProfileName);
@@ -75,36 +75,38 @@ public class ProfileFragment extends Fragment {
         });
 
         fetchUserProfileData(currentUser);
+        profileName.setText("iae krl, funciona po");
         return view;
     }
 
     private void fetchUserProfileData (ParseUser user){
-        ParseQuery<ParseObject> profileDataQuery = ParseQuery.getQuery("User");
+        ParseQuery<ParseUser> profileDataQuery = ParseUser.getQuery();
         profileDataQuery.whereEqualTo("username", user.getUsername());
-        profileDataQuery.findInBackground(new FindCallback<ParseObject>() {
+        Log.e("ProfileQuery", user.getUsername());
+        profileDataQuery.findInBackground(new FindCallback<ParseUser>() {
             @Override
-            public void done(List<ParseObject> userData, ParseException e) {
-                if (e == null && userData.size() == 1){
-                    ParseObject user = userData.get(0); // the list should ideally have only one element, given users are unique
-                    Log.d("ProfileQuerySuccess", Integer.toString(userData.size()));
+            public void done(List<ParseUser> userDataList, ParseException e) {
+                if (e == null){
+                    Log.e("ProfileQuerySuccess", Integer.toString(userDataList.size()));
+                    ParseUser userData = userDataList.get(0); // the list should ideally have only one element, given users are unique
 
-                    String name = user.get("firstName").toString() + " " + userData.get(0).get("lastName").toString();
-                    String age = user.get("age").toString();
-                    String bio = user.get("bio").toString();
-                    String webpage = user.get("webpage").toString();
+                    String name = userData.get("firstName").toString() + " " + userData.get("lastName").toString();
+                    String age = userData.get("age").toString();
+                    String bio = userData.get("bio").toString();
+                    String webpage = userData.get("webpage").toString();
 
                     profileName.setText(name);
                     profileAge.setText(age);
                     Glide.with(context)
-                            .load(user.getParseFile("profilePic").getUrl())
+                            .load(userData.getParseFile("profilePic").getUrl())
                             .centerCrop()
                             .into(profilePic);
                     profileBio.setText(bio);
                     profileWebpage.setText(webpage);
 
                 } else {
-                    Log.d("ProfileQueryFailed", "failed");
                     e.printStackTrace();
+                    Log.d("ProfileQueryFailed", "failed" + Integer.toString(userDataList.size()));
                 }
             }
         });

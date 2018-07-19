@@ -7,6 +7,18 @@
     tools:context=".LoginActivity">
 
     <EditText
+        android:id="@+id/loginEmail"
+        android:layout_width="388dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="96dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="86dp" />
+
+    <EditText
         android:id="@+id/loginPassword"
         android:layout_width="386dp"
         android:layout_height="wrap_content"
@@ -18,17 +30,6 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="165dp" />
 
-    <EditText
-        android:id="@+id/loginEmail"
-        android:layout_width="388dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="96dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="86dp" />
 
     <Button
         android:id="@+id/loginButton"
