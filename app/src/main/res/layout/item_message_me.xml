@@ -13,27 +13,29 @@
         <TextView
             android:id="@+id/tvInfo"
             android:layout_width="wrap_content"
-            android:layout_height="30sp"
+            android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:textSize="12sp"
-            android:textColor="@android:color/darker_gray" />
+            android:text="June 29 at 4:35 pm"
+            android:layout_margin="5dp"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp" />
 
         <LinearLayout
             android:id="@+id/contentWithBackground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:background="@drawable/in_message_bg"
-            android:paddingLeft="10dp"
-            android:paddingBottom="10dp"
+            android:background="@drawable/message_bubble_me"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:maxWidth="240dp" />
+                android:maxWidth="240dp"
+                android:layout_margin="5dp"
+                android:text="Hi! How are you doing?"
+                android:textColor="@android:color/black" />
         </LinearLayout>
     </LinearLayout>
 
