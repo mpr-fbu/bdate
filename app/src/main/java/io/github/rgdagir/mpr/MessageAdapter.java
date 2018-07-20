@@ -9,16 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.List;
 
+import bolts.Task;
 import io.github.rgdagir.mpr.models.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Message> mMessages;
+    private String senderObjId;
+    private boolean isItYou;
 
     public MessageAdapter(List<Message> messages) {
         mMessages = messages;
@@ -45,16 +50,35 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         Message message = mMessages.get(position);
+
         switch (holder.getItemViewType()) {
             case 0:
-                ViewHolderMe viewHolderMe = (ViewHolderMe) holder;
+                final ViewHolderMe viewHolderMe = (ViewHolderMe) holder;
                 viewHolderMe.mInfoMe.setText(message.getTimestamp());
-                viewHolderMe.mMessageMe.setText(message.getText());
+                message.fetchInBackground(new GetCallback<Message>() {
+                    @Override
+                    public void done(Message object, ParseException e) {
+                        if (e == null) {
+                            viewHolderMe.mMessageMe.setText(object.getText());
+                        } else {
+                            Log.e("MessageAdapter", e.toString());
+                        }
+                    }
+                });
                 break;
             case 1:
-                ViewHolderOther viewHolderOther = (ViewHolderOther) holder;
+                final ViewHolderOther viewHolderOther = (ViewHolderOther) holder;
                 viewHolderOther.mInfoOther.setText(message.getTimestamp());
-                viewHolderOther.mMessageOther.setText(message.getText());
+                message.fetchInBackground(new GetCallback<Message>() {
+                    @Override
+                    public void done(Message object, ParseException e) {
+                        if (e == null) {
+                            viewHolderOther.mMessageOther.setText(object.getText());
+                        } else {
+                            Log.e("MessageAdapter", e.toString());
+                        }
+                    }
+                });
                 break;
         }
     }
@@ -67,20 +91,27 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         Message message = mMessages.get(position);
-        ParseUser sender = null;
-        try {
-            sender = message.getSender().fetch();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        Log.d("ItemViewType", Integer.toString(position));
-        if (sender.equals(currentUser)) {
-            return 0;
-        } else {
-            return 1;
-        }
+        message.fetchInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    Message msg = (Message) object;
+                    senderObjId = msg.getSender().getObjectId();
+                    Log.d("Fetch Sender", "success!");
 
+                    String currentUserObjId = ParseUser.getCurrentUser().getObjectId();
+                    if (senderObjId.equals(currentUserObjId)) {
+                        isItYou = false;
+                    } else {
+                        isItYou = true;
+                    }
+                } else {
+                    Log.e("Fetch Sender", "wtf is going on");
+                    e.printStackTrace();
+                }
+            }
+        });
+        return isItYou ? 1 : 0;
     }
 
     public class ViewHolderMe extends RecyclerView.ViewHolder {
