@@ -134,19 +134,20 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+        rvMessages.scrollToPosition(0);
     }
-
-    private int getNumberOfMessagesSentBy(ParseUser sender) {
-        final int numberOfMessages;
-        ParseQuery<Message> fetchNumberOfMessages = new Message.Query();
-        fetchNumberOfMessages.whereEqualTo("sender", sender.getUsername())
-                .whereEqualTo("conversation", conversation);
-        fetchNumberOfMessages.findInBackground(new FindCallback<Message>() {
-            @Override
-            public void done(List<Message> objects, ParseException e) {
-                numberOfMessages = objects.size();
-            }
-        });
-        return numberOfMessages;
-    }
+//
+//    private int getNumberOfMessagesSentBy(ParseUser sender) {
+//        final int numberOfMessages;
+//        ParseQuery<Message> fetchNumberOfMessages = new Message.Query();
+//        fetchNumberOfMessages.whereEqualTo("sender", sender.getUsername())
+//                .whereEqualTo("conversation", conversation);
+//        fetchNumberOfMessages.findInBackground(new FindCallback<Message>() {
+//            @Override
+//            public void done(List<Message> objects, ParseException e) {
+//                numberOfMessages = objects.size();
+//            }
+//        });
+//        return numberOfMessages;
+//    }
 }
