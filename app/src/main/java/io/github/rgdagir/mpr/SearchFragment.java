@@ -141,7 +141,7 @@ public class SearchFragment extends Fragment {
                                 }
                             }
                         });
-                        createMilestones(openConvos.get(i), openConvos.get(i).getUser1());
+                        createMilestones(openConvos.get(i), currentUser);
                         return;
                     }
                 }
@@ -152,7 +152,7 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    private void createConversation(ParseUser currentUser) {
+    private void createConversation(final ParseUser currentUser) {
         final Conversation newConvo = new Conversation();
         newConvo.setUser1(currentUser);
 
@@ -161,12 +161,12 @@ public class SearchFragment extends Fragment {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("SearchFragment", "Create conversation success!");
+                    createMilestones(newConvo, currentUser);
                 } else {
                     Log.e("SearchFragment", "Creating conversation failed :(");
                 }
             }
         });
-        createMilestones(newConvo, currentUser);
     }
 
     private void createMilestones(Conversation conversation, ParseUser user) {
