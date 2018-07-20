@@ -35,10 +35,8 @@ public class LoginActivity extends AppCompatActivity {
         toSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentUser == null) {
-                    Intent toSignUp = new Intent(LoginActivity.this, SignUpActivity.class);
-                    startActivity(toSignUp);
-                }
+                Intent toSignUp = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(toSignUp);
             }
         });
 
@@ -58,6 +56,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        if (currentUser != null) {
+            // persistence if the user is already signed in
+            launchMainActivity();
+        }
 
     }
 
