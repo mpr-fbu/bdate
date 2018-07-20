@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "492710426737",
+    "firebase_url": "https://fbu-bdate.firebaseio.com",
+    "project_id": "fbu-bdate",
+    "storage_bucket": "fbu-bdate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:492710426737:android:51d3f6adc57b311e",
+        "android_client_info": {
+          "package_name": "io.github.rgdagir.mpr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "492710426737-f3stpr1t95flq4gbee6e4bansajmoal9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALivhKSsz0ugN79L2NRHvDDyJWx_4-tls"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
