@@ -57,15 +57,6 @@ public class ChatActivity extends AppCompatActivity {
         messageAdapter = new MessageAdapter(messages);
         rvMessages.setAdapter(messageAdapter);
 
-        final ParseQuery<Conversation> conversationsQuery1 = new Conversation.Query();
-        conversationsQuery1.whereEqualTo("user1", currUser);
-        final ParseQuery<Conversation> conversationsQuery2 = new Conversation.Query();
-        conversationsQuery2.whereEqualTo("user2", currUser);
-
-        List<ParseQuery<Conversation>> queries = new ArrayList<>();
-        queries.add(conversationsQuery1);
-        queries.add(conversationsQuery2);
-
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery<Message> parseQuery = new Message.Query();
         //parseQuery.whereEqualTo("conversation", conversation);
@@ -74,10 +65,9 @@ public class ChatActivity extends AppCompatActivity {
         // Listen for CREATE events
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
-
                     @Override
                     public void onEvent(ParseQuery<Message> query, Message object) {
-                        Log.d("Live Query", "Callback");
+                        Log.d("TestLive", "Callback");
                         try {
                             object.fetchInBackground();
                             messages.add(0, object);
@@ -85,20 +75,15 @@ public class ChatActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Log.d("Live Query", "Notifying Adapter...");
-                                    messageAdapter.notifyDataSetChanged();
-                                    Log.d("Live Query", "Scrolling to position...");
+                                    Log.d("TestLive", "Notifying Adapter...");
+                                    messageAdapter.notifyItemInserted(0);
+                                    Log.d("TestLive", "Scrolling to position...");
                                     rvMessages.scrollToPosition(0);
-                                    Log.d("Live Query", "Scrolled");
-                                }
-                            });
-
+                                    Log.d("TestLive", "Scrolled");
+                                }});
                         } catch (Error e){
                             e.printStackTrace();
                         }
-
-
-
                     }
                 });
         subscriptionHandling.handleError(new
@@ -179,7 +164,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void populateMessages() {
         final ParseQuery<Message> messagesQuery = new Message.Query();
-        messagesQuery.whereEqualTo("conversation", conversation);
+        messagesQuery.include("sender").whereEqualTo("conversation", conversation);
         messagesQuery.addDescendingOrder("createdAt");
 
         messagesQuery.findInBackground(new FindCallback<Message>() {
@@ -199,29 +184,6 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-//    private void liveQueryMessaging(){
-//        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-//        ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
-//        parseQuery.whereEqualTo("conversation", conversation);
-//        SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
-//        // Listen for CREATE events
-//        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
-//                SubscriptionHandling.HandleEventCallback<Message>() {
-//                    @Override
-//                    public void onEvent(ParseQuery<Message> query, Message object) {
-//                        messages.add(0, object);
-//
-//                        // RecyclerView updates need to be run on the UI thread
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                messageAdapter.notifyDataSetChanged();
-//                                rvMessages.scrollToPosition(0);
-//                            }
-//                        });
-//                    }
-//                });
-//    }
 
 //    private int getNumberOfMessagesSentBy(ParseUser sender) {
 //        final int numberOfMessages;
