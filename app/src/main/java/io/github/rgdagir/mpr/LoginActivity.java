@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.parse.LogInCallback;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -64,6 +65,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void launchMainActivity() {
+        // default ACLs for User object
+        ParseACL parseACL = new ParseACL(ParseUser.getCurrentUser());
+        parseACL.setPublicReadAccess(true);
+        ParseUser.getCurrentUser().setACL(parseACL);
         Log.d(ACTIVITY_TAG, "Login success!");
         final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);

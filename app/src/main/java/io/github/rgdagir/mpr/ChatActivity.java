@@ -148,13 +148,13 @@ public class ChatActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            messageAdapter.notifyItemInserted(0);
+                            messageAdapter.notifyDataSetChanged();
                             rvMessages.scrollToPosition(0);
                         }
                     });
-
                 } else {
                     Log.e("ChatActivity", "Sending message failed :(");
+                    e.printStackTrace();
                 }
             }
         });
