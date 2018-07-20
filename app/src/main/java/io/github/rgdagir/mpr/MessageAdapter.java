@@ -3,11 +3,13 @@ package io.github.rgdagir.mpr;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -65,13 +67,20 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         Message message = mMessages.get(position);
-        ParseUser sender = message.getSender();
+        ParseUser sender = null;
+        try {
+            sender = message.getSender().fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if (sender.getObjectId().equals(currentUser.getObjectId())) {
+        Log.d("ItemViewType", Integer.toString(position));
+        if (sender.equals(currentUser)) {
             return 0;
         } else {
             return 1;
         }
+
     }
 
     public class ViewHolderMe extends RecyclerView.ViewHolder {
