@@ -58,8 +58,8 @@ public class ChatActivity extends AppCompatActivity {
 
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery<Message> messagesQuery = new Message.Query();
-        messagesQuery.include("sender").whereEqualTo("conversation", conversation);
-        messagesQuery.addDescendingOrder("createdAt");
+//        messagesQuery.include("sender").whereEqualTo("conversation", conversation);
+//        messagesQuery.addDescendingOrder("createdAt");
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messagesQuery);
         Log.e("Live Query", "Query");
         // Listen for CREATE events

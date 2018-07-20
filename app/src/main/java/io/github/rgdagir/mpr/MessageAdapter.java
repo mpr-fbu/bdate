@@ -24,6 +24,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Message> mMessages;
     private String senderObjId;
     private boolean isItYou;
+    private ParseUser sender;
 
     public MessageAdapter(List<Message> messages) {
         mMessages = messages;
@@ -91,21 +92,26 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         Message message = mMessages.get(position);
-        message.getSender().fetchInBackground(new GetCallback<ParseUser>() {
+        message.fetchInBackground(new GetCallback<Message>() {
             @Override
-            public void done(ParseUser senderUser, ParseException e) {
+            public void done(Message msg, ParseException e) {
                 if (e == null) {
-                    senderObjId = senderUser.getObjectId();
-                    Log.d("Fetch Sender", "success!");
-                    String currentUserObjId = ParseUser.getCurrentUser().getObjectId();
-                    if (senderObjId.equals(currentUserObjId)) {
-                        isItYou = false;
-                    } else {
-                        isItYou = true;
-                    }
-                } else {
-                    Log.e("Fetch Sender", "wtf is going on");
-                    e.printStackTrace();
+                    sender = msg.getSender();
+                    sender.fetchInBackground(new GetCallback<ParseUser>() {
+                        @Override
+                        public void done(ParseUser theSenderOne, ParseException e) {
+                            if (e == null) {
+                                senderObjId = theSenderOne.getObjectId();
+                                Log.d("Fetch Sender", "success!");
+                                String currentUserObjId = ParseUser.getCurrentUser().getObjectId();
+                                if (senderObjId.equals(currentUserObjId)) {
+                                    isItYou = false;
+                                } else {
+                                    isItYou = true;
+                                }
+                            }
+                        }
+                    });
                 }
             }
         });
