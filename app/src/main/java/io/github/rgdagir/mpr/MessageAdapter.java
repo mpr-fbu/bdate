@@ -91,14 +91,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         Message message = mMessages.get(position);
-        message.fetchInBackground(new GetCallback<ParseObject>() {
+        message.getSender().fetchInBackground(new GetCallback<ParseUser>() {
             @Override
-            public void done(ParseObject object, ParseException e) {
+            public void done(ParseUser senderUser, ParseException e) {
                 if (e == null) {
-                    Message msg = (Message) object;
-                    senderObjId = msg.getSender().getObjectId();
+                    senderObjId = senderUser.getObjectId();
                     Log.d("Fetch Sender", "success!");
-
                     String currentUserObjId = ParseUser.getCurrentUser().getObjectId();
                     if (senderObjId.equals(currentUserObjId)) {
                         isItYou = false;
