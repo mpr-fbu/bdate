@@ -57,9 +57,10 @@ public class ChatActivity extends AppCompatActivity {
         rvMessages.setAdapter(messageAdapter);
 
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-        ParseQuery<Message> parseQuery = new Message.Query();
-        //parseQuery.whereEqualTo("conversation", conversation);
-        SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
+        ParseQuery<Message> messagesQuery = new Message.Query();
+        messagesQuery.include("sender").whereEqualTo("conversation", conversation);
+        messagesQuery.addDescendingOrder("createdAt");
+        SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messagesQuery);
         Log.e("Live Query", "Query");
         // Listen for CREATE events
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
@@ -75,7 +76,7 @@ public class ChatActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     Log.d("TestLive", "Notifying Adapter...");
-                                    messageAdapter.notifyItemInserted(0);
+                                    messageAdapter.notifyItemInserted(messages.size() - 1);
                                     Log.d("TestLive", "Scrolling to position...");
                                     rvMessages.scrollToPosition(0);
                                     Log.d("TestLive", "Scrolled");
@@ -85,8 +86,7 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     }
                 });
-        subscriptionHandling.handleError(new
-                                                 SubscriptionHandling.HandleErrorCallback<Message>() {
+        subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Message>() {
                                                      @Override
                                                      public void onError(ParseQuery<Message> query, LiveQueryException exception) {
                                                          Log.d("Live Query", "Callback failed");
@@ -124,8 +124,6 @@ public class ChatActivity extends AppCompatActivity {
                 sendMessage();
             }
         });
-
-        // Then do querying and stuff and actually get the messages
         populateMessages();
     }
 
@@ -162,10 +160,9 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void populateMessages() {
-        final ParseQuery<Message> messagesQuery = new Message.Query();
+        ParseQuery<Message> messagesQuery = new Message.Query();
         messagesQuery.include("sender").whereEqualTo("conversation", conversation);
         messagesQuery.addDescendingOrder("createdAt");
-
         messagesQuery.findInBackground(new FindCallback<Message>() {
             @Override
             public void done(List<Message> objects, ParseException e) {
