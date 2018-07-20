@@ -182,6 +182,7 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+        rvMessages.scrollToPosition(0);
     }
 
 
@@ -198,5 +199,4 @@ public class ChatActivity extends AppCompatActivity {
 //        });
 //        return numberOfMessages;
 //    }
-
 }
