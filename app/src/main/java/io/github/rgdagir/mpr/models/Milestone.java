@@ -26,11 +26,11 @@ public class Milestone extends ParseObject {
         put(KEY_ACHIEVEMENT, achievement);
     }
 
-    public int getPointsNeeded() {
+    public Integer getPointsNeeded() {
         return (Integer) getNumber(KEY_POINTS_NEEDED);
     }
 
-    public void setPointsNeeded(int pointsNeeded) {
+    public void setPointsNeeded(Integer pointsNeeded) {
         put(KEY_POINTS_NEEDED, pointsNeeded);
     }
 
