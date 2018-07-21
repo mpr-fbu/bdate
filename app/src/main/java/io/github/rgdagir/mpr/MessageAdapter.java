@@ -56,30 +56,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case 0:
                 final ViewHolderMe viewHolderMe = (ViewHolderMe) holder;
                 viewHolderMe.mInfoMe.setText(message.getTimestamp());
-                message.fetchInBackground(new GetCallback<Message>() {
-                    @Override
-                    public void done(Message object, ParseException e) {
-                        if (e == null) {
-                            viewHolderMe.mMessageMe.setText(object.getText());
-                        } else {
-                            Log.e("MessageAdapter", e.toString());
-                        }
-                    }
-                });
+                viewHolderMe.mMessageMe.setText(message.getText());
                 break;
             case 1:
                 final ViewHolderOther viewHolderOther = (ViewHolderOther) holder;
                 viewHolderOther.mInfoOther.setText(message.getTimestamp());
-                message.fetchInBackground(new GetCallback<Message>() {
-                    @Override
-                    public void done(Message object, ParseException e) {
-                        if (e == null) {
-                            viewHolderOther.mMessageOther.setText(object.getText());
-                        } else {
-                            Log.e("MessageAdapter", e.toString());
-                        }
-                    }
-                });
+                viewHolderOther.mMessageOther.setText(message.getText());
                 break;
         }
     }

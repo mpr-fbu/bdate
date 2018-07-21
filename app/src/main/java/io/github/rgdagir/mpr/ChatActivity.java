@@ -12,9 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.LiveQueryException;
 import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -40,6 +42,7 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<Message> messages;
     ParseUser currUser;
     ParseUser otherUser;
+    private boolean mFirstLoad = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +60,11 @@ public class ChatActivity extends AppCompatActivity {
         rvMessages.setAdapter(messageAdapter);
 
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-        ParseQuery<Message> messagesQuery = new Message.Query();
+        ParseQuery<Message> messageParseQuery = new Message.Query();
+        messageParseQuery.addDescendingOrder("createdAt");
 //        messagesQuery.include("sender").whereEqualTo("conversation", conversation);
 //        messagesQuery.addDescendingOrder("createdAt");
-        SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messagesQuery);
+        SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messageParseQuery);
         Log.e("Live Query", "Query");
         // Listen for CREATE events
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
@@ -68,22 +72,25 @@ public class ChatActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(ParseQuery<Message> query, Message object) {
                         Log.d("TestLive", "Callback");
-                        try {
-                            object.fetchInBackground();
-                            messages.add(0, object);
-                            // RecyclerView updates need to be run on the UI thread
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Log.d("TestLive", "Notifying Adapter...");
-                                    messageAdapter.notifyItemInserted(messages.size() - 1);
-                                    Log.d("TestLive", "Scrolling to position...");
-                                    rvMessages.scrollToPosition(0);
-                                    Log.d("TestLive", "Scrolled");
-                                }});
-                        } catch (Error e){
-                            e.printStackTrace();
-                        }
+                        object.fetchInBackground(new GetCallback<Message>() {
+                            @Override
+                            public void done(Message msg, ParseException e) {
+                                if (e== null) {
+                                    messages.add(0, msg);
+                                    // RecyclerView updates need to be run on the UI thread
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Log.d("TestLive", "Notifying Adapter...");
+                                            messageAdapter.notifyDataSetChanged();
+                                            Log.d("TestLive", "Scrolling to position...");
+                                            rvMessages.scrollToPosition(0);
+                                            Log.d("TestLive", "Scrolled");
+                                        }
+                                    });
+                                }
+                            }
+                        });
                     }
                 });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Message>() {
@@ -167,18 +174,19 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void done(List<Message> objects, ParseException e) {
                 if (e == null) {
-                    for (int i = 0; i < objects.size(); ++i) {
-                        Message message = objects.get(i);
-                        messages.add(message);
-                        messageAdapter.notifyItemInserted(messages.size() - 1);
-                        Log.d("Messages", "a message has been loaded!");
+                    messages.clear();
+                    messages.addAll(objects);
+                    messageAdapter.notifyDataSetChanged();
+                    Log.d("Messages", "a message has been loaded!");
+                    if (mFirstLoad){
+                        rvMessages.scrollToPosition(0);
+                        mFirstLoad = false;
                     }
                 } else {
-                    Log.d("ChatActivity", "Error querying for messages");
+                    Log.d("ChatActivity", "Error querying for messages" + e);
                 }
             }
         });
-        rvMessages.scrollToPosition(0);
     }
 
 
