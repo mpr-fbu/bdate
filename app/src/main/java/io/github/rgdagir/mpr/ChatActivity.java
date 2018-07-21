@@ -12,11 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.LiveQueryException;
 import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -142,15 +140,6 @@ public class ChatActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("ChatActivity", "Sending message success!");
-                    mMessages.add(0, newMessage);
-                    // RecyclerView updates need to be run on the UI thread
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mMessageAdapter.notifyDataSetChanged();
-                            rvMessages.scrollToPosition(0);
-                        }
-                    });
                 } else {
                     Log.e("ChatActivity", "Sending message failed :(");
                     e.printStackTrace();
