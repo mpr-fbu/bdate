@@ -12,9 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.LiveQueryException;
 import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -173,11 +175,10 @@ public class ChatActivity extends AppCompatActivity {
                         Log.d("Messages", "a message has been loaded!");
                     }
                 } else {
-                    Log.d("ChatActivity", "Error querying for messages");
+                    Log.d("ChatActivity", "Error querying for messages" + e);
                 }
             }
         });
-        rvMessages.scrollToPosition(0);
     }
 
 
