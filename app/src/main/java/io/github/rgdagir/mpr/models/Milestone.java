@@ -2,9 +2,9 @@ package io.github.rgdagir.mpr.models;
 
 public class Milestone {
 
-    private static final int NAME_SCORE = 5;
-    private static final int AGE_SCORE = 5;
-    private static final int DISTANCE_AWAY_SCORE = 5;
+    private static final int NAME_SCORE = 3;
+    private static final int AGE_SCORE = 6;
+    private static final int DISTANCE_AWAY_SCORE = 9;
 
     public Milestone() {
     }

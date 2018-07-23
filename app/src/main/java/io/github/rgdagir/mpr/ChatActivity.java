@@ -132,6 +132,16 @@ public class ChatActivity extends AppCompatActivity {
         if (conversation.getLastMessage() != null) {
             if (!currUser.getObjectId().equals(conversation.getLastMessage().getSender().getObjectId())) {
                 conversation.setExchanges(conversation.getExchanges() + 1);
+                conversation.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Log.d("ChatActivity", "exchange updated");
+                        } else {
+                            Log.e("ChatActivity", "exchange failed to update");
+                        }
+                    }
+                });
             }
         }
 
