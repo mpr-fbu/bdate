@@ -81,8 +81,8 @@ public class ChatsListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 HashMap<String, String> payload = new HashMap<>();
-                payload.put("newMatchNotification", "You got a match, what a miracle! :O");
-                ParseCloud.callFunctionInBackground("pushChannelTest", payload);
+                payload.put("newData", "You got a match, what a miracle! :O");
+                ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
             }
         });
 

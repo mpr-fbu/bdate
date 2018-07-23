@@ -105,10 +105,10 @@ public class ChatActivity extends AppCompatActivity {
         subscriptionHandlingConversations.handleEvent(SubscriptionHandling.Event.UPDATE, new
                 SubscriptionHandling.HandleEventCallback<Conversation>() {
                     @Override
-                    public void onEvent(ParseQuery<Conversation> query, Conversation object) {
-
-                            }
-                        });
+                    public void onEvent(ParseQuery<Conversation> query, Conversation conv) {
+                        conversation = conv;
+                    }
+                });
         subscriptionHandlingConversations.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
             @Override
             public void onError(ParseQuery<Conversation> query, LiveQueryException exception) {
@@ -157,9 +157,10 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        if (conversation.getLastMessage() != null) {
-            if (!currUser.getObjectId().equals(conversation.getLastMessage().getSender().getObjectId())) {
-                conversation.setExchanges(conversation.getExchanges() + 1);
+        Integer exchanges = conversation.getExchanges();
+        if (!mMessages.isEmpty()) {
+            if (!currUser.getObjectId().equals(mMessages.get(0).getSender().getObjectId())) {
+                conversation.setExchanges(exchanges + 1);
                 conversation.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
@@ -172,7 +173,6 @@ public class ChatActivity extends AppCompatActivity {
                 });
             }
         }
-
         final Message newMessage = new Message();
         String messageText = etMessage.getText().toString();
 
