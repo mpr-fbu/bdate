@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
                 return false;
             }
         });
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(CustomPushReceiver.intentAction));
     }
 
     @Override
