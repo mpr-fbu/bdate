@@ -20,7 +20,6 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SubscriptionHandling;
 
-import org.json.JSONException;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;

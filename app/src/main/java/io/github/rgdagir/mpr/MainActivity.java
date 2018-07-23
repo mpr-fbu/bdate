@@ -1,22 +1,21 @@
 package io.github.rgdagir.mpr;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements ChatsListFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener {
 
-    //FragmentTransaction fragmentTransaction;
-
-    ChatsListFragment fragment1 = new ChatsListFragment();
-    SearchFragment fragment2 = new SearchFragment();
-    ProfileFragment fragment3 = new ProfileFragment();
+//    ParseUser currentUser = ParseUser.getCurrentUser();
+//    currentUser.logOut();
+    ChatsListFragment initialFragment = new ChatsListFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
 
         //set chats fragment as initial
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.flContainer, fragment1).commit();
+        fragmentTransaction.replace(R.id.flContainer, initialFragment).commit();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -39,21 +38,22 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
 
                 switch(item.getItemId()) {
                     case R.id.action_chats:
-                        FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
-                        fragmentTransaction1.replace(R.id.flContainer, fragment1).commit();
+                        switchFragment(fragmentManager.beginTransaction(), initialFragment);
                         return true;
                     case R.id.action_search:
-                        FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
-                        fragmentTransaction2.replace(R.id.flContainer, fragment2).commit();
+                        switchFragment(fragmentManager.beginTransaction(), new SearchFragment());
                         return true;
                     case R.id.action_profile:
-                        FragmentTransaction fragmentTransaction3 = fragmentManager.beginTransaction();
-                        fragmentTransaction3.replace(R.id.flContainer, fragment3).commit();
+                        switchFragment(fragmentManager.beginTransaction(), new ProfileFragment());
                         return true;
                 }
                 return false;
             }
         });
+    }
+
+    public static void switchFragment(FragmentTransaction fragmentTransaction, Fragment fragment) {
+        fragmentTransaction.replace(R.id.flContainer, fragment).commit();
     }
 
     @Override
