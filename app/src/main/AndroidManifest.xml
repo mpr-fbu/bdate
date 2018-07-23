@@ -22,7 +22,6 @@
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -43,7 +42,7 @@
             </intent-filter>
         </service>
         <receiver
-            android:name="com.parse.ParsePushBroadcastReceiver"
+            android:name="CustomPushReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
@@ -52,7 +51,7 @@
             </intent-filter>
         </receiver>
         <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+        See README(https://goo.gl/l4GJaQ) for more. -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_stat_ic_notification" />
@@ -61,6 +60,9 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
+        <meta-data
+            android:name="com.parse.push.notification_icon"
+            android:resource="@drawable/ic_stat_ic_notification" />
     </application>
 
 </manifest>

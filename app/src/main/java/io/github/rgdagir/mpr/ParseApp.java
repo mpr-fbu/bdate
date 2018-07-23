@@ -12,8 +12,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class ParseApp extends Application {
 
-//    private String parseAppId = this.getResources().getString(R.string.parseAppId);
-//    private String parseServer = this.getResources().getString(R.string.parseServer);
     @Override
     public void onCreate() {
         super.onCreate();
