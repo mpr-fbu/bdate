@@ -36,8 +36,8 @@ public class ChatActivity extends AppCompatActivity {
     private Button btnReturn;
     private Button btnSend;
     private RecyclerView rvMessages;
-    private MessageAdapter messageAdapter;
-    private ArrayList<Message> messages;
+    private MessageAdapter mMessageAdapter;
+    private ArrayList<Message> mMessages;
     ParseUser currUser;
     ParseUser otherUser;
 
@@ -52,52 +52,46 @@ public class ChatActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.btnSend);
         rvMessages = findViewById(R.id.rvMessages);
         currUser = ParseUser.getCurrentUser();
-        messages = new ArrayList<>();
-        messageAdapter = new MessageAdapter(messages);
-        rvMessages.setAdapter(messageAdapter);
+        mMessages = new ArrayList<>();
+        mMessageAdapter = new MessageAdapter(mMessages);
+        rvMessages.setAdapter(mMessageAdapter);
 
+        // Make sure the Parse server is setup to configured for live queries
+        // URL for server is determined by Parse.initialize() call.
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-        ParseQuery<Message> parseQuery = new Message.Query();
-        //parseQuery.whereEqualTo("conversation", conversation);
-        SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
-        Log.e("Live Query", "Query");
-        // Listen for CREATE events
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
+
+        ParseQuery<Message> messagesQuery = ParseQuery.getQuery(Message.class);
+        // messagesQuery.include("sender"); //.whereEqualTo("conversation", conversation);
+        // messagesQuery.addDescendingOrder("createdAt");
+        SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messagesQuery);
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
                     @Override
                     public void onEvent(ParseQuery<Message> query, Message object) {
-                        Log.d("TestLive", "Callback");
-                        try {
-                            object.fetchInBackground();
-                            messages.add(0, object);
-                            // RecyclerView updates need to be run on the UI thread
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Log.d("TestLive", "Notifying Adapter...");
-                                    messageAdapter.notifyItemInserted(0);
-                                    Log.d("TestLive", "Scrolling to position...");
-                                    rvMessages.scrollToPosition(0);
-                                    Log.d("TestLive", "Scrolled");
-                                }});
-                        } catch (Error e){
-                            e.printStackTrace();
-                        }
+                        mMessages.add(0, object);
+                        // RecyclerView updates need to be run on the UI thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMessageAdapter.notifyDataSetChanged();
+                                rvMessages.scrollToPosition(0);
+                            }
+                        });
                     }
                 });
-        subscriptionHandling.handleError(new
-                SubscriptionHandling.HandleErrorCallback<Message>() {
-                    @Override
-                    public void onError(ParseQuery<Message> query, LiveQueryException exception) {
-                        Log.d("Live Query", "Callback failed");
-                    }
-                });
+        subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Message>() {
+                                                     @Override
+                                                     public void onError(ParseQuery<Message> query, LiveQueryException exception) {
+                                                         Log.d("Live Query", "Callback failed");
+                                                     }
+                                                 });
 
-
+        // set up recycler view for messages
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
         linearLayoutManager.setReverseLayout(true);
         rvMessages.setLayoutManager(linearLayoutManager);
 
+        // display username on top of chat
         if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
             otherUser = conversation.getUser2();
             try {
@@ -110,6 +104,7 @@ public class ChatActivity extends AppCompatActivity {
             tvUsername.setText(otherUser.getUsername());
         }
 
+        // back button to return to chat list
         btnReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,11 +116,13 @@ public class ChatActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMessage();
+                if (etMessage.getText().toString().length() > 0) {
+                    sendMessage();
+                }
             }
         });
 
-        // Then do querying and stuff and actually get the messages
+        // initially populate chat with past messages
         populateMessages();
     }
 
@@ -143,18 +140,9 @@ public class ChatActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("ChatActivity", "Sending message success!");
-                    messages.add(0, newMessage);
-                    // RecyclerView updates need to be run on the UI thread
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            messageAdapter.notifyItemInserted(0);
-                            rvMessages.scrollToPosition(0);
-                        }
-                    });
-
                 } else {
                     Log.e("ChatActivity", "Sending message failed :(");
+                    e.printStackTrace();
                 }
             }
         });
@@ -162,26 +150,24 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void populateMessages() {
-        final ParseQuery<Message> messagesQuery = new Message.Query();
+        ParseQuery<Message> messagesQuery = new Message.Query();
         messagesQuery.include("sender").whereEqualTo("conversation", conversation);
         messagesQuery.addDescendingOrder("createdAt");
-
         messagesQuery.findInBackground(new FindCallback<Message>() {
             @Override
             public void done(List<Message> objects, ParseException e) {
                 if (e == null) {
                     for (int i = 0; i < objects.size(); ++i) {
                         Message message = objects.get(i);
-                        messages.add(message);
-                        messageAdapter.notifyItemInserted(messages.size() - 1);
+                        mMessages.add(message);
+                        mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
                         Log.d("Messages", "a message has been loaded!");
                     }
                 } else {
-                    Log.d("ChatActivity", "Error querying for messages");
+                    Log.d("ChatActivity", "Error querying for messages" + e);
                 }
             }
         });
-        rvMessages.scrollToPosition(0);
     }
 
 
