@@ -1,5 +1,7 @@
 package io.github.rgdagir.mpr.models;
 
+import io.github.rgdagir.mpr.ChatActivity;
+
 public class Milestone {
 
     private static final int NAME_SCORE = 3;
@@ -11,25 +13,25 @@ public class Milestone {
 
     public static boolean canSeeName(Conversation conversation) {
         int currentPoints = conversation.getExchanges();
-        if (currentPoints >= NAME_SCORE) {
-            return true;
+        if (currentPoints == NAME_SCORE) {
+            ChatActivity.showSnackbar("name");
         }
-        return false;
+        return (currentPoints > NAME_SCORE);
     }
 
     public static boolean canSeeAge(Conversation conversation) {
         int currentPoints = conversation.getExchanges();
-        if (currentPoints >= AGE_SCORE) {
-            return true;
+        if (currentPoints == AGE_SCORE) {
+            ChatActivity.showSnackbar("age");
         }
-        return false;
+        return (currentPoints > AGE_SCORE);
     }
 
     public static boolean canSeeDistanceAway(Conversation conversation) {
         int currentPoints = conversation.getExchanges();
-        if (currentPoints >= DISTANCE_AWAY_SCORE) {
-            return true;
+        if (currentPoints == DISTANCE_AWAY_SCORE) {
+            ChatActivity.showSnackbar("distance away");
         }
-        return false;
+        return (currentPoints > DISTANCE_AWAY_SCORE);
     }
 }

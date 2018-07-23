@@ -7,4 +7,7 @@
     <string name="password">Password...</string>
     <string name="confirmPassword">Confirm password...</string>
     <string name="email">Email...</string>
+    <string name="snackbar_name">Name unlocked!</string>
+    <string name="snackbar_age">Age unlocked!</string>
+    <string name="snackbar_distance_away">Distance away unlocked!</string>
 </resources>
