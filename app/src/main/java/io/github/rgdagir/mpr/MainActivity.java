@@ -1,6 +1,8 @@
 package io.github.rgdagir.mpr;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -12,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -21,6 +24,9 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
 
     ChatsListFragment initialFragment = new ChatsListFragment();
     private static final int LOCATION_PERMISSION_REQUEST = 1;
+
+    // set up broadcast receiver for push notifications
+    private BroadcastReceiver mBroadcastReceiver = new CustomPushReceiver();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -35,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        //set chats fragment as initial
+        // set chats fragment as initial
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.flContainer, initialFragment).commit();
 
@@ -58,6 +64,18 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(CustomPushReceiver.intentAction));
     }
 
     public static void switchFragment(FragmentTransaction fragmentTransaction, Fragment fragment) {
