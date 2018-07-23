@@ -1,9 +1,19 @@
 package io.github.rgdagir.mpr;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +21,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -22,9 +37,13 @@ import java.util.List;
 
 import io.github.rgdagir.mpr.models.Conversation;
 
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
+
 public class SearchFragment extends Fragment {
     private SearchFragment.OnFragmentInteractionListener mListener;
     private Button searchButton;
+    private static final int LOCATION_PERMISSION_REQUEST = 1;
+    private Context context;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -35,9 +54,14 @@ public class SearchFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        context = getActivity();
+        getLocationPermissions();
+        getLastLocation();
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search, container, false);
     }
@@ -200,4 +224,100 @@ public class SearchFragment extends Fragment {
         }
         return true;
     }
+
+    @SuppressLint("MissingPermission")
+    public void getLastLocation() {
+        FusedLocationProviderClient locationClient = getFusedLocationProviderClient(context);
+        locationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                // GPS location can be null if GPS is switched off
+                if (location != null) {
+                    updateUserLocation(location);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("MapDemoActivity", "Error trying to get last GPS location");
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void updateUserLocation(Location location){
+        Log.d("NEWLOCATION", "Latitude = " + Double.toString(location.getLatitude()));
+        Log.d("NEWLOCATION", "Longitude = " + Double.toString(location.getLongitude()));
+        ParseGeoPoint newLoc = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
+        ParseUser currUser = ParseUser.getCurrentUser();
+        currUser.put("lastLocation", newLoc);
+    }
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void getLocationPermissions(){
+        // 1) Use the support library version ContextCompat.checkSelfPermission(...) to avoid
+        // checking the build version since Context.checkSelfPermission(...) is only available
+        // in Marshmallow
+        // 2) Always check for permission (even if permission has already been granted)
+        // since the user can revoke permissions at any time through Settings
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // If the statement above is true, then no permission was granted
+            // Check if the user has been asked about this permission already and denied
+            // it. If so, we want to give more explanation about why the permission is needed.
+            if (shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // if the statement above is false, it means that the user has previously denied the request for that permission
+                // TODO - give user an explanation of how location will be used before the actual request is made
+            }
+            // Request permission
+            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST);
+        }
+    }
+
+    // Callback function for location request
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST) {
+            if (grantResults.length == 1
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(context, "Location permission granted", Toast.LENGTH_SHORT).show();
+            } else {
+                boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION);
+                if (showRationale) {
+                    // TODO - handle this situation when the user has denied permission
+                } else {
+                    Toast.makeText(context, "Location permission denied", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+// TODO - set up handlers for location request denials below
+//    // Annotate a method which explains why the permission/s is/are needed.
+//    // It passes in a `PermissionRequest` object which can continue or abort the current permission
+//    @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
+//    void showRationaleForPhoneCall(PermissionRequest request) {
+//        new AlertDialog.Builder(this)
+//                .setMessage(R.string.permission_phone_rationale)
+//                .setPositiveButton(R.string.button_allow, (dialog, button) -> request.proceed())
+//                .setNegativeButton(R.string.button_deny, (dialog, button) -> request.cancel())
+//                .show();
+//    }
+//
+//    // Annotate a method which is invoked if the user doesn't grant the permissions
+//    @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION)
+//    void showDeniedForPhoneCall() {
+//        Toast.makeText(this, R.string.permission_call_denied, Toast.LENGTH_SHORT).show();
+//    }
+//
+//    // Annotates a method which is invoked if the user
+//    // chose to have the device "never ask again" about a permission
+//    @OnNeverAskAgain(Manifest.permission.ACCESS_FINE_LOCATION)
+//    void showNeverAskForPhoneCall() {
+//        Toast.makeText(this, R.string.permission_call_neverask, Toast.LENGTH_SHORT).show();
+//    }
 }
