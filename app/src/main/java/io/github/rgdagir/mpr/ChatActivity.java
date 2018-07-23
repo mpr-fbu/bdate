@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.LiveQueryException;
@@ -32,7 +33,6 @@ import io.github.rgdagir.mpr.models.Milestone;
 public class ChatActivity extends AppCompatActivity {
 
     Conversation conversation;
-    Milestone milestone;
     private EditText etMessage;
     private TextView tvUsername;
     private Button btnReturn;
@@ -48,7 +48,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         conversation = Parcels.unwrap(getIntent().getParcelableExtra("conversation"));
-        milestone = new Milestone(conversation);
         etMessage = findViewById(R.id.etMessage);
         tvUsername = findViewById(R.id.tvUsername);
         btnReturn = findViewById(R.id.btnReturn);
@@ -156,6 +155,14 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
         etMessage.setText(null);
+
+        if (Milestone.canSeeDistanceAway(conversation)) {
+            Toast.makeText(this, "Unlocked distance away!", Toast.LENGTH_LONG).show();
+        } else if (Milestone.canSeeAge(conversation)) {
+            Toast.makeText(this, "Unlocked age!", Toast.LENGTH_LONG).show();
+        } else if (Milestone.canSeeName(conversation)) {
+            Toast.makeText(this, "Unlocked name!", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void populateMessages() {
