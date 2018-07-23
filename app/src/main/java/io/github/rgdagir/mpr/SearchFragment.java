@@ -178,6 +178,7 @@ public class SearchFragment extends Fragment {
         final Conversation newConvo = new Conversation();
         newConvo.setUser1(currentUser);
         newConvo.setExchanges(0);
+        newConvo.setLocation
 
         newConvo.saveInBackground(new SaveCallback() {
             @Override
