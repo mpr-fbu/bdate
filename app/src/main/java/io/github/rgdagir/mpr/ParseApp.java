@@ -7,7 +7,6 @@ import com.parse.ParseObject;
 
 import io.github.rgdagir.mpr.models.Conversation;
 import io.github.rgdagir.mpr.models.Message;
-import io.github.rgdagir.mpr.models.Milestone;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -24,7 +23,6 @@ public class ParseApp extends Application {
 
         ParseObject.registerSubclass(Message.class);
         ParseObject.registerSubclass(Conversation.class);
-        ParseObject.registerSubclass(Milestone.class);
 
         // Use for monitoring Parse OkHttp traffic
         // Can be Level.BASIC, Level.HEADERS, or Level.BODY
