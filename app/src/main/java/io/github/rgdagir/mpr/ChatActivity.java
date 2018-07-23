@@ -2,6 +2,7 @@ package io.github.rgdagir.mpr;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,7 +37,7 @@ public class ChatActivity extends AppCompatActivity {
     private EditText etMessage;
     private TextView tvUsername;
     private Button btnReturn;
-    private Button btnSend;
+    private static Button btnSend;
     private RecyclerView rvMessages;
     private MessageAdapter mMessageAdapter;
     private ArrayList<Message> mMessages;
@@ -168,10 +169,16 @@ public class ChatActivity extends AppCompatActivity {
 
         if (Milestone.canSeeDistanceAway(conversation)) {
             Toast.makeText(this, "Unlocked distance away!", Toast.LENGTH_LONG).show();
+            showSnackbar("distance away");
+            //show distance away in other user's profile
         } else if (Milestone.canSeeAge(conversation)) {
             Toast.makeText(this, "Unlocked age!", Toast.LENGTH_LONG).show();
+            showSnackbar("age");
+            //show age in other user's profile
         } else if (Milestone.canSeeName(conversation)) {
             Toast.makeText(this, "Unlocked name!", Toast.LENGTH_LONG).show();
+            showSnackbar("distance name");
+            tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
         }
     }
 
@@ -194,6 +201,21 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public static void showSnackbar(String milestone) {
+        switch (milestone) {
+            case "name":
+                Snackbar.make(btnSend, R.string.snackbar_name, Snackbar.LENGTH_LONG)
+                        .show();
+                //tvUsername
+            case "age":
+                Snackbar.make(btnSend, R.string.snackbar_age, Snackbar.LENGTH_LONG)
+                        .show();
+            case "distance away":
+                Snackbar.make(btnSend, R.string.snackbar_distance_away, Snackbar.LENGTH_LONG)
+                        .show();
+        }
     }
 
 
