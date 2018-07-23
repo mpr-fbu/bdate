@@ -27,10 +27,12 @@ import java.util.List;
 
 import io.github.rgdagir.mpr.models.Conversation;
 import io.github.rgdagir.mpr.models.Message;
+import io.github.rgdagir.mpr.models.Milestone;
 
 public class ChatActivity extends AppCompatActivity {
 
     Conversation conversation;
+    Milestone milestone;
     private EditText etMessage;
     private TextView tvUsername;
     private Button btnReturn;
@@ -46,6 +48,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         conversation = Parcels.unwrap(getIntent().getParcelableExtra("conversation"));
+        milestone = new Milestone(conversation);
         etMessage = findViewById(R.id.etMessage);
         tvUsername = findViewById(R.id.tvUsername);
         btnReturn = findViewById(R.id.btnReturn);
@@ -127,6 +130,12 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
+        if (conversation.getLastMessage() != null) {
+            if (!currUser.getObjectId().equals(conversation.getLastMessage().getSender().getObjectId())) {
+                conversation.setExchanges(conversation.getExchanges() + 1);
+            }
+        }
+
         final Message newMessage = new Message();
         String messageText = etMessage.getText().toString();
 

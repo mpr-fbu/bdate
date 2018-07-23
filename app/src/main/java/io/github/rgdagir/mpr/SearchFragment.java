@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rgdagir.mpr.models.Conversation;
-import io.github.rgdagir.mpr.models.Milestone;
 
 public class SearchFragment extends Fragment {
     private SearchFragment.OnFragmentInteractionListener mListener;
@@ -141,7 +140,6 @@ public class SearchFragment extends Fragment {
                                 }
                             }
                         });
-                        createMilestones(openConvos.get(i), currentUser);
                         return;
                     }
                 }
@@ -155,41 +153,15 @@ public class SearchFragment extends Fragment {
     private void createConversation(final ParseUser currentUser) {
         final Conversation newConvo = new Conversation();
         newConvo.setUser1(currentUser);
+        newConvo.setExchanges(0);
 
         newConvo.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("SearchFragment", "Create conversation success!");
-                    createMilestones(newConvo, currentUser);
                 } else {
                     Log.e("SearchFragment", "Creating conversation failed :(");
-                }
-            }
-        });
-    }
-
-    private void createMilestones(Conversation conversation, ParseUser user) {
-        milestoneGenerator(conversation, user, "name", 5);
-        milestoneGenerator(conversation, user, "age", 5);
-        milestoneGenerator(conversation, user, "distance away", 5);
-    }
-
-    private void milestoneGenerator(Conversation conversation, ParseUser user, String achievement, Integer pointsNeeded) {
-        final Milestone milestone = new Milestone();
-        milestone.setConversation(conversation);
-        milestone.setUser(user);
-        milestone.setAchievement(achievement);
-        milestone.setPointsNeeded(pointsNeeded);
-        milestone.setUnlocked(false);
-
-        milestone.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("Milestone", "Milestone successfully created!");
-                } else {
-                    Log.e("Milestone", "Creating milestone failed :((((");
                 }
             }
         });

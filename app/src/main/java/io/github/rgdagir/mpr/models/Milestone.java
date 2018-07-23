@@ -1,39 +1,37 @@
 package io.github.rgdagir.mpr.models;
 
-import com.parse.ParseUser;
-
 public class Milestone {
 
-    public Conversation conversation;
-    public Boolean nameUnlocked;
-    public Boolean ageUnlocked;
-    public Boolean distanceAwayUnlocked;
+    private static Conversation conversation;
+    private static final int NAME_SCORE = 5;
+    private static final int AGE_SCORE = 5;
+    private static final int DISTANCE_AWAY_SCORE = 5;
 
-    public Milestone(Conversation conversation) {
-        this.conversation = conversation;
-        nameUnlocked = false;
-        ageUnlocked = false;
-        distanceAwayUnlocked = false;
+    public Milestone(Conversation convo) {
+        conversation = convo;
     }
 
-    public void canSeeName() {
+    public static boolean canSeeName() {
         int currentPoints = conversation.getExchanges();
-        if (currentPoints >= 3) {
-            nameUnlocked = true;
+        if (currentPoints >= NAME_SCORE) {
+            return true;
         }
+        return false;
     }
 
-    public void canSeeAge() {
+    public static boolean canSeeAge() {
         int currentPoints = conversation.getExchanges();
-        if (currentPoints >= 6) {
-            ageUnlocked = true;
+        if (currentPoints >= AGE_SCORE) {
+            return true;
         }
+        return false;
     }
 
-    public void canSeeDistanceAway() {
+    public static boolean canSeeDistanceAway() {
         int currentPoints = conversation.getExchanges();
-        if (currentPoints >= 9) {
-            distanceAwayUnlocked = true;
+        if (currentPoints >= DISTANCE_AWAY_SCORE) {
+            return true;
         }
+        return false;
     }
 }

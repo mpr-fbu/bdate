@@ -14,7 +14,6 @@ import java.util.Locale;
 public class Conversation extends ParseObject {
     private static final String KEY_USER1 = "user1";
     private static final String KEY_USER2 = "user2";
-    private static final String KEY_FULL = "full";
     private static final String KEY_LAST_MSG = "lastMessage";
     private static final String KEY_EXCHANGES = "exchanges";
 
