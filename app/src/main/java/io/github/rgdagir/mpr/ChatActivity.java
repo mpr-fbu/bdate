@@ -89,6 +89,33 @@ public class ChatActivity extends AppCompatActivity {
                                                      }
                                                  });
 
+        ParseUser currUser = ParseUser.getCurrentUser();
+        final ParseQuery<Conversation> conversationsQuery1 = new Conversation.Query();
+        conversationsQuery1.whereEqualTo("user1", currUser);
+        final ParseQuery<Conversation> conversationsQuery2 = new Conversation.Query();
+        conversationsQuery2.whereEqualTo("user2", currUser);
+
+        List<ParseQuery<Conversation>> queries = new ArrayList<>();
+        queries.add(conversationsQuery1);
+        queries.add(conversationsQuery2);
+
+        final ParseQuery<Conversation> conversationsQuery = ParseQuery.or(queries).whereExists("user2").whereExists("user1");
+        conversationsQuery.include("user1").include("user2").include("lastMessage").addDescendingOrder("updatedAt");
+        SubscriptionHandling<Conversation> subscriptionHandlingConversations = parseLiveQueryClient.subscribe(conversationsQuery);
+        subscriptionHandlingConversations.handleEvent(SubscriptionHandling.Event.UPDATE, new
+                SubscriptionHandling.HandleEventCallback<Conversation>() {
+                    @Override
+                    public void onEvent(ParseQuery<Conversation> query, Conversation conv) {
+                        conversation = conv;
+                    }
+                });
+        subscriptionHandlingConversations.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
+            @Override
+            public void onError(ParseQuery<Conversation> query, LiveQueryException exception) {
+                Log.d("Live Query", "Callback failed");
+            }
+        });
+
         // set up recycler view for messages
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
         linearLayoutManager.setReverseLayout(true);
@@ -130,9 +157,10 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        if (conversation.getLastMessage() != null) {
-            if (!currUser.getObjectId().equals(conversation.getLastMessage().getSender().getObjectId())) {
-                conversation.setExchanges(conversation.getExchanges() + 1);
+        Integer exchanges = conversation.getExchanges();
+        if (!mMessages.isEmpty()) {
+            if (!currUser.getObjectId().equals(mMessages.get(0).getSender().getObjectId())) {
+                conversation.setExchanges(exchanges + 1);
                 conversation.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
@@ -145,7 +173,6 @@ public class ChatActivity extends AppCompatActivity {
                 });
             }
         }
-
         final Message newMessage = new Message();
         String messageText = etMessage.getText().toString();
 
