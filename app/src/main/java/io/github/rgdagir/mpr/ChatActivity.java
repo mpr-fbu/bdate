@@ -48,25 +48,18 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         setUpToolbar();
-
         findViews();
         setUpInstanceVariables();
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         subscribeToMessages(parseLiveQueryClient);
         subscribeToConversations(parseLiveQueryClient);
-
-        // set up recycler view for messages
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
-        linearLayoutManager.setReverseLayout(true);
-        rvMessages.setLayoutManager(linearLayoutManager);
-
+        setUpRecyclerView();
         displayUsernameAtTop();
         setOnClickListeners();
-
-        // initially populate chat with past messages
         populateMessages();
         rvMessages.scrollToPosition(0);
     }
+
 
     private void setUpToolbar() {
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
@@ -74,6 +67,19 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    private void setUpRecyclerView() {
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
+        linearLayoutManager.setReverseLayout(true);
+        rvMessages.setLayoutManager(linearLayoutManager);
+        rvMessages.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom)
+            {
+                rvMessages.scrollToPosition(0);
+            }
+        });
     }
 
     @Override
@@ -198,22 +204,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        Integer exchanges = conversation.getExchanges();
-        if (!mMessages.isEmpty()) {
-            if (!currUser.getObjectId().equals(mMessages.get(0).getSender().getObjectId())) {
-                conversation.setExchanges(exchanges + 1);
-                conversation.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            Log.d("ChatActivity", "exchange updated");
-                        } else {
-                            Log.e("ChatActivity", "exchange failed to update");
-                        }
-                    }
-                });
-            }
-        }
+        updateExchanges();
         final Message newMessage = new Message();
         String messageText = etMessage.getText().toString();
 
@@ -234,6 +225,25 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
         etMessage.setText(null);
+    }
+
+    private void updateExchanges() {
+        Integer exchanges = conversation.getExchanges();
+        if (!mMessages.isEmpty()) {
+            if (!currUser.getObjectId().equals(mMessages.get(0).getSender().getObjectId())) {
+                conversation.setExchanges(exchanges + 1);
+                conversation.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Log.d("ChatActivity", "exchange updated");
+                        } else {
+                            Log.e("ChatActivity", "exchange failed to update");
+                        }
+                    }
+                });
+            }
+        }
     }
 
     private void populateMessages() {
