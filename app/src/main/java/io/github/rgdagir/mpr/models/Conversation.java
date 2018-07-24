@@ -1,6 +1,7 @@
 package io.github.rgdagir.mpr.models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -74,5 +75,21 @@ public class Conversation extends ParseObject {
             include(KEY_USER2);
             return this;
         }
+    }
+
+    public void setMatchLocation(ParseGeoPoint location) {
+        put("matchLocation", location);
+    }
+
+    public ParseGeoPoint getMatchLocation() {
+        return getParseGeoPoint("matchLocation");
+    }
+
+    public void setMatchRange(int rangeInMiles) {
+        put("matchRange", rangeInMiles);
+    }
+
+    public int getMatchRange() {
+        return getInt("matchRange");
     }
 }

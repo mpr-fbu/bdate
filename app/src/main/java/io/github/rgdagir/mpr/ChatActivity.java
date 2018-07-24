@@ -63,8 +63,6 @@ public class ChatActivity extends AppCompatActivity {
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 
         ParseQuery<Message> messagesQuery = ParseQuery.getQuery(Message.class);
-        // messagesQuery.include("sender"); //.whereEqualTo("conversation", conversation);
-        // messagesQuery.addDescendingOrder("createdAt");
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messagesQuery);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
@@ -88,32 +86,47 @@ public class ChatActivity extends AppCompatActivity {
                                                      }
                                                  });
 
-//        ParseUser currUser = ParseUser.getCurrentUser();
-//        final ParseQuery<Conversation> conversationsQuery1 = new Conversation.Query();
-//        conversationsQuery1.whereEqualTo("user1", currUser);
-//        final ParseQuery<Conversation> conversationsQuery2 = new Conversation.Query();
-//        conversationsQuery2.whereEqualTo("user2", currUser);
-//
-//        List<ParseQuery<Conversation>> queries = new ArrayList<>();
-//        queries.add(conversationsQuery1);
-//        queries.add(conversationsQuery2);
-//
-//        final ParseQuery<Conversation> conversationsQuery = ParseQuery.or(queries).whereExists("user2").whereExists("user1");
-//        conversationsQuery.include("user1").include("user2").include("lastMessage").addDescendingOrder("updatedAt");
-//        SubscriptionHandling<Conversation> subscriptionHandlingConversations = parseLiveQueryClient.subscribe(conversationsQuery);
-//        subscriptionHandlingConversations.handleEvent(SubscriptionHandling.Event.UPDATE, new
-//                SubscriptionHandling.HandleEventCallback<Conversation>() {
-//                    @Override
-//                    public void onEvent(ParseQuery<Conversation> query, Conversation conv) {
-//                        conversation = conv;
-//                    }
-//                });
-//        subscriptionHandlingConversations.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
-//            @Override
-//            public void onError(ParseQuery<Conversation> query, LiveQueryException exception) {
-//                Log.d("Live Query", "Callback failed");
-//            }
-//        });
+        ParseUser currUser = ParseUser.getCurrentUser();
+        if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
+
+        }
+        final ParseQuery<Conversation> conversationsQuery1 = new Conversation.Query();
+        conversationsQuery1.whereEqualTo("user1", currUser);
+        conversationsQuery1.whereEqualTo("user2", otherUser);
+        final ParseQuery<Conversation> conversationsQuery2 = new Conversation.Query();
+        conversationsQuery2.whereEqualTo("user2", currUser);
+        conversationsQuery2.whereEqualTo("user1", otherUser);
+
+        List<ParseQuery<Conversation>> queries = new ArrayList<>();
+        queries.add(conversationsQuery1);
+        queries.add(conversationsQuery2);
+
+        final ParseQuery<Conversation> conversationsQuery = ParseQuery.or(queries).whereExists("user2").whereExists("user1");
+        conversationsQuery.include("user1").include("user2").include("lastMessage").addDescendingOrder("updatedAt");
+        SubscriptionHandling<Conversation> subscriptionHandlingConversations = parseLiveQueryClient.subscribe(conversationsQuery);
+        subscriptionHandlingConversations.handleEvent(SubscriptionHandling.Event.UPDATE, new
+                SubscriptionHandling.HandleEventCallback<Conversation>() {
+                    @Override
+                    public void onEvent(ParseQuery<Conversation> query, Conversation conv) {
+                        conversation = conv;
+                        if (Milestone.canSeeDistanceAway(conversation)) {
+                            //Toast.makeText(this, "Unlocked distance away!", Toast.LENGTH_LONG).show();
+                            //show distance away in both user profiles
+                        } else if (Milestone.canSeeAge(conversation)) {
+                            //Toast.makeText(this, "Unlocked age!", Toast.LENGTH_LONG).show();
+                            //show age in both user profiles
+                        } else if (Milestone.canSeeName(conversation)) {
+                            //Toast.makeText(this, "Unlocked name!", Toast.LENGTH_LONG).show();
+                            tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
+                        }
+                    }
+                });
+        subscriptionHandlingConversations.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
+            @Override
+            public void onError(ParseQuery<Conversation> query, LiveQueryException exception) {
+                Log.d("Conversation Live Query", "Callback failed");
+            }
+        });
 
         // set up recycler view for messages
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
@@ -153,6 +166,7 @@ public class ChatActivity extends AppCompatActivity {
 
         // initially populate chat with past messages
         populateMessages();
+        rvMessages.scrollToPosition(0);
     }
 
     private void sendMessage() {
@@ -192,17 +206,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
         etMessage.setText(null);
-
-        if (Milestone.canSeeDistanceAway(conversation)) {
-            //Toast.makeText(this, "Unlocked distance away!", Toast.LENGTH_LONG).show();
-            //show distance away in both user profiles
-        } else if (Milestone.canSeeAge(conversation)) {
-            //Toast.makeText(this, "Unlocked age!", Toast.LENGTH_LONG).show();
-            //show age in both user profiles
-        } else if (Milestone.canSeeName(conversation)) {
-            //Toast.makeText(this, "Unlocked name!", Toast.LENGTH_LONG).show();
-            tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
-        }
     }
 
     private void populateMessages() {
@@ -242,19 +245,4 @@ public class ChatActivity extends AppCompatActivity {
                 return;
         }
     }
-
-
-//    private int getNumberOfMessagesSentBy(ParseUser sender) {
-//        final int numberOfMessages;
-//        ParseQuery<Message> fetchNumberOfMessages = new Message.Query();
-//        fetchNumberOfMessages.whereEqualTo("sender", sender.getUsername())
-//                .whereEqualTo("conversation", conversation);
-//        fetchNumberOfMessages.findInBackground(new FindCallback<Message>() {
-//            @Override
-//            public void done(List<Message> objects, ParseException e) {
-//                numberOfMessages = objects.size();
-//            }
-//        });
-//        return numberOfMessages;
-//    }
 }

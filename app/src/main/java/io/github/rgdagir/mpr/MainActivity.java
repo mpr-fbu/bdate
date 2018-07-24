@@ -29,9 +29,7 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         final FragmentManager fragmentManager = getSupportFragmentManager();
-
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -82,6 +80,5 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
     public void onFragmentInteraction(Uri uri) {
 
     }
-
 
 }

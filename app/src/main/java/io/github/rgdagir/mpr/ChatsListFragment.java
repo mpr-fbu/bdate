@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,11 +16,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
+import com.parse.LiveQueryException;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
+import com.parse.ParseLiveQueryClient;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SubscriptionHandling;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +35,7 @@ import io.github.rgdagir.mpr.models.Conversation;
 public class ChatsListFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private SwipeRefreshLayout swipeContainer;
 
     private Button btnSendNotification;
     private ParseImageView ivProfilePic;
@@ -39,7 +44,7 @@ public class ChatsListFragment extends Fragment {
     private TextView tvNumConversations;
     private ConversationAdapter conversationAdapter;
     RecyclerView rvConversations;
-    ArrayList<Conversation> conversations;
+    ArrayList<Conversation> mConversations;
 
     public ChatsListFragment() {
         // Required empty public constructor
@@ -63,6 +68,44 @@ public class ChatsListFragment extends Fragment {
         rvConversations = view.findViewById(R.id.rvConversations);
         btnSendNotification = view.findViewById(R.id.btnSendNotification);
 
+        // Lookup the swipe container view
+        swipeContainer = view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                refreshConversations();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        // Make sure the Parse server is setup to configured for live queries
+        // URL for server is determined by Parse.initialize() call.
+        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+
+        ParseQuery<Conversation> conversationsQuery = ParseQuery.getQuery(Conversation.class);
+        SubscriptionHandling<Conversation> subscriptionHandling = parseLiveQueryClient.subscribe(conversationsQuery);
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
+                SubscriptionHandling.HandleEventCallback<Conversation>() {
+                    @Override
+                    public void onEvent(ParseQuery<Conversation> query, Conversation object) {
+                        // TODO: stuff in here when convo is updated
+                    }
+                });
+        subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
+            @Override
+            public void onError(ParseQuery<Conversation> query, LiveQueryException exception) {
+                Log.d("Live Query", "Callback failed");
+            }
+        });
+
         if (currUser.getParseFile("profilePic") != null) {
             Glide.with(this)
                     .load(currUser.getParseFile("profilePic").getUrl())
@@ -71,8 +114,8 @@ public class ChatsListFragment extends Fragment {
         }
         tvUsername.setText(currUser.getString("firstName") + " " + currUser.getString("lastName"));
 
-        conversations = new ArrayList<>();
-        conversationAdapter = new ConversationAdapter(conversations);
+        mConversations = new ArrayList<>();
+        conversationAdapter = new ConversationAdapter(mConversations);
         rvConversations.setLayoutManager(new LinearLayoutManager(context));
         rvConversations.setAdapter(conversationAdapter);
         populateConversations();
@@ -112,6 +155,47 @@ public class ChatsListFragment extends Fragment {
     }
 
     private void populateConversations() {
+        final ParseQuery<Conversation> conversationsQuery = makeConversationQuery();
+        conversationsQuery.findInBackground(new FindCallback<Conversation>() {
+            @Override
+            public void done(List<Conversation> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); ++i) {
+                        Conversation conversation = objects.get(i);
+                        mConversations.add(conversation);
+                        conversationAdapter.notifyItemInserted(mConversations.size() - 1);
+                        Log.d("Conversations", "a conversation has been loaded!" + conversation.getUser1().getUsername());
+                    }
+                    tvNumConversations.setText(Integer.toString(mConversations.size()));
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void refreshConversations() {
+        final ParseQuery<Conversation> conversationsQuery = makeConversationQuery();
+        conversationsQuery.findInBackground(new FindCallback<Conversation>() {
+            @Override
+            public void done(List<Conversation> objects, ParseException e) {
+                if (e == null) {
+                    // Remember to CLEAR OUT old items before appending in the new ones
+                    conversationAdapter.clear();
+                    mConversations.clear();
+                    // add in new items
+                    mConversations.addAll(objects);
+                    tvNumConversations.setText(Integer.toString(mConversations.size()));
+                    // signal refresh has finished
+                    swipeContainer.setRefreshing(false);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private ParseQuery<Conversation> makeConversationQuery() {
         ParseUser currUser = ParseUser.getCurrentUser();
         final ParseQuery<Conversation> conversationsQuery1 = new Conversation.Query();
         conversationsQuery1.whereEqualTo("user1", currUser);
@@ -124,21 +208,6 @@ public class ChatsListFragment extends Fragment {
 
         final ParseQuery<Conversation> conversationsQuery = ParseQuery.or(queries).whereExists("user2").whereExists("user1");
         conversationsQuery.include("user1").include("user2").include("lastMessage").addDescendingOrder("updatedAt");
-        conversationsQuery.findInBackground(new FindCallback<Conversation>() {
-            @Override
-            public void done(List<Conversation> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); ++i) {
-                        Conversation conversation = objects.get(i);
-                        conversations.add(conversation);
-                        conversationAdapter.notifyItemInserted(conversations.size() - 1);
-                        Log.d("Conversations", "a conversation has been loaded!" + conversation.getUser1().getUsername());
-                    }
-                    tvNumConversations.setText(Integer.toString(conversations.size()));
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
+        return conversationsQuery;
     }
 }
