@@ -47,32 +47,45 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        conversation = Parcels.unwrap(getIntent().getParcelableExtra("conversation"));
+
+        findViews();
+        setUpInstanceVariables();
+        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+        subscribeToMessages(parseLiveQueryClient);
+        subscribeToConversations(parseLiveQueryClient);
+
+        // set up recycler view for messages
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
+        linearLayoutManager.setReverseLayout(true);
+        rvMessages.setLayoutManager(linearLayoutManager);
+
+        displayUsernameAtTop();
+        setOnClickListeners();
+
+        // initially populate chat with past messages
+        populateMessages();
+        rvMessages.scrollToPosition(0);
+    }
+
+    private void findViews() {
         etMessage = findViewById(R.id.etMessage);
         tvUsername = findViewById(R.id.tvUsername);
         btnReturn = findViewById(R.id.btnReturn);
         btnSend = findViewById(R.id.btnSend);
         rvMessages = findViewById(R.id.rvMessages);
+    }
+
+    private void setUpInstanceVariables() {
+        conversation = Parcels.unwrap(getIntent().getParcelableExtra("conversation"));
         currUser = ParseUser.getCurrentUser();
         mMessages = new ArrayList<>();
         mMessageAdapter = new MessageAdapter(mMessages);
         rvMessages.setAdapter(mMessageAdapter);
+    }
 
-        // display username on top of chat
-        if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
-            otherUser = conversation.getUser2();
-            try {
-                tvUsername.setText(otherUser.fetchIfNeeded().getUsername());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        } else {
-            otherUser = conversation.getUser1();
-            tvUsername.setText(otherUser.getUsername());
-        }
+    private void subscribeToMessages(ParseLiveQueryClient parseLiveQueryClient) {
         // Make sure the Parse server is setup to configured for live queries
         // URL for server is determined by Parse.initialize() call.
-        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 
         ParseQuery<Message> messagesQuery = ParseQuery.getQuery(Message.class);
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messagesQuery);
@@ -92,12 +105,14 @@ public class ChatActivity extends AppCompatActivity {
                     }
                 });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Message>() {
-                                                     @Override
-                                                     public void onError(ParseQuery<Message> query, LiveQueryException exception) {
-                                                         Log.d("Live Query", "Callback failed");
-                                                     }
-                                                 });
+            @Override
+            public void onError(ParseQuery<Message> query, LiveQueryException exception) {
+                Log.d("Live Query", "Callback failed");
+            }
+        });
+    }
 
+    private void subscribeToConversations(ParseLiveQueryClient parseLiveQueryClient) {
         ParseQuery<Conversation> conversationQuery = ParseQuery.getQuery(Conversation.class);
         conversationQuery.whereEqualTo("objectId", conversation.getObjectId());
         SubscriptionHandling<Conversation> subscriptionHandlingConversations = parseLiveQueryClient.subscribe(conversationQuery);
@@ -106,20 +121,7 @@ public class ChatActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(ParseQuery<Conversation> query, Conversation conv) {
                         conversation = conv;
-
-                        if (Milestone.canSeeDistanceAway(conversation)) {
-                            //show distance away in both user profiles
-                        } else if (Milestone.canSeeAge(conversation)) {
-                            //show age in both user profiles
-                        } else if (Milestone.canSeeName(conversation)) {
-                            //also need to update chatlist adapter to show name properly
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
-                                }
-                            });
-                        }
+                        checkNewUnlockedMilestones(conversation);
                     }
                 });
         subscriptionHandlingConversations.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
@@ -128,12 +130,39 @@ public class ChatActivity extends AppCompatActivity {
                 Log.d("Conversation Live Query", "Callback failed");
             }
         });
+    }
 
-        // set up recycler view for messages
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
-        linearLayoutManager.setReverseLayout(true);
-        rvMessages.setLayoutManager(linearLayoutManager);
+    private void checkNewUnlockedMilestones(Conversation conversation) {
+        if (Milestone.canSeeDistanceAway(conversation)) {
+            //show distance away in both user profiles
+        } else if (Milestone.canSeeAge(conversation)) {
+            //show age in both user profiles
+        } else if (Milestone.canSeeName(conversation)) {
+            //also need to update chatlist adapter to show name properly
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
+                }
+            });
+        }
+    }
 
+    private void displayUsernameAtTop() {
+        if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
+            otherUser = conversation.getUser2();
+            try {
+                tvUsername.setText(otherUser.fetchIfNeeded().getUsername());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            otherUser = conversation.getUser1();
+            tvUsername.setText(otherUser.getUsername());
+        }
+    }
+
+    private void setOnClickListeners() {
         // back button to return to chat list
         btnReturn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,10 +180,6 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
-
-        // initially populate chat with past messages
-        populateMessages();
-        rvMessages.scrollToPosition(0);
     }
 
     private void sendMessage() {
