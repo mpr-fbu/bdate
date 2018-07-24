@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.LiveQueryException;
@@ -89,32 +88,32 @@ public class ChatActivity extends AppCompatActivity {
                                                      }
                                                  });
 
-        ParseUser currUser = ParseUser.getCurrentUser();
-        final ParseQuery<Conversation> conversationsQuery1 = new Conversation.Query();
-        conversationsQuery1.whereEqualTo("user1", currUser);
-        final ParseQuery<Conversation> conversationsQuery2 = new Conversation.Query();
-        conversationsQuery2.whereEqualTo("user2", currUser);
-
-        List<ParseQuery<Conversation>> queries = new ArrayList<>();
-        queries.add(conversationsQuery1);
-        queries.add(conversationsQuery2);
-
-        final ParseQuery<Conversation> conversationsQuery = ParseQuery.or(queries).whereExists("user2").whereExists("user1");
-        conversationsQuery.include("user1").include("user2").include("lastMessage").addDescendingOrder("updatedAt");
-        SubscriptionHandling<Conversation> subscriptionHandlingConversations = parseLiveQueryClient.subscribe(conversationsQuery);
-        subscriptionHandlingConversations.handleEvent(SubscriptionHandling.Event.UPDATE, new
-                SubscriptionHandling.HandleEventCallback<Conversation>() {
-                    @Override
-                    public void onEvent(ParseQuery<Conversation> query, Conversation conv) {
-                        conversation = conv;
-                    }
-                });
-        subscriptionHandlingConversations.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
-            @Override
-            public void onError(ParseQuery<Conversation> query, LiveQueryException exception) {
-                Log.d("Live Query", "Callback failed");
-            }
-        });
+//        ParseUser currUser = ParseUser.getCurrentUser();
+//        final ParseQuery<Conversation> conversationsQuery1 = new Conversation.Query();
+//        conversationsQuery1.whereEqualTo("user1", currUser);
+//        final ParseQuery<Conversation> conversationsQuery2 = new Conversation.Query();
+//        conversationsQuery2.whereEqualTo("user2", currUser);
+//
+//        List<ParseQuery<Conversation>> queries = new ArrayList<>();
+//        queries.add(conversationsQuery1);
+//        queries.add(conversationsQuery2);
+//
+//        final ParseQuery<Conversation> conversationsQuery = ParseQuery.or(queries).whereExists("user2").whereExists("user1");
+//        conversationsQuery.include("user1").include("user2").include("lastMessage").addDescendingOrder("updatedAt");
+//        SubscriptionHandling<Conversation> subscriptionHandlingConversations = parseLiveQueryClient.subscribe(conversationsQuery);
+//        subscriptionHandlingConversations.handleEvent(SubscriptionHandling.Event.UPDATE, new
+//                SubscriptionHandling.HandleEventCallback<Conversation>() {
+//                    @Override
+//                    public void onEvent(ParseQuery<Conversation> query, Conversation conv) {
+//                        conversation = conv;
+//                    }
+//                });
+//        subscriptionHandlingConversations.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
+//            @Override
+//            public void onError(ParseQuery<Conversation> query, LiveQueryException exception) {
+//                Log.d("Live Query", "Callback failed");
+//            }
+//        });
 
         // set up recycler view for messages
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
@@ -195,16 +194,13 @@ public class ChatActivity extends AppCompatActivity {
         etMessage.setText(null);
 
         if (Milestone.canSeeDistanceAway(conversation)) {
-            Toast.makeText(this, "Unlocked distance away!", Toast.LENGTH_LONG).show();
-            showSnackbar("distance away");
-            //show distance away in other user's profile
+            //Toast.makeText(this, "Unlocked distance away!", Toast.LENGTH_LONG).show();
+            //show distance away in both user profiles
         } else if (Milestone.canSeeAge(conversation)) {
-            Toast.makeText(this, "Unlocked age!", Toast.LENGTH_LONG).show();
-            showSnackbar("age");
-            //show age in other user's profile
+            //Toast.makeText(this, "Unlocked age!", Toast.LENGTH_LONG).show();
+            //show age in both user profiles
         } else if (Milestone.canSeeName(conversation)) {
-            Toast.makeText(this, "Unlocked name!", Toast.LENGTH_LONG).show();
-            showSnackbar("distance name");
+            //Toast.makeText(this, "Unlocked name!", Toast.LENGTH_LONG).show();
             tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
         }
     }
@@ -235,13 +231,15 @@ public class ChatActivity extends AppCompatActivity {
             case "name":
                 Snackbar.make(btnSend, R.string.snackbar_name, Snackbar.LENGTH_LONG)
                         .show();
-                //tvUsername
+                return;
             case "age":
                 Snackbar.make(btnSend, R.string.snackbar_age, Snackbar.LENGTH_LONG)
                         .show();
+                return;
             case "distance away":
                 Snackbar.make(btnSend, R.string.snackbar_distance_away, Snackbar.LENGTH_LONG)
                         .show();
+                return;
         }
     }
 

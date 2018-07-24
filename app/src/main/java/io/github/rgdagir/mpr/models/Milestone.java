@@ -5,8 +5,8 @@ import io.github.rgdagir.mpr.ChatActivity;
 public class Milestone {
 
     private static final int NAME_SCORE = 3;
-    private static final int AGE_SCORE = 6;
-    private static final int DISTANCE_AWAY_SCORE = 9;
+    private static final int AGE_SCORE = 20;
+    private static final int DISTANCE_AWAY_SCORE = 30;
 
     public Milestone() {
     }
