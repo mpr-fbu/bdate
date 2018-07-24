@@ -58,6 +58,18 @@ public class ChatActivity extends AppCompatActivity {
         mMessageAdapter = new MessageAdapter(mMessages);
         rvMessages.setAdapter(mMessageAdapter);
 
+        // display username on top of chat
+        if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
+            otherUser = conversation.getUser2();
+            try {
+                tvUsername.setText(otherUser.fetchIfNeeded().getUsername());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            otherUser = conversation.getUser1();
+            tvUsername.setText(otherUser.getUsername());
+        }
         // Make sure the Parse server is setup to configured for live queries
         // URL for server is determined by Parse.initialize() call.
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
@@ -117,7 +129,12 @@ public class ChatActivity extends AppCompatActivity {
                             //show age in both user profiles
                         } else if (Milestone.canSeeName(conversation)) {
                             //Toast.makeText(this, "Unlocked name!", Toast.LENGTH_LONG).show();
-                            tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
+                                }
+                            });
                         }
                     }
                 });
@@ -132,19 +149,6 @@ public class ChatActivity extends AppCompatActivity {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
         linearLayoutManager.setReverseLayout(true);
         rvMessages.setLayoutManager(linearLayoutManager);
-
-        // display username on top of chat
-        if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
-            otherUser = conversation.getUser2();
-            try {
-                tvUsername.setText(otherUser.fetchIfNeeded().getUsername());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        } else {
-            otherUser = conversation.getUser1();
-            tvUsername.setText(otherUser.getUsername());
-        }
 
         // back button to return to chat list
         btnReturn.setOnClickListener(new View.OnClickListener() {
