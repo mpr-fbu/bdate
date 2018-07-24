@@ -77,4 +77,9 @@
             android:text="Log Out" />
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/child_fragment_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>

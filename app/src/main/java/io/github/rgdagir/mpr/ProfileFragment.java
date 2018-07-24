@@ -1,9 +1,11 @@
 package io.github.rgdagir.mpr;
 
+import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,7 +19,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -77,6 +78,18 @@ public class ProfileFragment extends Fragment {
         fetchUserProfileData(currentUser);
         profileName.setText("iae krl, funciona po");
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        insertNestedEditProfileFragment();
+    }
+
+    // Embeds the child fragment dynamically
+    private void insertNestedEditProfileFragment() {
+        Fragment editProfileFragment = new EditProfileFragment();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.child_fragment_container, editProfileFragment).commit();
     }
 
     private void fetchUserProfileData (ParseUser user){
