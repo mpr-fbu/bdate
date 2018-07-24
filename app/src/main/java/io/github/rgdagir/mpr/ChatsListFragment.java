@@ -1,9 +1,12 @@
 package io.github.rgdagir.mpr;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.FindCallback;
 import com.parse.LiveQueryException;
 import com.parse.ParseCloud;
@@ -114,10 +118,23 @@ public class ChatsListFragment extends Fragment {
         });
 
         if (currUser.getParseFile("profilePic") != null) {
-            Glide.with(this)
-                    .load(currUser.getParseFile("profilePic").getUrl())
-                    .centerCrop()
-                    .into(ivProfilePic);
+//            Glide.with(this)
+//                    .load(currUser.getParseFile("profilePic").getUrl())
+//                    .centerCrop()
+//                    .into(ivProfilePic);
+            Glide.with(context).load(currUser.getParseFile("profilePic").getUrl())
+                    .asBitmap().centerCrop().dontAnimate()
+                    .placeholder(R.drawable.ic_action_name)
+                    .error(R.drawable.ic_action_name)
+                    .into(new BitmapImageViewTarget(ivProfilePic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            ivProfilePic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
         }
         tvUsername.setText(currUser.getString("firstName") + " " + currUser.getString("lastName"));
 

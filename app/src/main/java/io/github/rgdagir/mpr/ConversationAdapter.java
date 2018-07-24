@@ -2,7 +2,10 @@ package io.github.rgdagir.mpr;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.ParseImageView;
 import com.parse.ParseUser;
 
@@ -105,14 +109,27 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         }
     }
 
-    private void setConversationDetails(ParseUser user, TextView tvUsername, ParseImageView ivProfilePic) {
+    private void setConversationDetails(ParseUser user, TextView tvUsername, final ParseImageView ivProfilePic) {
         tvUsername.setText(user.getUsername());
         if (user.getParseFile("profilePic") != null) {
-            Glide.with(context)
-                    .load(user.getParseFile("profilePic").getUrl())
+//            Glide.with(context)
+//                    .load(user.getParseFile("profilePic").getUrl())
+//                    .placeholder(R.drawable.ic_action_name)
+//                    .centerCrop()
+//                    .into(ivProfilePic);
+            Glide.with(context).load(user.getParseFile("profilePic").getUrl())
+                    .asBitmap().centerCrop().dontAnimate()
                     .placeholder(R.drawable.ic_action_name)
-                    .centerCrop()
-                    .into(ivProfilePic);
+                    .error(R.drawable.ic_action_name)
+                    .into(new BitmapImageViewTarget(ivProfilePic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            ivProfilePic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
         }
     }
 }
