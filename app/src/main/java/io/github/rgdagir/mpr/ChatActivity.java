@@ -1,11 +1,11 @@
 package io.github.rgdagir.mpr;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -47,6 +47,12 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        //setup toolbar
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         findViews();
         setUpInstanceVariables();
@@ -67,9 +73,15 @@ public class ChatActivity extends AppCompatActivity {
         rvMessages.scrollToPosition(0);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     private void findViews() {
         etMessage = findViewById(R.id.etMessage);
-        tvUsername = findViewById(R.id.tvUsername);
+        tvUsername = findViewById(R.id.toolbar_title);
         btnReturn = findViewById(R.id.btnReturn);
         btnSend = findViewById(R.id.btnSend);
         rvMessages = findViewById(R.id.rvMessages);
@@ -164,13 +176,13 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setOnClickListeners() {
         // back button to return to chat list
-        btnReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+//        btnReturn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
