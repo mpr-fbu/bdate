@@ -26,6 +26,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -44,6 +45,7 @@ public class SearchFragment extends Fragment {
     private Button searchButton;
     private static final int LOCATION_PERMISSION_REQUEST = 1;
     private Context context;
+    private ParseGeoPoint myLoc;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -61,7 +63,6 @@ public class SearchFragment extends Fragment {
 
         context = getActivity();
         getLocationPermissions();
-        getLastLocation();
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search, container, false);
     }
@@ -116,9 +117,8 @@ public class SearchFragment extends Fragment {
                 public void done(final List<Conversation> objects, ParseException e) {
                     if (e == null) {
                         //objects has list of open conversations
-                        boolean check = hasOpenConvo(currentUser, objects);
                         if (hasOpenConvo(currentUser, objects)) {
-                            Toast.makeText(getActivity(), "Already searching...", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Already searching...", Toast.LENGTH_LONG).show();
                             return;
                         }
                         searchForMatches(objects, currentUser);
@@ -148,7 +148,7 @@ public class SearchFragment extends Fragment {
             public void done(List<Conversation> results, ParseException e) {
                 // results has the list of full conversations in which the current user is participating in
                 for (int i = 0; i < openConvos.size(); i++) {
-                    if (checkNotAlreadyMatched(openConvos.get(i).getUser1(), listAlreadyMatched(currentUser, results))) {
+                    if (checkNotAlreadyMatched(openConvos.get(i).getUser1(), listAlreadyMatched(currentUser, results)) && checkIfInRange(openConvos.get(i), currentUser)) {
                         //possible to get first/last name?
                         Toast.makeText(getActivity(), "Match found! " + openConvos.get(i).getUser1().getUsername(), Toast.LENGTH_LONG).show();
                         openConvos.get(i).setUser2(currentUser);
@@ -178,7 +178,8 @@ public class SearchFragment extends Fragment {
         final Conversation newConvo = new Conversation();
         newConvo.setUser1(currentUser);
         newConvo.setExchanges(0);
-        newConvo.setLocation
+        newConvo.setMatchLocation(getLastLocation());
+        newConvo.setMatchRange(currentUser.getInt("matchRange"));
 
         newConvo.saveInBackground(new SaveCallback() {
             @Override
@@ -226,15 +227,21 @@ public class SearchFragment extends Fragment {
         return true;
     }
 
+    public boolean checkIfInRange(Conversation conversation, ParseUser user){
+        // get distance (in miles) between user who started the conversation and the one trying to match
+        double distanceFromMatch = calcDistance(conversation.getMatchLocation().getLatitude(), conversation.getMatchLocation().getLongitude(), user.getParseGeoPoint("lastLocation").getLatitude(), user.getParseGeoPoint("lastLocation").getLongitude(), 0, 0);
+        return (distanceFromMatch <= conversation.getMatchRange());
+    }
+
     @SuppressLint("MissingPermission")
-    public void getLastLocation() {
+    public ParseGeoPoint getLastLocation() {
         FusedLocationProviderClient locationClient = getFusedLocationProviderClient(context);
         locationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 // GPS location can be null if GPS is switched off
                 if (location != null) {
-                    updateUserLocation(location);
+                    myLoc = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -244,17 +251,8 @@ public class SearchFragment extends Fragment {
                 e.printStackTrace();
             }
         });
+        return myLoc;
     }
-
-    public void updateUserLocation(Location location){
-        Log.d("NEWLOCATION", "Latitude = " + Double.toString(location.getLatitude()));
-        Log.d("NEWLOCATION", "Longitude = " + Double.toString(location.getLongitude()));
-        ParseGeoPoint newLoc = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
-        ParseUser currUser = ParseUser.getCurrentUser();
-        currUser.put("lastLocation", newLoc);
-    }
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void getLocationPermissions(){
@@ -295,6 +293,27 @@ public class SearchFragment extends Fragment {
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    // Returns distance in miles between two coordinates
+    public static double calcDistance(double lat1, double lat2, double lon1,
+                                  double lon2, double el1, double el2) {
+
+        final int R = 6371; // Radius of the earth
+
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c * 1000; // convert to meters
+
+        double height = el1 - el2;
+
+        distance = Math.pow(distance, 2) + Math.pow(height, 2);
+
+        return (Math.sqrt(distance))/1609.34;
     }
 
 // TODO - set up handlers for location request denials below
