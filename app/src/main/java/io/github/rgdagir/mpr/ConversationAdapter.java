@@ -62,6 +62,18 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     @Override
     public int getItemCount() { return mConversations.size(); }
 
+    // Clean all elements of the recycler
+    public void clear() {
+        mConversations.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items -- change to type used
+    public void addAll(List<Conversation> list) {
+        mConversations.addAll(list);
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ParseImageView ivProfilePic;
         public TextView tvUsername;

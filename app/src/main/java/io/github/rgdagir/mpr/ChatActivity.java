@@ -64,8 +64,6 @@ public class ChatActivity extends AppCompatActivity {
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 
         ParseQuery<Message> messagesQuery = ParseQuery.getQuery(Message.class);
-        // messagesQuery.include("sender"); //.whereEqualTo("conversation", conversation);
-        // messagesQuery.addDescendingOrder("createdAt");
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messagesQuery);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
@@ -88,33 +86,6 @@ public class ChatActivity extends AppCompatActivity {
                                                          Log.d("Live Query", "Callback failed");
                                                      }
                                                  });
-
-        ParseUser currUser = ParseUser.getCurrentUser();
-        final ParseQuery<Conversation> conversationsQuery1 = new Conversation.Query();
-        conversationsQuery1.whereEqualTo("user1", currUser);
-        final ParseQuery<Conversation> conversationsQuery2 = new Conversation.Query();
-        conversationsQuery2.whereEqualTo("user2", currUser);
-
-        List<ParseQuery<Conversation>> queries = new ArrayList<>();
-        queries.add(conversationsQuery1);
-        queries.add(conversationsQuery2);
-
-        final ParseQuery<Conversation> conversationsQuery = ParseQuery.or(queries).whereExists("user2").whereExists("user1");
-        conversationsQuery.include("user1").include("user2").include("lastMessage").addDescendingOrder("updatedAt");
-        SubscriptionHandling<Conversation> subscriptionHandlingConversations = parseLiveQueryClient.subscribe(conversationsQuery);
-        subscriptionHandlingConversations.handleEvent(SubscriptionHandling.Event.UPDATE, new
-                SubscriptionHandling.HandleEventCallback<Conversation>() {
-                    @Override
-                    public void onEvent(ParseQuery<Conversation> query, Conversation conv) {
-                        conversation = conv;
-                    }
-                });
-        subscriptionHandlingConversations.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
-            @Override
-            public void onError(ParseQuery<Conversation> query, LiveQueryException exception) {
-                Log.d("Live Query", "Callback failed");
-            }
-        });
 
         // set up recycler view for messages
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
@@ -244,19 +215,4 @@ public class ChatActivity extends AppCompatActivity {
                         .show();
         }
     }
-
-
-//    private int getNumberOfMessagesSentBy(ParseUser sender) {
-//        final int numberOfMessages;
-//        ParseQuery<Message> fetchNumberOfMessages = new Message.Query();
-//        fetchNumberOfMessages.whereEqualTo("sender", sender.getUsername())
-//                .whereEqualTo("conversation", conversation);
-//        fetchNumberOfMessages.findInBackground(new FindCallback<Message>() {
-//            @Override
-//            public void done(List<Message> objects, ParseException e) {
-//                numberOfMessages = objects.size();
-//            }
-//        });
-//        return numberOfMessages;
-//    }
 }
