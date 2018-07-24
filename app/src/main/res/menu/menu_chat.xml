@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/chat_options"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        app:showAsAction="always"
+        android:title="Chats">
+        <menu>
+            <item
+                android:id="@+id/chat_option_one"
+                android:title="Report user"/>
+            <item
+                android:id="@+id/chat_option_two"
+                android:title="Unmatch"/>
+        </menu>
+    </item>
 </menu>

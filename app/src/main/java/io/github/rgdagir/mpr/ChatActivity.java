@@ -1,5 +1,6 @@
 package io.github.rgdagir.mpr;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -7,11 +8,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.LiveQueryException;
 import com.parse.ParseException;
@@ -42,6 +47,7 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<Message> mMessages;
     ParseUser currUser;
     ParseUser otherUser;
+    ParseLiveQueryClient parseLiveQueryClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +56,9 @@ public class ChatActivity extends AppCompatActivity {
         setUpToolbar();
         findViews();
         setUpInstanceVariables();
-        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-        subscribeToMessages(parseLiveQueryClient);
-        subscribeToConversations(parseLiveQueryClient);
+        parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+        subscribeToMessages();
+        subscribeToConversations();
         setUpRecyclerView();
         displayUsernameAtTop();
         setOnClickListeners();
@@ -67,6 +73,28 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_chat, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.chat_option_one:
+                Toast.makeText(this, "This doesn't do anything lmao", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.chat_option_two:
+                Toast.makeText(this, "You unmatched </3", Toast.LENGTH_LONG).show();
+                unmatch();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setUpRecyclerView() {
@@ -104,7 +132,7 @@ public class ChatActivity extends AppCompatActivity {
         rvMessages.setAdapter(mMessageAdapter);
     }
 
-    private void subscribeToMessages(ParseLiveQueryClient parseLiveQueryClient) {
+    private void subscribeToMessages() {
         // Make sure the Parse server is setup to configured for live queries
         // URL for server is determined by Parse.initialize() call.
 
@@ -133,7 +161,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void subscribeToConversations(ParseLiveQueryClient parseLiveQueryClient) {
+    private void subscribeToConversations() {
         ParseQuery<Conversation> conversationQuery = ParseQuery.getQuery(Conversation.class);
         conversationQuery.whereEqualTo("objectId", conversation.getObjectId());
         SubscriptionHandling<Conversation> subscriptionHandlingConversations = parseLiveQueryClient.subscribe(conversationQuery);
@@ -164,6 +192,14 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
+                }
+            });
+        } else if (Milestone.canSeeProfilePicture(conversation)) {
+            //also need to update chatlist adapter to show name properly
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //update profile pic in chat and chatlist
                 }
             });
         }
@@ -281,6 +317,21 @@ public class ChatActivity extends AppCompatActivity {
                 Snackbar.make(btnSend, R.string.snackbar_distance_away, Snackbar.LENGTH_LONG)
                         .show();
                 return;
+            case "profile picture":
+                Snackbar.make(btnSend, R.string.snackbar_profile_pic, Snackbar.LENGTH_LONG)
+                        .show();
+                return;
         }
+    }
+
+    private void unmatch() {
+        conversation.deleteInBackground(new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                Intent intent =new Intent(ChatActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }
