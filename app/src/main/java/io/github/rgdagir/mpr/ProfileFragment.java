@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment {
         editProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // go to edit profile fragment
+                insertNestedEditProfileFragment();
             }
         });
 
@@ -76,13 +76,7 @@ public class ProfileFragment extends Fragment {
         });
 
         fetchUserProfileData(currentUser);
-        profileName.setText("iae krl, funciona po");
         return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        insertNestedEditProfileFragment();
     }
 
     // Embeds the child fragment dynamically
@@ -118,8 +112,8 @@ public class ProfileFragment extends Fragment {
                     profileWebpage.setText(webpage);
 
                 } else {
+                    Log.e("ProfileQuery", "Failed");
                     e.printStackTrace();
-                    Log.d("ProfileQueryFailed", "failed" + Integer.toString(userDataList.size()));
                 }
             }
         });

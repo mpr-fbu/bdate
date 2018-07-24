@@ -11,7 +11,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -40,20 +39,24 @@
                 <TextView
                     android:id="@+id/tvProfileAge"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/tvProfileGender"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
 
                 <Button
                     android:id="@+id/editProfileButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Edit Your Profile" />
+                <Button
+                    android:id="@+id/logoutBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Log Out" />
+
             </LinearLayout>
 
         </LinearLayout>
@@ -61,20 +64,13 @@
         <TextView
             android:id="@+id/tvProfileBio"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/tvProfileWebpage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/logoutBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Log Out" />
     </LinearLayout>
 
     <FrameLayout
