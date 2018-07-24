@@ -74,9 +74,6 @@ public class ChatsListFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
                 refreshConversations();
             }
         });
@@ -96,7 +93,17 @@ public class ChatsListFragment extends Fragment {
                 SubscriptionHandling.HandleEventCallback<Conversation>() {
                     @Override
                     public void onEvent(ParseQuery<Conversation> query, Conversation object) {
-                        // TODO: stuff in here when convo is updated
+                        refreshConversations();
+                        // retrieve receiver of notification
+                        // TODO: set push receiver
+                        // send push notification for new message or conversation
+                        HashMap<String, String> payload = new HashMap<>();
+                        if (mConversations.contains(object)) {
+                            payload.put("newData", context.getString(R.string.new_message_notification));
+                        } else {
+                            payload.put("newData", context.getString(R.string.new_conversation_notification));
+                        }
+                        ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
                     }
                 });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
