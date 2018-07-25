@@ -43,12 +43,13 @@ public class ChatsListFragment extends Fragment {
 
     private Button btnSendNotification;
     private ParseImageView ivProfilePic;
-    private Context context;
     private TextView tvUsername;
     private TextView tvNumConversations;
     private ConversationAdapter conversationAdapter;
     RecyclerView rvConversations;
     ArrayList<Conversation> mConversations;
+    Context context;
+    ParseUser currUser;
 
     public ChatsListFragment() {
         // Required empty public constructor
@@ -60,54 +61,26 @@ public class ChatsListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
-        context = getActivity();
-        ParseUser currUser = ParseUser.getCurrentUser();
-        ivProfilePic = view.findViewById(R.id.ivProfilePic);
-        tvUsername = view.findViewById(R.id.tvUsername);
-        tvNumConversations = view.findViewById(R.id.tvNumMessages);
-        rvConversations = view.findViewById(R.id.rvConversations);
-        btnSendNotification = view.findViewById(R.id.btnSendNotification);
 
-        // Lookup the swipe container view
-        swipeContainer = view.findViewById(R.id.swipeContainer);
-        // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshConversations();
-            }
-        });
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        // Set class variables (views, user, swipe container etc.)
+        setupFragmentVariables(view);
 
         // Make sure the Parse server is setup to configured for live queries
         // URL for server is determined by Parse.initialize() call.
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 
         ParseQuery<Conversation> conversationsQuery = ParseQuery.getQuery(Conversation.class);
+        conversationsQuery.include("lastMessage");
         SubscriptionHandling<Conversation> subscriptionHandling = parseLiveQueryClient.subscribe(conversationsQuery);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
                 SubscriptionHandling.HandleEventCallback<Conversation>() {
                     @Override
                     public void onEvent(ParseQuery<Conversation> query, Conversation object) {
                         refreshConversations();
-                        // retrieve receiver of notification
-                        // TODO: set push receiver
-                        // send push notification for new message or conversation
-                        HashMap<String, String> payload = new HashMap<>();
-                        if (mConversations.contains(object)) {
-                            payload.put("newData", context.getString(R.string.new_message_notification));
-                        } else {
-                            payload.put("newData", context.getString(R.string.new_conversation_notification));
-                        }
-                        ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
                     }
                 });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
@@ -117,33 +90,12 @@ public class ChatsListFragment extends Fragment {
             }
         });
 
-        if (currUser.getParseFile("profilePic") != null) {
-//            Glide.with(this)
-//                    .load(currUser.getParseFile("profilePic").getUrl())
-//                    .centerCrop()
-//                    .into(ivProfilePic);
-            Glide.with(context).load(currUser.getParseFile("profilePic").getUrl())
-                    .asBitmap().centerCrop().dontAnimate()
-                    .placeholder(R.drawable.ic_action_name)
-                    .error(R.drawable.ic_action_name)
-                    .into(new BitmapImageViewTarget(ivProfilePic) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                            circularBitmapDrawable.setCircular(true);
-                            ivProfilePic.setImageDrawable(circularBitmapDrawable);
-                        }
-                    });
-        }
-        tvUsername.setText(currUser.getString("firstName") + " " + currUser.getString("lastName"));
-
-        mConversations = new ArrayList<>();
-        conversationAdapter = new ConversationAdapter(mConversations);
-        rvConversations.setLayoutManager(new LinearLayoutManager(context));
-        rvConversations.setAdapter(conversationAdapter);
+        // set up and populate views
+        populateViewsLayouts();
+        // populate recycler view with conversations
         populateConversations();
 
+        // TESTING: to be removed once notifications are done
         btnSendNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,5 +185,54 @@ public class ChatsListFragment extends Fragment {
         final ParseQuery<Conversation> conversationsQuery = ParseQuery.or(queries).whereExists("user2").whereExists("user1");
         conversationsQuery.include("user1").include("user2").include("lastMessage").addDescendingOrder("updatedAt");
         return conversationsQuery;
+    }
+
+    private void setupFragmentVariables(View view) {
+        context = getActivity();
+        currUser = ParseUser.getCurrentUser();
+        ivProfilePic = view.findViewById(R.id.ivProfilePic);
+        tvUsername = view.findViewById(R.id.tvUsername);
+        tvNumConversations = view.findViewById(R.id.tvNumMessages);
+        rvConversations = view.findViewById(R.id.rvConversations);
+        btnSendNotification = view.findViewById(R.id.btnSendNotification);
+
+        // Lookup the swipe container view
+        swipeContainer = view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshConversations();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
+    private void populateViewsLayouts() {
+        if (currUser.getParseFile("profilePic") != null) {
+            Glide.with(context).load(currUser.getParseFile("profilePic").getUrl())
+                    .asBitmap().centerCrop().dontAnimate()
+                    .placeholder(R.drawable.ic_action_name)
+                    .error(R.drawable.ic_action_name)
+                    .into(new BitmapImageViewTarget(ivProfilePic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            ivProfilePic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        }
+        tvUsername.setText(currUser.getString("firstName") + " " + currUser.getString("lastName"));
+
+        mConversations = new ArrayList<>();
+        conversationAdapter = new ConversationAdapter(mConversations);
+        rvConversations.setLayoutManager(new LinearLayoutManager(context));
+        rvConversations.setAdapter(conversationAdapter);
     }
 }

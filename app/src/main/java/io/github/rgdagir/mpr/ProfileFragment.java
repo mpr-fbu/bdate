@@ -3,7 +3,6 @@ package io.github.rgdagir.mpr;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -100,7 +100,8 @@ public class ProfileFragment extends Fragment {
             public void done(List<ParseUser> userDataList, ParseException e) {
                 if (e == null){
                     Log.e("ProfileQuerySuccess", Integer.toString(userDataList.size()));
-                    ParseUser userData = userDataList.get(0); // the list should ideally have only one element, given users are unique
+                    // the list should ideally have only one element, given users are unique
+                    ParseUser userData = userDataList.get(0);
 
                     String name = userData.get("firstName").toString() + " " + userData.get("lastName").toString();
                     String age = userData.get("age").toString();
@@ -109,10 +110,6 @@ public class ProfileFragment extends Fragment {
 
                     profileName.setText(name);
                     profileAge.setText(age);
-//                    Glide.with(context)
-//                            .load(userData.getParseFile("profilePic").getUrl())
-//                            .centerCrop()
-//                            .into(profilePic);
                     Glide.with(context).load(userData.getParseFile("profilePic").getUrl())
                             .asBitmap().centerCrop().dontAnimate()
                             .placeholder(R.drawable.ic_action_name)
@@ -141,9 +138,12 @@ public class ProfileFragment extends Fragment {
         user.logOutInBackground();
         Intent goToLogin = new Intent(context, LoginActivity.class);
         goToLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // set current user on installation to null
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("currentUserId", "");
+        installation.saveInBackground();
         startActivity(goToLogin);
     }
-
 
     @Override
     public void onAttach(Context context) {

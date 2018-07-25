@@ -44,6 +44,7 @@ public class CustomPushReceiver extends BroadcastReceiver {
                     // Extract custom push data
                     if (key.equals("mydata")) {
                         // create a local notification
+                        Log.d(TAG, "mydata was sent");
                         createNotification(context, R.drawable.ic_stat_ic_notification, "fbu-bdate", body);
                     }
                 }
