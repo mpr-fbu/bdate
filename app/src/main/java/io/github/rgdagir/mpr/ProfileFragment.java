@@ -1,13 +1,12 @@
 package io.github.rgdagir.mpr;
 
-import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +18,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import org.xml.sax.Parser;
 
 import java.util.List;
 
@@ -123,9 +121,12 @@ public class ProfileFragment extends Fragment {
         user.logOutInBackground();
         Intent goToLogin = new Intent(context, LoginActivity.class);
         goToLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // set current user on installation to null
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("currentUserId", "");
+        installation.saveInBackground();
         startActivity(goToLogin);
     }
-
 
     @Override
     public void onAttach(Context context) {

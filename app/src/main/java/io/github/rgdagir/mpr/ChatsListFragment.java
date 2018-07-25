@@ -39,12 +39,13 @@ public class ChatsListFragment extends Fragment {
 
     private Button btnSendNotification;
     private ParseImageView ivProfilePic;
-    private Context context;
     private TextView tvUsername;
     private TextView tvNumConversations;
     private ConversationAdapter conversationAdapter;
     RecyclerView rvConversations;
     ArrayList<Conversation> mConversations;
+    Context context;
+    ParseUser currUser;
 
     public ChatsListFragment() {
         // Required empty public constructor
@@ -56,12 +57,12 @@ public class ChatsListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
         context = getActivity();
-        ParseUser currUser = ParseUser.getCurrentUser();
+        currUser = ParseUser.getCurrentUser();
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         tvUsername = view.findViewById(R.id.tvUsername);
         tvNumConversations = view.findViewById(R.id.tvNumMessages);
@@ -88,22 +89,13 @@ public class ChatsListFragment extends Fragment {
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 
         ParseQuery<Conversation> conversationsQuery = ParseQuery.getQuery(Conversation.class);
+        conversationsQuery.include("lastMessage");
         SubscriptionHandling<Conversation> subscriptionHandling = parseLiveQueryClient.subscribe(conversationsQuery);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
                 SubscriptionHandling.HandleEventCallback<Conversation>() {
                     @Override
                     public void onEvent(ParseQuery<Conversation> query, Conversation object) {
                         refreshConversations();
-                        // retrieve receiver of notification
-                        // TODO: set push receiver
-                        // send push notification for new message or conversation
-                        HashMap<String, String> payload = new HashMap<>();
-                        if (mConversations.contains(object)) {
-                            payload.put("newData", context.getString(R.string.new_message_notification));
-                        } else {
-                            payload.put("newData", context.getString(R.string.new_conversation_notification));
-                        }
-                        ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
                     }
                 });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
@@ -113,6 +105,7 @@ public class ChatsListFragment extends Fragment {
             }
         });
 
+        // set up and populate views
         if (currUser.getParseFile("profilePic") != null) {
             Glide.with(this)
                     .load(currUser.getParseFile("profilePic").getUrl())
