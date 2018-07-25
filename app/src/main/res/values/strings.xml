@@ -10,4 +10,7 @@
     <string name="snackbar_name">Name unlocked!</string>
     <string name="snackbar_age">Age unlocked!</string>
     <string name="snackbar_distance_away">Distance away unlocked!</string>
+    <string name="snackbar_profile_pic">Distance away unlocked!</string>
+    <string name="new_message_notification">You received a new message!</string>
+    <string name="new_conversation_notification">You have been matched to a new conversation!</string>
 </resources>

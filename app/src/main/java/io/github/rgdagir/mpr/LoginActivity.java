@@ -1,5 +1,6 @@
 package io.github.rgdagir.mpr;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,10 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
@@ -20,11 +23,13 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etLoginPassword;
     private Button loginBtn;
     private Button toSignUpBtn;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        context = this;
 
         etLoginEmail = findViewById(R.id.loginEmail);
         etLoginPassword = findViewById(R.id.loginPassword);
@@ -49,8 +54,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (user != null) {
                             launchMainActivity();
                         } else {
-                            // Signup failed. Look at the ParseException to see what happened.
+                            // Sign in failed. Look at the ParseException to see what happened.
                             Log.d(ACTIVITY_TAG, "Login failed :(");
+                            Toast.makeText(context, "Login failed, please try again.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -70,6 +76,11 @@ public class LoginActivity extends AppCompatActivity {
         parseACL.setPublicReadAccess(true);
         ParseUser.getCurrentUser().setACL(parseACL);
         Log.d(ACTIVITY_TAG, "Login success!");
+        // set current user for installation
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("currentUserId", ParseUser.getCurrentUser().getObjectId());
+        installation.saveInBackground();
+        // redirect to main activity
         final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();

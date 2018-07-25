@@ -1,9 +1,12 @@
 package io.github.rgdagir.mpr;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.FindCallback;
 import com.parse.LiveQueryException;
 import com.parse.ParseCloud;
@@ -74,9 +78,6 @@ public class ChatsListFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
                 refreshConversations();
             }
         });
@@ -96,7 +97,17 @@ public class ChatsListFragment extends Fragment {
                 SubscriptionHandling.HandleEventCallback<Conversation>() {
                     @Override
                     public void onEvent(ParseQuery<Conversation> query, Conversation object) {
-                        // TODO: stuff in here when convo is updated
+                        refreshConversations();
+                        // retrieve receiver of notification
+                        // TODO: set push receiver
+                        // send push notification for new message or conversation
+                        HashMap<String, String> payload = new HashMap<>();
+                        if (mConversations.contains(object)) {
+                            payload.put("newData", context.getString(R.string.new_message_notification));
+                        } else {
+                            payload.put("newData", context.getString(R.string.new_conversation_notification));
+                        }
+                        ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
                     }
                 });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
@@ -107,10 +118,23 @@ public class ChatsListFragment extends Fragment {
         });
 
         if (currUser.getParseFile("profilePic") != null) {
-            Glide.with(this)
-                    .load(currUser.getParseFile("profilePic").getUrl())
-                    .centerCrop()
-                    .into(ivProfilePic);
+//            Glide.with(this)
+//                    .load(currUser.getParseFile("profilePic").getUrl())
+//                    .centerCrop()
+//                    .into(ivProfilePic);
+            Glide.with(context).load(currUser.getParseFile("profilePic").getUrl())
+                    .asBitmap().centerCrop().dontAnimate()
+                    .placeholder(R.drawable.ic_action_name)
+                    .error(R.drawable.ic_action_name)
+                    .into(new BitmapImageViewTarget(ivProfilePic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            ivProfilePic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
         }
         tvUsername.setText(currUser.getString("firstName") + " " + currUser.getString("lastName"));
 

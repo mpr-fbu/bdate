@@ -7,6 +7,7 @@ public class Milestone {
     private static final int NAME_SCORE = 3;
     private static final int AGE_SCORE = 5;
     private static final int DISTANCE_AWAY_SCORE = 7;
+    private static final int PROFILE_PICTURE_SCORE = 9;
 
     public Milestone() {
     }
@@ -36,5 +37,14 @@ public class Milestone {
             return true;
         }
         return (currentPoints > DISTANCE_AWAY_SCORE);
+    }
+
+    public static boolean canSeeProfilePicture(Conversation conversation) {
+        int currentPoints = conversation.getExchanges();
+        if (currentPoints == PROFILE_PICTURE_SCORE) {
+            ChatActivity.showSnackbar("profile picture");
+            return true;
+        }
+        return (currentPoints > PROFILE_PICTURE_SCORE);
     }
 }

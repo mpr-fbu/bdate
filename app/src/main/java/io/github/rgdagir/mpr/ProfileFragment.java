@@ -1,13 +1,15 @@
 package io.github.rgdagir.mpr;
 
-import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +20,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import org.xml.sax.Parser;
 
 import java.util.List;
 
@@ -108,10 +109,23 @@ public class ProfileFragment extends Fragment {
 
                     profileName.setText(name);
                     profileAge.setText(age);
-                    Glide.with(context)
-                            .load(userData.getParseFile("profilePic").getUrl())
-                            .centerCrop()
-                            .into(profilePic);
+//                    Glide.with(context)
+//                            .load(userData.getParseFile("profilePic").getUrl())
+//                            .centerCrop()
+//                            .into(profilePic);
+                    Glide.with(context).load(userData.getParseFile("profilePic").getUrl())
+                            .asBitmap().centerCrop().dontAnimate()
+                            .placeholder(R.drawable.ic_action_name)
+                            .error(R.drawable.ic_action_name)
+                            .into(new BitmapImageViewTarget(profilePic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            profilePic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
                     profileBio.setText(bio);
                     profileWebpage.setText(webpage);
 
