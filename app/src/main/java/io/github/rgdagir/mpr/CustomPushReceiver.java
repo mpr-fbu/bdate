@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -14,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class CustomPushReceiver extends BroadcastReceiver {
     private static final String TAG = "CustomPushReceiver";
@@ -42,8 +45,11 @@ public class CustomPushReceiver extends BroadcastReceiver {
                     String key = itr.next();
                     String body = json.getString(key);
                     Log.d(TAG, "..." + key + " => " + body);
+                    // Check if user is already in chat activity before pushing
+                    SharedPreferences sp = context.getSharedPreferences("ACTIVEINFO", MODE_PRIVATE);
+                    Boolean chatActive = sp.getBoolean("active", false);
                     // Extract custom push data
-                    if (key.equals("mydata")) {
+                    if (key.equals("mydata") && !chatActive) {
                         // create a local notification
                         Log.d(TAG, "mydata was sent");
                         createNotification(context, R.drawable.ic_stat_ic_notification, "fbu-bdate", body);

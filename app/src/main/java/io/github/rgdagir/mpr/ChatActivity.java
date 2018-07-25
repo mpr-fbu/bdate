@@ -1,6 +1,7 @@
 package io.github.rgdagir.mpr;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -76,6 +77,15 @@ public class ChatActivity extends AppCompatActivity {
         rvMessages.scrollToPosition(0);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Store our shared preference
+        SharedPreferences sp = getSharedPreferences("ACTIVEINFO", MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putBoolean("active", true);
+        ed.commit();
+    }
 
     private void setUpToolbar() {
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
@@ -124,6 +134,16 @@ public class ChatActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Store our shared preference
+        SharedPreferences sp = getSharedPreferences("ACTIVEINFO", MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putBoolean("active", false);
+        ed.commit();
     }
 
     private void findViews() {
