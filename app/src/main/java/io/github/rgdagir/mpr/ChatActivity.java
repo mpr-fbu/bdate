@@ -57,6 +57,7 @@ public class ChatActivity extends AppCompatActivity {
     ParseUser currUser;
     ParseUser otherUser;
     ParseLiveQueryClient parseLiveQueryClient;
+    private boolean profileNotificationShown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class ChatActivity extends AppCompatActivity {
         subscribeToConversations();
         setUpRecyclerView();
         displayUsernameAtTop();
-        displayDefaultProfilePicture();
+        displayProfilePicture();
         setOnClickListeners();
         populateMessages();
         rvMessages.scrollToPosition(0);
@@ -192,7 +193,15 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void checkNewUnlockedMilestones(Conversation conversation) {
-        if (Milestone.canSeeDistanceAway(conversation)) {
+        if (Milestone.canSeeProfilePicture(conversation)) {
+            //also need to update chatlist adapter to show pro pics properly
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    displayActualProfilePicture();
+                }
+            });
+        } else if (Milestone.canSeeDistanceAway(conversation)) {
             //show distance away in both user profiles
         } else if (Milestone.canSeeAge(conversation)) {
             //show age in both user profiles
@@ -202,14 +211,6 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
-                }
-            });
-        } else if (Milestone.canSeeProfilePicture(conversation)) {
-            //also need to update chatlist adapter to show name properly
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //update profile pic in chat and chatlist
                 }
             });
         }
@@ -226,6 +227,14 @@ public class ChatActivity extends AppCompatActivity {
         } else {
             otherUser = conversation.getUser1();
             tvUsername.setText(otherUser.getUsername());
+        }
+    }
+
+    private void displayProfilePicture() {
+        if (Milestone.canSeeProfilePicture(conversation)) {
+            displayActualProfilePicture();
+        } else {
+            displayDefaultProfilePicture();
         }
     }
 
@@ -250,6 +259,32 @@ public class ChatActivity extends AppCompatActivity {
                         });
             }
         });
+    }
+
+    private void displayActualProfilePicture() {
+        if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
+            otherUser = conversation.getUser2();
+        } else {
+            otherUser = conversation.getUser1();
+        }
+        try {
+            Glide.with(getApplicationContext()).load(otherUser.fetchIfNeeded().getParseFile("profilePic").getUrl())
+                    .asBitmap().centerCrop().dontAnimate()
+                    .placeholder(R.drawable.ic_action_name)
+                    .error(R.drawable.ic_action_name)
+                    .into(new BitmapImageViewTarget(ivProfilePic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            ivProfilePic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        } catch (ParseException e) {
+            Log.e("ChatActivity", "Error displaying actual profile picture");
+            e.printStackTrace();
+        }
     }
 
     private void setOnClickListeners() {
