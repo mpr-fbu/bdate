@@ -54,7 +54,8 @@ public class SignUpActivity extends AppCompatActivity {
                         if (e == null) {
                             // Hooray! Let them use the app now.
                             Log.d(ACTIVITY_TAG, "Success!");
-                            ParseUser.logInInBackground(etEmailSignUp.getText().toString(), etPasswordSignUp.getText().toString(), new LogInCallback() {
+                            ParseUser.logInInBackground(etEmailSignUp.getText().toString(),
+                                    etPasswordSignUp.getText().toString(), new LogInCallback() {
                                 public void done(ParseUser user, ParseException e) {
                                     if (user != null) {
                                         launchMainActivity();
@@ -62,8 +63,8 @@ public class SignUpActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            // Sign up didn't succeed. Look at the ParseException
-                            // to figure out what went wrong
+                            // Sign up didn't succeed.
+                            // Look at the ParseException to figure out what went wrong
                             Log.d(ACTIVITY_TAG, "Failed :(");
                         }
                     }

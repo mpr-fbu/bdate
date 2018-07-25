@@ -149,7 +149,8 @@ public class SearchFragment extends Fragment {
                 // results has the list of full conversations in which the current user is participating in
                 for (int i = 0; i < openConvos.size(); i++) {
                     final Conversation conversation = openConvos.get(i);
-                    if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results)) && checkIfInRange(conversation, currentUser)) {
+                    if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results))
+                            && checkIfInRange(conversation, currentUser)) {
                         // possible to get first/last name?
                         Toast.makeText(getActivity(), "Match found! " + conversation.getUser1().getUsername(), Toast.LENGTH_LONG).show();
                         conversation.setUser2(currentUser);
@@ -173,7 +174,7 @@ public class SearchFragment extends Fragment {
                         return;
                     }
                 }
-                //create new convo if there does not already exist open convo with only current user
+                // create new convo if there does not already exist open convo with only current user
                 Toast.makeText(getActivity(), "Match not found... starting new conversation...", Toast.LENGTH_LONG).show();
                 createConversation(currentUser);
             }
@@ -199,7 +200,7 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    //returns true if current user has open convo, otherwise returns false
+    // returns true if current user has open convo, otherwise returns false
     public boolean hasOpenConvo(ParseUser currentUser, List<Conversation> openConvos) {
         for (int i = 0; i < openConvos.size(); i++) {
             if (openConvos.get(i).getUser1().getObjectId().equals(currentUser.getObjectId())) {
@@ -209,7 +210,8 @@ public class SearchFragment extends Fragment {
         return false;
     }
 
-    //goes through full conversations containing current user and returns a list of users already matched with the current user
+    // goes through full conversations containing current user
+    // returns a list of users already matched with the current user
     public List<ParseUser> listAlreadyMatched(ParseUser currentUser, List<Conversation> fullConvos) {
         List<ParseUser> currentMatches = new ArrayList<>();
 
@@ -223,7 +225,7 @@ public class SearchFragment extends Fragment {
         return currentMatches;
     }
 
-    //returns true if the users are not already matched, otherwise returns false
+    // returns true if the users are not already matched, otherwise returns false
     public boolean checkNotAlreadyMatched(ParseUser otherUser, List<ParseUser> currentMatches) {
         for (int i = 0; i < currentMatches.size(); i++) {
             if (otherUser.getObjectId().equals(currentMatches.get(i).getObjectId())) {
@@ -235,7 +237,9 @@ public class SearchFragment extends Fragment {
 
     public boolean checkIfInRange(Conversation conversation, ParseUser user){
         // get distance (in miles) between user who started the conversation and the one trying to match
-        double distanceFromMatch = calcDistance(conversation.getMatchLocation().getLatitude(), conversation.getMatchLocation().getLongitude(), user.getParseGeoPoint("lastLocation").getLatitude(), user.getParseGeoPoint("lastLocation").getLongitude(), 0, 0);
+        double distanceFromMatch = calcDistance(conversation.getMatchLocation().getLatitude(),
+                conversation.getMatchLocation().getLongitude(), user.getParseGeoPoint("lastLocation").getLatitude(),
+                user.getParseGeoPoint("lastLocation").getLongitude(), 0, 0);
         return (distanceFromMatch <= conversation.getMatchRange());
     }
 

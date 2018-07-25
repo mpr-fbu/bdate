@@ -15,8 +15,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements ChatsListFragment.OnFragmentInteractionListener,
-        ProfileFragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity
+        implements ChatsListFragment.OnFragmentInteractionListener,
+        ProfileFragment.OnFragmentInteractionListener,
+        SearchFragment.OnFragmentInteractionListener {
 
     ChatsListFragment initialFragment = new ChatsListFragment();
     final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -57,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
             }
         });
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(CustomPushReceiver.intentAction));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,
+                new IntentFilter(CustomPushReceiver.intentAction));
     }
 
     @Override
@@ -69,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(CustomPushReceiver.intentAction));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,
+                new IntentFilter(CustomPushReceiver.intentAction));
     }
 
     public static void switchFragment(FragmentTransaction fragmentTransaction, Fragment fragment) {

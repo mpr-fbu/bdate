@@ -100,7 +100,8 @@ public class ProfileFragment extends Fragment {
             public void done(List<ParseUser> userDataList, ParseException e) {
                 if (e == null){
                     Log.e("ProfileQuerySuccess", Integer.toString(userDataList.size()));
-                    ParseUser userData = userDataList.get(0); // the list should ideally have only one element, given users are unique
+                    // the list should ideally have only one element, given users are unique
+                    ParseUser userData = userDataList.get(0);
 
                     String name = userData.get("firstName").toString() + " " + userData.get("lastName").toString();
                     String age = userData.get("age").toString();
@@ -109,10 +110,6 @@ public class ProfileFragment extends Fragment {
 
                     profileName.setText(name);
                     profileAge.setText(age);
-//                    Glide.with(context)
-//                            .load(userData.getParseFile("profilePic").getUrl())
-//                            .centerCrop()
-//                            .into(profilePic);
                     Glide.with(context).load(userData.getParseFile("profilePic").getUrl())
                             .asBitmap().centerCrop().dontAnimate()
                             .placeholder(R.drawable.ic_action_name)

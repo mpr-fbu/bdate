@@ -112,11 +112,6 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     private void setConversationDetails(ParseUser user, TextView tvUsername, final ParseImageView ivProfilePic) {
         tvUsername.setText(user.getUsername());
         if (user.getParseFile("profilePic") != null) {
-//            Glide.with(context)
-//                    .load(user.getParseFile("profilePic").getUrl())
-//                    .placeholder(R.drawable.ic_action_name)
-//                    .centerCrop()
-//                    .into(ivProfilePic);
             Glide.with(context).load(user.getParseFile("profilePic").getUrl())
                     .asBitmap().centerCrop().dontAnimate()
                     .placeholder(R.drawable.ic_action_name)
