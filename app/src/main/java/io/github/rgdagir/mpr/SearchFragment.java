@@ -23,6 +23,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.FindCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -30,6 +31,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.github.rgdagir.mpr.models.Conversation;
@@ -99,10 +101,12 @@ public class SearchFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    //searches for convos that have only one user and matches current user to other user if they're not already matched
-    //if all convos are full creates a new convo with only the current user
-    //a new convo must only have User1; User2 should be null
-    //users cannot open more than one new convo; somehow convo must delete itself after a time period or immediately before log out
+    /* Search for convos that have only one user, and
+       match current user to other user if they're not already matched.
+       If all convos are full, create a new convo with only the current user.
+       A new convo must only have User1; User2 should be null
+       Users cannot open more than one new convo;
+       somehow convo must delete itself after a time period or immediately before log out */
     public void searchForOpenConvos() {
         final ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
@@ -112,7 +116,7 @@ public class SearchFragment extends Fragment {
                 @Override
                 public void done(final List<Conversation> objects, ParseException e) {
                     if (e == null) {
-                        //objects has list of open conversations
+                        // objects has list of open conversations
                         if (hasOpenConvo(currentUser, objects)) {
                             Toast.makeText(context, "Already searching...", Toast.LENGTH_LONG).show();
                             return;
@@ -144,17 +148,23 @@ public class SearchFragment extends Fragment {
             public void done(List<Conversation> results, ParseException e) {
                 // results has the list of full conversations in which the current user is participating in
                 for (int i = 0; i < openConvos.size(); i++) {
-                    if (checkNotAlreadyMatched(openConvos.get(i).getUser1(), listAlreadyMatched(currentUser, results)) && checkIfInRange(openConvos.get(i), currentUser)) {
-                        //possible to get first/last name?
-                        Toast.makeText(getActivity(), "Match found! " + openConvos.get(i).getUser1().getUsername(), Toast.LENGTH_LONG).show();
-                        openConvos.get(i).setUser2(currentUser);
-                        openConvos.get(i).saveInBackground(new SaveCallback() {
+                    final Conversation conversation = openConvos.get(i);
+                    if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results)) && checkIfInRange(conversation, currentUser)) {
+                        // possible to get first/last name?
+                        Toast.makeText(getActivity(), "Match found! " + conversation.getUser1().getUsername(), Toast.LENGTH_LONG).show();
+                        conversation.setUser2(currentUser);
+                        conversation.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
                                 if (e == null) {
                                     Log.d("SearchFragment", "You have joined the conversation!");
-                                    //start chat activity between currentUser and objects.get(i).getUser1()
-                                    //other user gets notif
+                                    // start chat activity between currentUser and objects.get(i).getUser1()
+                                    // other user gets notification of new match
+                                    HashMap<String, String> payload = new HashMap<>();
+                                    ParseUser recipient = conversation.getUser1();
+                                    payload.put("receiver", recipient.getObjectId());
+                                    payload.put("newData", getString(R.string.new_conversation_notification));
+                                    ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
                                 } else {
                                     Log.e("SearchFragment", "Error when joining conversation");
                                 }

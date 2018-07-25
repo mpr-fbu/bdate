@@ -111,10 +111,6 @@ public class ChatsListFragment extends Fragment {
 
         // set up and populate views
         if (currUser.getParseFile("profilePic") != null) {
-//            Glide.with(this)
-//                    .load(currUser.getParseFile("profilePic").getUrl())
-//                    .centerCrop()
-//                    .into(ivProfilePic);
             Glide.with(context).load(currUser.getParseFile("profilePic").getUrl())
                     .asBitmap().centerCrop().dontAnimate()
                     .placeholder(R.drawable.ic_action_name)

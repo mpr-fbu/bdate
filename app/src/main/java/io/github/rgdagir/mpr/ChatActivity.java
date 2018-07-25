@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.LiveQueryException;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseQuery;
@@ -29,6 +30,7 @@ import com.parse.SubscriptionHandling;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.github.rgdagir.mpr.models.Conversation;
@@ -220,15 +222,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        // back button to return to chat list
-//        btnReturn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,6 +247,17 @@ public class ChatActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("ChatActivity", "Sending message success!");
+                    // send push notification to other user
+                    HashMap<String, String> payload = new HashMap<>();
+                    ParseUser recipient;
+                    if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
+                        recipient = conversation.getUser2();
+                    } else {
+                        recipient = conversation.getUser1();
+                    }
+                    payload.put("receiver", recipient.getObjectId());
+                    payload.put("newData", getString(R.string.new_message_notification));
+                    ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
                 } else {
                     Log.e("ChatActivity", "Sending message failed :(");
                     e.printStackTrace();
