@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,7 +29,7 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
     private ProfileFragment.OnFragmentInteractionListener mListener;
-    private TextView profileName;
+    private EditText profileName;
     private TextView profileAge;
     private ImageView profilePic;
     private TextView profileBio;
@@ -64,7 +65,7 @@ public class ProfileFragment extends Fragment {
         editProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                insertNestedEditProfileFragment();
+                mListener.goToEditProfile();
             }
         });
 
@@ -82,8 +83,11 @@ public class ProfileFragment extends Fragment {
     // Embeds the child fragment dynamically
     private void insertNestedEditProfileFragment() {
         Fragment editProfileFragment = new EditProfileFragment();
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.child_fragment_container, editProfileFragment).commit();
+        FragmentTransaction transactionToChild = getChildFragmentManager().beginTransaction();
+        FragmentTransaction killParent = getFragmentManager().beginTransaction();
+        transactionToChild.replace(R.id.child_fragment_container, editProfileFragment).commit();
+        killParent.replace(R.id.flContainer, editProfileFragment).commit();
+
     }
 
     private void fetchUserProfileData (ParseUser user){
@@ -144,8 +148,9 @@ public class ProfileFragment extends Fragment {
         mListener = null;
     }
 
+
     public interface OnFragmentInteractionListener {
         // Placeholder, to be inserted when clicking is introduced
-        void onFragmentInteraction(Uri uri);
+        void goToEditProfile();
     }
 }
