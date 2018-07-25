@@ -27,8 +27,8 @@
 
             <com.parse.ParseImageView
                 android:id="@+id/ivProfilePic"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_margin="5dp" />
 
             <LinearLayout
@@ -45,7 +45,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:maxWidth="240dp"
-                    android:paddingTop="5dp"
                     android:textColor="@android:color/black" />
             </LinearLayout>
 

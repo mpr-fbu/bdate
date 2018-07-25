@@ -60,6 +60,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 final ViewHolderMe viewHolderMe = (ViewHolderMe) holder;
                 viewHolderMe.mInfoMe.setText(message.getTimestamp());
                 viewHolderMe.mMessageMe.setText(message.getText());
+                displayMyProfilePicture(viewHolderMe.mProfilePic);
                 break;
             case 1:
                 final ViewHolderOther viewHolderOther = (ViewHolderOther) holder;
@@ -68,6 +69,23 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 displayDefaultProfilePicture(viewHolderOther.mProfilePic);
                 break;
         }
+    }
+
+    private void displayMyProfilePicture(final ParseImageView myProfilePic) {
+        ParseUser me = ParseUser.getCurrentUser();
+        Glide.with(getApplicationContext()).load(me.getParseFile("profilePic").getUrl())
+                .asBitmap().centerCrop().dontAnimate()
+                .placeholder(R.drawable.ic_action_name)
+                .error(R.drawable.ic_action_name)
+                .into(new BitmapImageViewTarget(myProfilePic) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        myProfilePic.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
     }
 
     private void displayDefaultProfilePicture(final ParseImageView defaultImage) {
@@ -113,11 +131,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class ViewHolderMe extends RecyclerView.ViewHolder {
         TextView mMessageMe;
         TextView mInfoMe;
+        ParseImageView mProfilePic;
 
         public ViewHolderMe(View itemView) {
             super(itemView);
             mMessageMe = itemView.findViewById(R.id.tvMessageMe);
             mInfoMe = itemView.findViewById(R.id.tvInfoMe);
+            mProfilePic = itemView.findViewById(R.id.ivProfilePic);
         }
     }
 

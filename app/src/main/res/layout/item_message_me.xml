@@ -19,22 +19,34 @@
             android:layout_margin="5dp"
             android:textColor="@android:color/darker_gray"
             android:textSize="12sp" />
-
         <LinearLayout
-            android:id="@+id/contentWithBackgroundMe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@drawable/message_bubble_me"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:layout_gravity="right">
 
-            <TextView
-                android:id="@+id/tvMessageMe"
+            <LinearLayout
+                android:id="@+id/contentWithBackgroundMe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxWidth="240dp"
-                android:layout_margin="5dp"
-                android:textColor="@android:color/black" />
+                android:layout_gravity="right"
+                android:background="@drawable/message_bubble_me"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvMessageMe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="240dp"
+                    android:layout_margin="5dp"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
+            <com.parse.ParseImageView
+                android:id="@+id/ivProfilePic"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="5dp" />
         </LinearLayout>
     </LinearLayout>
 
