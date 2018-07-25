@@ -1,8 +1,11 @@
 package io.github.rgdagir.mpr;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,11 +19,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.LiveQueryException;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseImageView;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -42,7 +49,7 @@ public class ChatActivity extends AppCompatActivity {
     Conversation conversation;
     private EditText etMessage;
     private TextView tvUsername;
-    private Button btnReturn;
+    private ParseImageView ivProfilePic;
     private static Button btnSend;
     private RecyclerView rvMessages;
     private MessageAdapter mMessageAdapter;
@@ -63,6 +70,7 @@ public class ChatActivity extends AppCompatActivity {
         subscribeToConversations();
         setUpRecyclerView();
         displayUsernameAtTop();
+        displayDefaultProfilePicture();
         setOnClickListeners();
         populateMessages();
         rvMessages.scrollToPosition(0);
@@ -121,7 +129,7 @@ public class ChatActivity extends AppCompatActivity {
     private void findViews() {
         etMessage = findViewById(R.id.etMessage);
         tvUsername = findViewById(R.id.toolbar_title);
-        btnReturn = findViewById(R.id.btnReturn);
+        ivProfilePic = findViewById(R.id.ivProfilePic);
         btnSend = findViewById(R.id.btnSend);
         rvMessages = findViewById(R.id.rvMessages);
     }
@@ -219,6 +227,29 @@ public class ChatActivity extends AppCompatActivity {
             otherUser = conversation.getUser1();
             tvUsername.setText(otherUser.getUsername());
         }
+    }
+
+    private void displayDefaultProfilePicture() {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("objectId", "Bhg8VXqMbu");
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser defaultUser, ParseException e) {
+                Glide.with(getApplicationContext()).load(defaultUser.getParseFile("profilePic").getUrl())
+                        .asBitmap().centerCrop().dontAnimate()
+                        .placeholder(R.drawable.ic_action_name)
+                        .error(R.drawable.ic_action_name)
+                        .into(new BitmapImageViewTarget(ivProfilePic) {
+                            @Override
+                            protected void setResource(Bitmap resource) {
+                                RoundedBitmapDrawable circularBitmapDrawable =
+                                        RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
+                                circularBitmapDrawable.setCircular(true);
+                                ivProfilePic.setImageDrawable(circularBitmapDrawable);
+                            }
+                        });
+            }
+        });
     }
 
     private void setOnClickListeners() {
