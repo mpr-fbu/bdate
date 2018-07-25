@@ -2,9 +2,11 @@ package io.github.rgdagir.mpr;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -13,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class CustomPushReceiver extends BroadcastReceiver {
     private static final String TAG = "CustomPushReceiver";
@@ -41,8 +45,11 @@ public class CustomPushReceiver extends BroadcastReceiver {
                     String key = itr.next();
                     String body = json.getString(key);
                     Log.d(TAG, "..." + key + " => " + body);
+                    // Check if user is already in chat activity before pushing
+                    SharedPreferences sp = context.getSharedPreferences("ACTIVEINFO", MODE_PRIVATE);
+                    Boolean chatActive = sp.getBoolean("active", false);
                     // Extract custom push data
-                    if (key.equals("mydata")) {
+                    if (key.equals("mydata") && !chatActive) {
                         // create a local notification
                         Log.d(TAG, "mydata was sent");
                         createNotification(context, R.drawable.ic_stat_ic_notification, "fbu-bdate", body);
@@ -58,11 +65,18 @@ public class CustomPushReceiver extends BroadcastReceiver {
     public static final String CHANNEL_ID = "my_channel_01";
     // Create a local dashboard notification to tell user about the event
     private void createNotification(Context context, int iconRes, String title, String body) {
+        // Create an explicit intent for MainActivity of app
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                 context).setSmallIcon(iconRes)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setChannelId(CHANNEL_ID);
+                .setChannelId(CHANNEL_ID)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
 
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
