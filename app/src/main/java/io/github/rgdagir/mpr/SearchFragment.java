@@ -144,7 +144,7 @@ public class SearchFragment extends Fragment {
             public void done(List<Conversation> results, ParseException e) {
                 // results has the list of full conversations in which the current user is participating in
                 for (int i = 0; i < openConvos.size(); i++) {
-                    if (checkNotAlreadyMatched(openConvos.get(i).getUser1(), listAlreadyMatched(currentUser, results)) && checkIfInRange(openConvos.get(i), currentUser)) {
+                    if (checkNotAlreadyMatched(openConvos.get(i).getUser1(), listAlreadyMatched(currentUser, results)) /*&& checkIfInRange(openConvos.get(i), currentUser)*/) {
                         //possible to get first/last name?
                         Toast.makeText(getActivity(), "Match found! " + openConvos.get(i).getUser1().getUsername(), Toast.LENGTH_LONG).show();
                         openConvos.get(i).setUser2(currentUser);
@@ -174,7 +174,9 @@ public class SearchFragment extends Fragment {
         final Conversation newConvo = new Conversation();
         newConvo.setUser1(currentUser);
         newConvo.setExchanges(0);
-        newConvo.setMatchLocation(getLastLocation());
+        if (myLoc != null){
+            newConvo.setMatchLocation(myLoc);
+        }
         newConvo.setMatchRange(currentUser.getInt("matchRange"));
 
         newConvo.saveInBackground(new SaveCallback() {
@@ -230,7 +232,7 @@ public class SearchFragment extends Fragment {
     }
 
     @SuppressLint("MissingPermission")
-    public ParseGeoPoint getLastLocation() {
+    public void getLastLoc() {
         FusedLocationProviderClient locationClient = getFusedLocationProviderClient(context);
         locationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
@@ -247,7 +249,6 @@ public class SearchFragment extends Fragment {
                 e.printStackTrace();
             }
         });
-        return myLoc;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
