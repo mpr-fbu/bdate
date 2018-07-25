@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
         ProfileFragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener {
 
     ChatsListFragment initialFragment = new ChatsListFragment();
+    final FragmentManager fragmentManager = getSupportFragmentManager();
+
 
     // set up broadcast receiver for push notifications
     private BroadcastReceiver mBroadcastReceiver = new CustomPushReceiver();
@@ -29,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final FragmentManager fragmentManager = getSupportFragmentManager();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -41,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
                 switch(item.getItemId()) {
                     case R.id.action_chats:
                         switchFragment(fragmentManager.beginTransaction(), initialFragment);
@@ -78,7 +78,10 @@ public class MainActivity extends AppCompatActivity implements ChatsListFragment
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
+        goToEditProfile();
     }
 
+    public void goToEditProfile() {
+        switchFragment(fragmentManager.beginTransaction(), new EditProfileFragment());
+    }
 }

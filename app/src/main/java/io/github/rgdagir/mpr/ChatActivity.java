@@ -6,12 +6,17 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.LiveQueryException;
 import com.parse.ParseException;
@@ -42,34 +47,78 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<Message> mMessages;
     ParseUser currUser;
     ParseUser otherUser;
+    ParseLiveQueryClient parseLiveQueryClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
+        setUpToolbar();
         findViews();
         setUpInstanceVariables();
-        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-        subscribeToMessages(parseLiveQueryClient);
-        subscribeToConversations(parseLiveQueryClient);
-
-        // set up recycler view for messages
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
-        linearLayoutManager.setReverseLayout(true);
-        rvMessages.setLayoutManager(linearLayoutManager);
-
+        parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+        subscribeToMessages();
+        subscribeToConversations();
+        setUpRecyclerView();
         displayUsernameAtTop();
         setOnClickListeners();
-
-        // initially populate chat with past messages
         populateMessages();
         rvMessages.scrollToPosition(0);
     }
 
+
+    private void setUpToolbar() {
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_chat, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.chat_option_one:
+                Toast.makeText(this, "This doesn't do anything lmao", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.chat_option_two:
+                Toast.makeText(this, "You unmatched </3", Toast.LENGTH_LONG).show();
+                unmatch();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setUpRecyclerView() {
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
+        linearLayoutManager.setReverseLayout(true);
+        rvMessages.setLayoutManager(linearLayoutManager);
+        rvMessages.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom)
+            {
+                rvMessages.scrollToPosition(0);
+            }
+        });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     private void findViews() {
         etMessage = findViewById(R.id.etMessage);
-        tvUsername = findViewById(R.id.tvUsername);
+        tvUsername = findViewById(R.id.toolbar_title);
         btnReturn = findViewById(R.id.btnReturn);
         btnSend = findViewById(R.id.btnSend);
         rvMessages = findViewById(R.id.rvMessages);
@@ -83,7 +132,7 @@ public class ChatActivity extends AppCompatActivity {
         rvMessages.setAdapter(mMessageAdapter);
     }
 
-    private void subscribeToMessages(ParseLiveQueryClient parseLiveQueryClient) {
+    private void subscribeToMessages() {
         // Make sure the Parse server is setup to configured for live queries
         // URL for server is determined by Parse.initialize() call.
 
@@ -112,7 +161,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void subscribeToConversations(ParseLiveQueryClient parseLiveQueryClient) {
+    private void subscribeToConversations() {
         ParseQuery<Conversation> conversationQuery = ParseQuery.getQuery(Conversation.class);
         conversationQuery.whereEqualTo("objectId", conversation.getObjectId());
         SubscriptionHandling<Conversation> subscriptionHandlingConversations = parseLiveQueryClient.subscribe(conversationQuery);
@@ -145,6 +194,14 @@ public class ChatActivity extends AppCompatActivity {
                     tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
                 }
             });
+        } else if (Milestone.canSeeProfilePicture(conversation)) {
+            //also need to update chatlist adapter to show name properly
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //update profile pic in chat and chatlist
+                }
+            });
         }
     }
 
@@ -164,13 +221,13 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setOnClickListeners() {
         // back button to return to chat list
-        btnReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+//        btnReturn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,22 +240,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        Integer exchanges = conversation.getExchanges();
-        if (!mMessages.isEmpty()) {
-            if (!currUser.getObjectId().equals(mMessages.get(0).getSender().getObjectId())) {
-                conversation.setExchanges(exchanges + 1);
-                conversation.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            Log.d("ChatActivity", "exchange updated");
-                        } else {
-                            Log.e("ChatActivity", "exchange failed to update");
-                        }
-                    }
-                });
-            }
-        }
+        updateExchanges();
         final Message newMessage = new Message();
         String messageText = etMessage.getText().toString();
 
@@ -219,6 +261,25 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
         etMessage.setText(null);
+    }
+
+    private void updateExchanges() {
+        Integer exchanges = conversation.getExchanges();
+        if (!mMessages.isEmpty()) {
+            if (!currUser.getObjectId().equals(mMessages.get(0).getSender().getObjectId())) {
+                conversation.setExchanges(exchanges + 1);
+                conversation.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Log.d("ChatActivity", "exchange updated");
+                        } else {
+                            Log.e("ChatActivity", "exchange failed to update");
+                        }
+                    }
+                });
+            }
+        }
     }
 
     private void populateMessages() {
@@ -256,6 +317,21 @@ public class ChatActivity extends AppCompatActivity {
                 Snackbar.make(btnSend, R.string.snackbar_distance_away, Snackbar.LENGTH_LONG)
                         .show();
                 return;
+            case "profile picture":
+                Snackbar.make(btnSend, R.string.snackbar_profile_pic, Snackbar.LENGTH_LONG)
+                        .show();
+                return;
         }
+    }
+
+    private void unmatch() {
+        conversation.deleteInBackground(new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                Intent intent =new Intent(ChatActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

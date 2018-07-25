@@ -2,20 +2,24 @@ package io.github.rgdagir.mpr;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
@@ -26,7 +30,7 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
     private ProfileFragment.OnFragmentInteractionListener mListener;
-    private TextView profileName;
+    private EditText profileName;
     private TextView profileAge;
     private ImageView profilePic;
     private TextView profileBio;
@@ -62,7 +66,7 @@ public class ProfileFragment extends Fragment {
         editProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                insertNestedEditProfileFragment();
+                mListener.goToEditProfile();
             }
         });
 
@@ -80,8 +84,11 @@ public class ProfileFragment extends Fragment {
     // Embeds the child fragment dynamically
     private void insertNestedEditProfileFragment() {
         Fragment editProfileFragment = new EditProfileFragment();
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.child_fragment_container, editProfileFragment).commit();
+        FragmentTransaction transactionToChild = getChildFragmentManager().beginTransaction();
+        FragmentTransaction killParent = getFragmentManager().beginTransaction();
+        transactionToChild.replace(R.id.child_fragment_container, editProfileFragment).commit();
+        killParent.replace(R.id.flContainer, editProfileFragment).commit();
+
     }
 
     private void fetchUserProfileData (ParseUser user){
@@ -102,10 +109,23 @@ public class ProfileFragment extends Fragment {
 
                     profileName.setText(name);
                     profileAge.setText(age);
-                    Glide.with(context)
-                            .load(userData.getParseFile("profilePic").getUrl())
-                            .centerCrop()
-                            .into(profilePic);
+//                    Glide.with(context)
+//                            .load(userData.getParseFile("profilePic").getUrl())
+//                            .centerCrop()
+//                            .into(profilePic);
+                    Glide.with(context).load(userData.getParseFile("profilePic").getUrl())
+                            .asBitmap().centerCrop().dontAnimate()
+                            .placeholder(R.drawable.ic_action_name)
+                            .error(R.drawable.ic_action_name)
+                            .into(new BitmapImageViewTarget(profilePic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            profilePic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
                     profileBio.setText(bio);
                     profileWebpage.setText(webpage);
 
@@ -145,8 +165,9 @@ public class ProfileFragment extends Fragment {
         mListener = null;
     }
 
+
     public interface OnFragmentInteractionListener {
         // Placeholder, to be inserted when clicking is introduced
-        void onFragmentInteraction(Uri uri);
+        void goToEditProfile();
     }
 }
