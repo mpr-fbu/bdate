@@ -3,6 +3,8 @@ package io.github.rgdagir.mpr;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -50,8 +52,16 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
             setConversationDetails(conversation.getUser2(), holder.tvUsername, holder.ivProfilePic);
+            if (!conversation.getReadUser1()) {
+                holder.tvText.setTypeface(null, Typeface.BOLD);
+                holder.tvText.setTextColor(Color.WHITE);
+            }
         } else {
             setConversationDetails(conversation.getUser1(), holder.tvUsername, holder.ivProfilePic);
+            if (!conversation.getReadUser2()) {
+                holder.tvText.setTypeface(null, Typeface.BOLD);
+                holder.tvText.setTextColor(Color.WHITE);
+            }
         }
 
         if (conversation.getLastMessage() == null) {

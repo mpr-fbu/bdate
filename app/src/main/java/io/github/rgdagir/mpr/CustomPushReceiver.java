@@ -47,7 +47,7 @@ public class CustomPushReceiver extends BroadcastReceiver {
                     Log.d(TAG, "..." + key + " => " + body);
                     // Check if user is already in chat activity before pushing
                     SharedPreferences sp = context.getSharedPreferences("ACTIVEINFO", MODE_PRIVATE);
-                    Boolean chatActive = sp.getBoolean("active", false);
+                    boolean chatActive = sp.getBoolean("active", false);
                     // Extract custom push data
                     if (key.equals("mydata") && !chatActive) {
                         // create a local notification

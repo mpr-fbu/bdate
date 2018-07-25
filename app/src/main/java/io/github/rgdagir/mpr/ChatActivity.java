@@ -179,6 +179,8 @@ public class ChatActivity extends AppCompatActivity {
                             public void run() {
                                 mMessageAdapter.notifyDataSetChanged();
                                 rvMessages.scrollToPosition(0);
+                                conversation.setReadUser1(true);
+                                conversation.setReadUser2(true);
                             }
                         });
                     }
@@ -292,6 +294,13 @@ public class ChatActivity extends AppCompatActivity {
         newMessage.setConversation(conversation);
         newMessage.setText(messageText);
         conversation.setLastMessage(newMessage);
+        if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
+            conversation.setReadUser1(true);
+            conversation.setReadUser2(false);
+        } else {
+            conversation.setReadUser1(false);
+            conversation.setReadUser2(true);
+        }
 
         newMessage.saveInBackground(new SaveCallback() {
             @Override
@@ -338,6 +347,12 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void populateMessages() {
+        if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
+            conversation.setReadUser1(true);
+        } else {
+            conversation.setReadUser2(true);
+        }
+        conversation.saveInBackground();
         ParseQuery<Message> messagesQuery = new Message.Query();
         messagesQuery.include("sender").whereEqualTo("conversation", conversation);
         messagesQuery.addDescendingOrder("createdAt");
