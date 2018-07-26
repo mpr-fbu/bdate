@@ -107,6 +107,7 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 saveUpdatedUser();
+                mListener.goBackToProfile();
             }
         });
 
@@ -224,6 +225,7 @@ public class EditProfileFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 displayProgress.setText(Integer.toString(progress));
                 rangeMatch = progress;
+                //changes.put("matchRange", Integer.toString(progress));
             }
 
             @Override
@@ -252,14 +254,6 @@ public class EditProfileFragment extends Fragment {
                 Log.d("EditProfile", "Success!");
             }
         });
-        // go back to profile page
-        submitEdits.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.goBackToProfile();
-            }
-        });
-
     }
 
     @Override
