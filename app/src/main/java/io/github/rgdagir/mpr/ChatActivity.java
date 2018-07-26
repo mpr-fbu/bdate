@@ -175,7 +175,7 @@ public class ChatActivity extends AppCompatActivity {
         // Make sure the Parse server is setup to configured for live queries
         // URL for server is determined by Parse.initialize() call.
         ParseQuery<Message> messagesQuery = ParseQuery.getQuery(Message.class);
-        messagesQuery.whereEqualTo("conversation", "WO3wJ1dRuu");
+        messagesQuery.whereEqualTo("conversation", conversation);
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messagesQuery);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
