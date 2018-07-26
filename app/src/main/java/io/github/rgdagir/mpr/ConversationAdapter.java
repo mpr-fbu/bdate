@@ -24,6 +24,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 import io.github.rgdagir.mpr.models.Conversation;
+import io.github.rgdagir.mpr.models.Message;
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder> {
     List<Conversation> mConversations;
@@ -68,7 +69,12 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             holder.tvText.setText("No messages yet! Start talking...");
             holder.tvTimestamp.setText("");
         } else {
-            holder.tvText.setText(conversation.getLastMessage().getText());
+            Message lastMessage = conversation.getLastMessage();
+            if (lastMessage.getSender().getObjectId().equals(currentUser.getObjectId())) {
+                holder.tvText.setText("You: " + lastMessage.getText());
+            } else {
+                holder.tvText.setText(lastMessage.getText());
+            }
             holder.tvTimestamp.setText(conversation.getTimestamp());
         }
     }

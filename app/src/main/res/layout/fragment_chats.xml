@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="SEND!" />
+            android:text="send love" />
 
     </RelativeLayout>
 

@@ -180,10 +180,12 @@ public class ChatActivity extends AppCompatActivity {
                             public void run() {
                                 mMessageAdapter.notifyDataSetChanged();
                                 rvMessages.scrollToPosition(0);
-                                conversation.setReadUser1(true);
-                                conversation.setReadUser2(true);
                             }
                         });
+                        // update read status of conversation
+                        conversation.setReadUser1(true);
+                        conversation.setReadUser2(true);
+                        conversation.saveInBackground();
                     }
                 });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Message>() {
@@ -382,28 +384,32 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void populateMessages() {
+        final ParseQuery<Message> messagesQuery = new Message.Query();
+        messagesQuery.include("sender").whereEqualTo("conversation", conversation);
+        messagesQuery.addDescendingOrder("createdAt");
         if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
             conversation.setReadUser1(true);
         } else {
             conversation.setReadUser2(true);
         }
-        conversation.saveInBackground();
-        ParseQuery<Message> messagesQuery = new Message.Query();
-        messagesQuery.include("sender").whereEqualTo("conversation", conversation);
-        messagesQuery.addDescendingOrder("createdAt");
-        messagesQuery.findInBackground(new FindCallback<Message>() {
+        conversation.saveInBackground(new SaveCallback() {
             @Override
-            public void done(List<Message> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); ++i) {
-                        Message message = objects.get(i);
-                        mMessages.add(message);
-                        mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
-                        Log.d("Messages", "a message has been loaded!");
+            public void done(ParseException e) {
+                messagesQuery.findInBackground(new FindCallback<Message>() {
+                    @Override
+                    public void done(List<Message> objects, ParseException e) {
+                        if (e == null) {
+                            for (int i = 0; i < objects.size(); ++i) {
+                                Message message = objects.get(i);
+                                mMessages.add(message);
+                                mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
+                                Log.d("Messages", "a message has been loaded!");
+                            }
+                        } else {
+                            Log.d("ChatActivity", "Error querying for messages" + e);
+                        }
                     }
-                } else {
-                    Log.d("ChatActivity", "Error querying for messages" + e);
-                }
+                });
             }
         });
     }

@@ -93,9 +93,9 @@ public class ChatsListFragment extends Fragment {
         // set up and populate views
         populateViewsLayouts();
         // populate recycler view with conversations
-        populateConversations();
+        // populateConversations();
 
-        // TESTING: to be removed once notifications are done
+        // TESTING ONLY: to be removed once notifications are done
         btnSendNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,6 +123,19 @@ public class ChatsListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // clear everything
+        conversationAdapter.clear();
+        mConversations.clear();
+        conversationAdapter.notifyDataSetChanged();
+        // re-set up and populate views
+        populateViewsLayouts();
+        // populate recycler view with conversations
+        populateConversations();
     }
 
     public interface OnFragmentInteractionListener {
