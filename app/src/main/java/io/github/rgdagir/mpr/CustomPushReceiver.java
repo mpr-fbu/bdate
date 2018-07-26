@@ -83,7 +83,7 @@ public class CustomPushReceiver extends BroadcastReceiver {
             /* Create or update. */
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                     "General Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager.IMPORTANCE_HIGH);
             mNotificationManager.createNotificationChannel(channel);
         }
         // mId allows you to update the notification later on.

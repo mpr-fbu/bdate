@@ -1,11 +1,14 @@
 package io.github.rgdagir.mpr;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,6 +30,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -198,6 +203,19 @@ public class EditProfileFragment extends Fragment {
         DateFormat outputFormatter = new SimpleDateFormat("MM/dd/yyyy");
         String output = outputFormatter.format(date);
         editBirthDate.setText(output);
+        Glide.with(context).load(currUser.getParseFile("profilePic").getUrl())
+                .asBitmap().centerCrop().dontAnimate()
+                .placeholder(R.drawable.ic_action_name)
+                .error(R.drawable.ic_action_name)
+                .into(new BitmapImageViewTarget(profilePic) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        profilePic.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
     }
 
     public void setupSpinners(View v){

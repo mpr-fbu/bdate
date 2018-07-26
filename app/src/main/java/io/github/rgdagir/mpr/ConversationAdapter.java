@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.parse.ParseException;
 import com.parse.ParseImageView;
 import com.parse.ParseUser;
 
@@ -70,10 +71,16 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             holder.tvTimestamp.setText("");
         } else {
             Message lastMessage = conversation.getLastMessage();
-            if (lastMessage.getSender().getObjectId().equals(currentUser.getObjectId())) {
-                holder.tvText.setText("You: " + lastMessage.getText());
-            } else {
+            try {
+                Message message = lastMessage.fetchIfNeeded();
+                /* if (message.getSender().getObjectId().equals(currentUser.getObjectId())) {
+                    holder.tvText.setText("You: " + lastMessage.getText());
+                } else {
+                    holder.tvText.setText(lastMessage.getText());
+                } */
                 holder.tvText.setText(lastMessage.getText());
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
             holder.tvTimestamp.setText(conversation.getTimestamp());
         }

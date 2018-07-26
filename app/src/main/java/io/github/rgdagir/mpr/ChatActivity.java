@@ -57,7 +57,7 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<Message> mMessages;
     ParseUser currUser;
     ParseUser otherUser;
-    ParseLiveQueryClient parseLiveQueryClient;
+    public ParseLiveQueryClient parseLiveQueryClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +79,12 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // Store our shared preference
+        // Store our shared preference for push notification
         SharedPreferences sp = getSharedPreferences("ACTIVEINFO", MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.putBoolean("active", true);
         ed.commit();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -125,6 +124,8 @@ public class ChatActivity extends AppCompatActivity {
         ed.commit();
     }
 
+    /* Methods for onCreate */
+
     private void setUpToolbar() {
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -132,7 +133,6 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
-
 
     private void findViews() {
         etMessage = findViewById(R.id.etMessage);
@@ -153,24 +153,20 @@ public class ChatActivity extends AppCompatActivity {
     private void setUpRecyclerView() {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
         linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
         rvMessages.setLayoutManager(linearLayoutManager);
         rvMessages.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
-            public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom)
-            {
-                if(bottom != oldBottom) {
-                    new Thread(){
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (bottom != oldBottom) {
+                    rvMessages.postDelayed(new Runnable() {
+                        @Override
                         public void run() {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    rvMessages.scrollToPosition(0);
-                                }
-                            });
-                        }
-                    }.start();
-                }
+                            rvMessages.smoothScrollToPosition(0);
 
+                        }
+                    }, 50);
+                }
             }
         });
     }
@@ -178,28 +174,26 @@ public class ChatActivity extends AppCompatActivity {
     private void subscribeToMessages() {
         // Make sure the Parse server is setup to configured for live queries
         // URL for server is determined by Parse.initialize() call.
-
         ParseQuery<Message> messagesQuery = ParseQuery.getQuery(Message.class);
+        messagesQuery.whereEqualTo("conversation", conversation);
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messagesQuery);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
                     @Override
                     public void onEvent(ParseQuery<Message> query, Message object) {
-                        mMessages.add(0, object);
-                        // RecyclerView updates need to be run on the UI thread
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mMessageAdapter.notifyDataSetChanged();
-                                rvMessages.scrollToPosition(0);
-                            }
-                        });
-                        // update read status of conversation
-                        conversation.setReadUser1(true);
-                        conversation.setReadUser2(true);
-                        conversation.saveInBackground();
+                        if (object.getConversation().getObjectId().equals(conversation.getObjectId())) {
+                            mMessages.add(0, object);
+                            // RecyclerView updates need to be run on the UI thread
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mMessageAdapter.notifyDataSetChanged();
+                                    rvMessages.scrollToPosition(0);
+                                }
+                            });
+                        }
                     }
-                });
+        });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Message>() {
             @Override
             public void onError(ParseQuery<Message> query, LiveQueryException exception) {
@@ -231,7 +225,6 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-
     private void displayUsernameAtTop() {
         if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
             otherUser = conversation.getUser2();
@@ -253,7 +246,6 @@ public class ChatActivity extends AppCompatActivity {
             displayDefaultProfilePicture();
         }
     }
-
 
     private void setOnClickListeners() {
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -293,14 +285,33 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     }
                 });
+                conversation.saveInBackground();
+                messagesQuery.findInBackground(new FindCallback<Message>() {
+                    @Override
+                    public void done(List<Message> objects, ParseException e) {
+                        if (e == null) {
+                            for (int i = 0; i < objects.size(); ++i) {
+                                Message message = objects.get(i);
+                                mMessages.add(message);
+                                mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
+                                rvMessages.scrollToPosition(0);
+                                Log.d("Messages", "a message has been loaded!");
+                            }
+                        } else {
+                            Log.d("ChatActivity", "Error querying for messages" + e);
+                        }
+                    }
+                });
             }
         });
     }
 
+    /* Helpers for other methods */
+
     private void checkNewUnlockedMilestones(final Conversation conversation) {
         if (Milestone.canSeeProfilePicture(conversation)) {
             Milestone.showNotification(conversation);
-            //also need to update chatlist adapter to show pro pics properly
+            // also need to update chatList adapter to show pro pics properly
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -311,13 +322,13 @@ public class ChatActivity extends AppCompatActivity {
             });
         } else if (Milestone.canSeeDistanceAway(conversation)) {
             Milestone.showNotification(conversation);
-            //show distance away in both user profiles
+            // show distance away in both user profiles
         } else if (Milestone.canSeeAge(conversation)) {
             Milestone.showNotification(conversation);
-            //show age in both user profiles
+            // show age in both user profiles
         } else if (Milestone.canSeeName(conversation)) {
             Milestone.showNotification(conversation);
-            //also need to update chatlist adapter to show name properly
+            // also need to update chatList adapter to show name properly
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -405,7 +416,6 @@ public class ChatActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     private void sendMessage() {
@@ -468,4 +478,5 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
     }
+
 }
