@@ -6,14 +6,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -23,8 +19,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.parse.GetCallback;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 public class EditProfileFragment extends Fragment {
@@ -35,8 +29,8 @@ public class EditProfileFragment extends Fragment {
     private EditText editBio;
     private EditText editBirthDate;
     private FloatingActionButton changeprofilePic;
-    private Spinner myGender;
-    private Spinner interestedInGender;
+    private Spinner myGenderSpinner;
+    private Spinner interestedInSpinner;
     private SeekBar rangeSeekBar;
     private ImageView profilePic;
     private ParseUser currUser;
@@ -77,8 +71,8 @@ public class EditProfileFragment extends Fragment {
         editBirthDate = v.findViewById(R.id.editBirthDate);
         changeprofilePic = v.findViewById(R.id.changeProfilePicBtn);
         profilePic = v.findViewById(R.id.profilePic);
-        myGender = v.findViewById(R.id.myGender);
-        interestedInGender = v.findViewById(R.id.interestedInGender);
+        myGenderSpinner = v.findViewById(R.id.myGender);
+        interestedInSpinner = v.findViewById(R.id.interestedInGender);
         rangeSeekBar = v.findViewById(R.id.rangeSeekBar);
     }
 
@@ -107,7 +101,7 @@ public class EditProfileFragment extends Fragment {
         String userGender = currUser.getString("gender");
         String userInterest = currUser.getString("interestedIn");
         // create spinners
-        Spinner myGenderSpinner = v.findViewById(R.id.myGender);
+        myGenderSpinner = v.findViewById(R.id.myGender);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
                 R.array.genders, android.R.layout.simple_spinner_dropdown_item);
@@ -116,9 +110,28 @@ public class EditProfileFragment extends Fragment {
         // Apply the adapter to the spinner
         myGenderSpinner.setAdapter(adapter);
         myGenderSpinner.setSelection(adapter.getPosition(userGender), true);
-        Spinner interestedInSpinner = v.findViewById(R.id.interestedInGender);
+        interestedInSpinner = v.findViewById(R.id.interestedInGender);
         // Apply the adapter to the spinner
         interestedInSpinner.setAdapter(adapter);
-        myGenderSpinner.setSelection(adapter.getPosition(userInterest), true);
+        interestedInSpinner.setSelection(adapter.getPosition(userInterest), true);
+    }
+
+    public void setupRangeBar(){
+        rangeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 }

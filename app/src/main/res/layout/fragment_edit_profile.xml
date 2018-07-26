@@ -58,6 +58,9 @@
 
             <SeekBar
                 android:id="@+id/rangeSeekBar"
+                android:max="100"
+                android:min="1"
+                android:progress="1"
                 android:layout_width="296dp"
                 android:layout_height="29dp"
                 android:layout_marginBottom="8dp"
