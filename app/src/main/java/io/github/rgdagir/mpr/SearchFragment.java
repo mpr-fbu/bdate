@@ -61,6 +61,7 @@ public class SearchFragment extends Fragment {
 
         context = getActivity();
         getLocationPermissions();
+        getLastLoc();
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search, container, false);
     }
@@ -149,11 +150,7 @@ public class SearchFragment extends Fragment {
                 for (int i = 0; i < openConvos.size(); i++) {
                     final Conversation conversation = openConvos.get(i);
                     if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results))
-<<<<<<< HEAD
-                         /*   && checkIfInRange(conversation, currentUser) */) {
-=======
-                            /* && checkIfInRange(conversation, currentUser)*/) {
->>>>>>> 22484ca39086da4599cfebe43726696cb6e8e370
+                            && checkIfInRange(conversation, currentUser)) {
                         // possible to get first/last name?
                         Toast.makeText(getActivity(), "Match found! " + conversation.getUser1().getUsername(), Toast.LENGTH_LONG).show();
                         conversation.setUser2(currentUser);
@@ -313,7 +310,7 @@ public class SearchFragment extends Fragment {
 
     // Returns distance in miles between two coordinates
     public static double calcDistance(double lat1, double lat2, double lon1,
-                                  double lon2, double el1, double el2) {
+                                      double lon2, double el1, double el2) {
 
         final int R = 6371; // Radius of the earth
 

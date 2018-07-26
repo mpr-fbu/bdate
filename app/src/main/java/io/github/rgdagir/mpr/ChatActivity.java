@@ -177,23 +177,34 @@ public class ChatActivity extends AppCompatActivity {
         ParseQuery<Message> messagesQuery = ParseQuery.getQuery(Message.class);
         messagesQuery.whereEqualTo("conversation", conversation);
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messagesQuery);
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.ENTER, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
                     @Override
                     public void onEvent(ParseQuery<Message> query, Message object) {
-                        if (object.getConversation().getObjectId().equals(conversation.getObjectId())) {
-                            mMessages.add(0, object);
-                            // RecyclerView updates need to be run on the UI thread
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mMessageAdapter.notifyDataSetChanged();
-                                    rvMessages.scrollToPosition(0);
-                                }
-                            });
+                        mMessages.add(0, object);
+                        Log.e("Message received", object.getText().toString());
+                        // RecyclerView updates need to be run on the UI thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMessageAdapter.notifyDataSetChanged();
+                                rvMessages.scrollToPosition(0);
+                            }
+                        });
+                        // update read status of conversation
+                        /* if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
+                            conversation.setReadUser1(true);
+                        } else {
+                            conversation.setReadUser2(true);
                         }
+                        conversation.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                Log.d("ChatActivity", "IT WAS READ");
+                            }
+                        }); */
                     }
-        });
+                });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Message>() {
             @Override
             public void onError(ParseQuery<Message> query, LiveQueryException exception) {
