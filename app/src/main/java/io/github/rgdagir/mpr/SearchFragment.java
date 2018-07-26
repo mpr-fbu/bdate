@@ -61,6 +61,7 @@ public class SearchFragment extends Fragment {
 
         context = getActivity();
         getLocationPermissions();
+        getLastLoc();
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search, container, false);
     }
@@ -149,7 +150,7 @@ public class SearchFragment extends Fragment {
                 for (int i = 0; i < openConvos.size(); i++) {
                     final Conversation conversation = openConvos.get(i);
                     if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results))
-                            /* && checkIfInRange(conversation, currentUser)*/) {
+                            && checkIfInRange(conversation, currentUser)) {
                         // possible to get first/last name?
                         Toast.makeText(getActivity(), "Match found! " + conversation.getUser1().getUsername(), Toast.LENGTH_LONG).show();
                         conversation.setUser2(currentUser);
