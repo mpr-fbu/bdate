@@ -175,6 +175,7 @@ public class ChatActivity extends AppCompatActivity {
         // Make sure the Parse server is setup to configured for live queries
         // URL for server is determined by Parse.initialize() call.
         ParseQuery<Message> messagesQuery = ParseQuery.getQuery(Message.class);
+        messagesQuery.whereEqualTo("conversation", conversation);
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messagesQuery);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
@@ -192,7 +193,7 @@ public class ChatActivity extends AppCompatActivity {
                             });
                         }
                     }
-                });
+        });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Message>() {
             @Override
             public void onError(ParseQuery<Message> query, LiveQueryException exception) {
