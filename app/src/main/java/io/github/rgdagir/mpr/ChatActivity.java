@@ -58,7 +58,6 @@ public class ChatActivity extends AppCompatActivity {
     ParseUser currUser;
     ParseUser otherUser;
     ParseLiveQueryClient parseLiveQueryClient;
-    private boolean profileNotificationShown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,15 +66,14 @@ public class ChatActivity extends AppCompatActivity {
         setUpToolbar();
         findViews();
         setUpInstanceVariables();
+        setUpRecyclerView();
         parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         subscribeToMessages();
         subscribeToConversations();
-        setUpRecyclerView();
         displayUsernameAtTop();
         displayProfilePicture();
         setOnClickListeners();
         populateMessages();
-        rvMessages.scrollToPosition(0);
     }
 
     @Override
@@ -88,13 +86,6 @@ public class ChatActivity extends AppCompatActivity {
         ed.commit();
     }
 
-    private void setUpToolbar() {
-        Toolbar myToolbar = findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,6 +107,47 @@ public class ChatActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Store our shared preference
+        SharedPreferences sp = getSharedPreferences("ACTIVEINFO", MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putBoolean("active", false);
+        ed.commit();
+    }
+
+    private void setUpToolbar() {
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+
+    private void findViews() {
+        etMessage = findViewById(R.id.etMessage);
+        tvUsername = findViewById(R.id.toolbar_title);
+        ivProfilePic = findViewById(R.id.ivProfilePic);
+        btnSend = findViewById(R.id.btnSend);
+        rvMessages = findViewById(R.id.rvMessages);
+    }
+
+    private void setUpInstanceVariables() {
+        conversation = Parcels.unwrap(getIntent().getParcelableExtra("conversation"));
+        currUser = ParseUser.getCurrentUser();
+        mMessages = new ArrayList<>();
+        mMessageAdapter = new MessageAdapter(mMessages, conversation);
+        rvMessages.setAdapter(mMessageAdapter);
     }
 
     private void setUpRecyclerView() {
@@ -141,38 +173,6 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // Store our shared preference
-        SharedPreferences sp = getSharedPreferences("ACTIVEINFO", MODE_PRIVATE);
-        SharedPreferences.Editor ed = sp.edit();
-        ed.putBoolean("active", false);
-        ed.commit();
-    }
-
-    private void findViews() {
-        etMessage = findViewById(R.id.etMessage);
-        tvUsername = findViewById(R.id.toolbar_title);
-        ivProfilePic = findViewById(R.id.ivProfilePic);
-        btnSend = findViewById(R.id.btnSend);
-        rvMessages = findViewById(R.id.rvMessages);
-    }
-
-    private void setUpInstanceVariables() {
-        conversation = Parcels.unwrap(getIntent().getParcelableExtra("conversation"));
-        currUser = ParseUser.getCurrentUser();
-        mMessages = new ArrayList<>();
-        mMessageAdapter = new MessageAdapter(mMessages);
-        rvMessages.setAdapter(mMessageAdapter);
     }
 
     private void subscribeToMessages() {
@@ -216,8 +216,11 @@ public class ChatActivity extends AppCompatActivity {
                 SubscriptionHandling.HandleEventCallback<Conversation>() {
                     @Override
                     public void onEvent(ParseQuery<Conversation> query, Conversation conv) {
+                        int oldExchanges = conversation.getExchanges();
                         conversation = conv;
-                        checkNewUnlockedMilestones(conversation);
+                        if(conversation.getExchanges() > oldExchanges) {
+                            checkNewUnlockedMilestones(conversation);
+                        }
                     }
                 });
         subscriptionHandlingConversations.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
@@ -228,33 +231,6 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void checkNewUnlockedMilestones(Conversation conversation) {
-        if (Milestone.canSeeProfilePicture(conversation)) {
-            Milestone.showNotification(conversation);
-            //also need to update chatlist adapter to show pro pics properly
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    displayActualProfilePicture();
-                }
-            });
-        } else if (Milestone.canSeeDistanceAway(conversation)) {
-            Milestone.showNotification(conversation);
-            //show distance away in both user profiles
-        } else if (Milestone.canSeeAge(conversation)) {
-            Milestone.showNotification(conversation);
-            //show age in both user profiles
-        } else if (Milestone.canSeeName(conversation)) {
-            Milestone.showNotification(conversation);
-            //also need to update chatlist adapter to show name properly
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
-                }
-            });
-        }
-    }
 
     private void displayUsernameAtTop() {
         if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
@@ -275,6 +251,79 @@ public class ChatActivity extends AppCompatActivity {
             displayActualProfilePicture();
         } else {
             displayDefaultProfilePicture();
+        }
+    }
+
+
+    private void setOnClickListeners() {
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (etMessage.getText().toString().length() > 0) {
+                    sendMessage();
+                }
+            }
+        });
+    }
+
+    private void populateMessages() {
+        final ParseQuery<Message> messagesQuery = new Message.Query();
+        messagesQuery.include("sender").whereEqualTo("conversation", conversation);
+        messagesQuery.addDescendingOrder("createdAt");
+        if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
+            conversation.setReadUser1(true);
+        } else {
+            conversation.setReadUser2(true);
+        }
+        conversation.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                messagesQuery.findInBackground(new FindCallback<Message>() {
+                    @Override
+                    public void done(List<Message> objects, ParseException e) {
+                        if (e == null) {
+                            for (int i = 0; i < objects.size(); ++i) {
+                                Message message = objects.get(i);
+                                mMessages.add(message);
+                                mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
+                                Log.d("Messages", "a message has been loaded!");
+                            }
+                        } else {
+                            Log.d("ChatActivity", "Error querying for messages" + e);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void checkNewUnlockedMilestones(final Conversation conversation) {
+        if (Milestone.canSeeProfilePicture(conversation)) {
+            Milestone.showNotification(conversation);
+            //also need to update chatlist adapter to show pro pics properly
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mMessageAdapter.setConversation(conversation);
+                    mMessageAdapter.notifyDataSetChanged();
+                    displayActualProfilePicture();
+                }
+            });
+        } else if (Milestone.canSeeDistanceAway(conversation)) {
+            Milestone.showNotification(conversation);
+            //show distance away in both user profiles
+        } else if (Milestone.canSeeAge(conversation)) {
+            Milestone.showNotification(conversation);
+            //show age in both user profiles
+        } else if (Milestone.canSeeName(conversation)) {
+            Milestone.showNotification(conversation);
+            //also need to update chatlist adapter to show name properly
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
+                }
+            });
         }
     }
 
@@ -327,15 +376,36 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void setOnClickListeners() {
-        btnSend.setOnClickListener(new View.OnClickListener() {
+    public static void showSnackbar(String milestone) {
+        switch (milestone) {
+            case "name":
+                Snackbar.make(btnSend, R.string.snackbar_name, Snackbar.LENGTH_LONG)
+                        .show();
+                return;
+            case "age":
+                Snackbar.make(btnSend, R.string.snackbar_age, Snackbar.LENGTH_LONG)
+                        .show();
+                return;
+            case "distance away":
+                Snackbar.make(btnSend, R.string.snackbar_distance_away, Snackbar.LENGTH_LONG)
+                        .show();
+                return;
+            case "profile picture":
+                Snackbar.make(btnSend, R.string.snackbar_profile_pic, Snackbar.LENGTH_LONG)
+                        .show();
+                return;
+        }
+    }
+
+    private void unmatch() {
+        conversation.deleteInBackground(new DeleteCallback() {
             @Override
-            public void onClick(View v) {
-                if (etMessage.getText().toString().length() > 0) {
-                    sendMessage();
-                }
+            public void done(ParseException e) {
+                Intent intent =new Intent(ChatActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
+
     }
 
     private void sendMessage() {
@@ -397,68 +467,5 @@ public class ChatActivity extends AppCompatActivity {
                 });
             }
         }
-    }
-
-    private void populateMessages() {
-        final ParseQuery<Message> messagesQuery = new Message.Query();
-        messagesQuery.include("sender").whereEqualTo("conversation", conversation);
-        messagesQuery.addDescendingOrder("createdAt");
-        if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
-            conversation.setReadUser1(true);
-        } else {
-            conversation.setReadUser2(true);
-        }
-        conversation.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                messagesQuery.findInBackground(new FindCallback<Message>() {
-                    @Override
-                    public void done(List<Message> objects, ParseException e) {
-                        if (e == null) {
-                            for (int i = 0; i < objects.size(); ++i) {
-                                Message message = objects.get(i);
-                                mMessages.add(message);
-                                mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
-                                Log.d("Messages", "a message has been loaded!");
-                            }
-                        } else {
-                            Log.d("ChatActivity", "Error querying for messages" + e);
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    public static void showSnackbar(String milestone) {
-        switch (milestone) {
-            case "name":
-                Snackbar.make(btnSend, R.string.snackbar_name, Snackbar.LENGTH_LONG)
-                        .show();
-                return;
-            case "age":
-                Snackbar.make(btnSend, R.string.snackbar_age, Snackbar.LENGTH_LONG)
-                        .show();
-                return;
-            case "distance away":
-                Snackbar.make(btnSend, R.string.snackbar_distance_away, Snackbar.LENGTH_LONG)
-                        .show();
-                return;
-            case "profile picture":
-                Snackbar.make(btnSend, R.string.snackbar_profile_pic, Snackbar.LENGTH_LONG)
-                        .show();
-                return;
-        }
-    }
-
-    private void unmatch() {
-        conversation.deleteInBackground(new DeleteCallback() {
-            @Override
-            public void done(ParseException e) {
-                Intent intent =new Intent(ChatActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
 }
