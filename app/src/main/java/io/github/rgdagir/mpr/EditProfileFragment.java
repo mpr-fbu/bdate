@@ -6,10 +6,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -20,6 +24,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import com.parse.ParseUser;
 
@@ -37,6 +42,10 @@ public class EditProfileFragment extends Fragment {
     private ImageView profilePic;
     private ParseUser currUser;
     private TextView displayProgress;
+    private int rangeMatch;
+    private Button submitEdits;
+    private HashMap changes;
+
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -68,6 +77,7 @@ public class EditProfileFragment extends Fragment {
     }
 
     public void setupViews(View v){
+        // associating views from xml file with the Java class
         editName = v.findViewById(R.id.editName);
         editEmail = v.findViewById(R.id.editEmail);
         editWebpage = v.findViewById(R.id.editWebpage);
@@ -79,6 +89,40 @@ public class EditProfileFragment extends Fragment {
         interestedInSpinner = v.findViewById(R.id.interestedInGender);
         rangeSeekBar = v.findViewById(R.id.rangeSeekBar);
         displayProgress = v.findViewById(R.id.displayProgress);
+        submitEdits = v.findViewById(R.id.submitEdits);
+
+        // adding listeners to buttons
+        changeprofilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        submitEdits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveUpdatedUser();
+            }
+        });
+
+        // adding listeners to text containers
+        editName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     public void fetchCurrentUserAndLoadPage(){
@@ -126,6 +170,7 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 displayProgress.setText(Integer.toString(progress));
+                rangeMatch = progress;
             }
 
             @Override
@@ -138,6 +183,10 @@ public class EditProfileFragment extends Fragment {
 
             }
         });
+    }
+
+    public void saveUpdatedUser(){
+
     }
 
 }
