@@ -59,6 +59,7 @@ public class EditProfileFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         setupViews(v);
         fetchCurrentUserAndLoadPage();
+        setupSpinners(v);
         return v;
     }
 
@@ -79,18 +80,6 @@ public class EditProfileFragment extends Fragment {
         myGender = v.findViewById(R.id.myGender);
         interestedInGender = v.findViewById(R.id.interestedInGender);
         rangeSeekBar = v.findViewById(R.id.rangeSeekBar);
-        // create spinners
-        Spinner myGenderSpinner = v.findViewById(R.id.myGender);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
-                R.array.genders, android.R.layout.simple_spinner_dropdown_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        myGenderSpinner.setAdapter(adapter);
-        Spinner interestedInSpinner = v.findViewById(R.id.interestedInGender);
-        // Apply the adapter to the spinner
-        interestedInSpinner.setAdapter(adapter);
     }
 
     public void fetchCurrentUserAndLoadPage(){
@@ -112,5 +101,24 @@ public class EditProfileFragment extends Fragment {
         DateFormat outputFormatter = new SimpleDateFormat("MM/dd/yyyy");
         String output = outputFormatter.format(date);
         editBirthDate.setText(output);
+    }
+
+    public void setupSpinners(View v){
+        String userGender = currUser.getString("gender");
+        String userInterest = currUser.getString("interestedIn");
+        // create spinners
+        Spinner myGenderSpinner = v.findViewById(R.id.myGender);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
+                R.array.genders, android.R.layout.simple_spinner_dropdown_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        myGenderSpinner.setAdapter(adapter);
+        myGenderSpinner.setSelection(adapter.getPosition(userGender), true);
+        Spinner interestedInSpinner = v.findViewById(R.id.interestedInGender);
+        // Apply the adapter to the spinner
+        interestedInSpinner.setAdapter(adapter);
+        myGenderSpinner.setSelection(adapter.getPosition(userInterest), true);
     }
 }
