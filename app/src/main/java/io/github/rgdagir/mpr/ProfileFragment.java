@@ -81,15 +81,7 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    // Embeds the child fragment dynamically
-    private void insertNestedEditProfileFragment() {
-        Fragment editProfileFragment = new EditProfileFragment();
-        FragmentTransaction transactionToChild = getChildFragmentManager().beginTransaction();
-        FragmentTransaction killParent = getFragmentManager().beginTransaction();
-        transactionToChild.replace(R.id.child_fragment_container, editProfileFragment).commit();
-        killParent.replace(R.id.flContainer, editProfileFragment).commit();
 
-    }
 
     private void fetchUserProfileData (ParseUser user){
         ParseQuery<ParseUser> profileDataQuery = ParseUser.getQuery();

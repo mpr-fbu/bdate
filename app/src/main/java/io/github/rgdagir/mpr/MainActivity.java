@@ -18,7 +18,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity
         implements ChatsListFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener,
-        SearchFragment.OnFragmentInteractionListener {
+        SearchFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener {
 
     ChatsListFragment initialFragment = new ChatsListFragment();
     final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -83,9 +83,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
         goToEditProfile();
+        goBackToProfile();
     }
 
     public void goToEditProfile() {
         switchFragment(fragmentManager.beginTransaction(), new EditProfileFragment());
+    }
+
+    public void goBackToProfile() {
+        switchFragment(fragmentManager.beginTransaction(), new ProfileFragment());
     }
 }

@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -25,8 +25,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class EditProfileFragment extends Fragment {
     private Context context;
@@ -45,6 +47,7 @@ public class EditProfileFragment extends Fragment {
     private int rangeMatch;
     private Button submitEdits;
     private HashMap changes;
+    private EditProfileFragment.OnFragmentInteractionListener mListener;
 
 
     public EditProfileFragment(){
@@ -62,6 +65,7 @@ public class EditProfileFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         context = getActivity();
         currUser = ParseUser.getCurrentUser();
+        changes = new HashMap<String, String>();
         View v = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         setupViews(v);
         fetchCurrentUserAndLoadPage();
@@ -115,12 +119,61 @@ public class EditProfileFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                changes.put("firstName", s);
+            }
+        });
 
+        editEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                changes.put("email", s.toString());
+                changes.put("username", s.toString());
+            }
+        });
+
+        editWebpage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                changes.put("webpage", s.toString());
+            }
+        });
+
+        editBio.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                changes.put("bio", s.toString());
             }
         });
     }
@@ -186,7 +239,50 @@ public class EditProfileFragment extends Fragment {
     }
 
     public void saveUpdatedUser(){
+        Iterator it = changes.entrySet().iterator();
+        while (it.hasNext()) {
+            HashMap.Entry entry = (HashMap.Entry)it.next();
+            currUser.put(entry.getKey().toString(), entry.getValue().toString());
+            System.out.println("key: " + entry.getKey().toString() + "value: " + entry.getValue().toString());
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+        currUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(com.parse.ParseException e) {
+                Log.d("EditProfile", "Success!");
+            }
+        });
+        // go back to profile page
+        submitEdits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.goBackToProfile();
+            }
+        });
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof EditProfileFragment.OnFragmentInteractionListener) {
+            mListener = (EditProfileFragment.OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+
+    public interface OnFragmentInteractionListener {
+        // Placeholder, to be inserted when clicking is introduced
+        void goBackToProfile();
     }
 
 }
