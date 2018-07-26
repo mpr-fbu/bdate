@@ -3,6 +3,8 @@ package io.github.rgdagir.mpr;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -22,6 +24,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 import io.github.rgdagir.mpr.models.Conversation;
+import io.github.rgdagir.mpr.models.Message;
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder> {
     List<Conversation> mConversations;
@@ -50,15 +53,28 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
             setConversationDetails(conversation.getUser2(), holder.tvUsername, holder.ivProfilePic);
+            if (!conversation.getReadUser1()) {
+                holder.tvText.setTypeface(null, Typeface.BOLD);
+                holder.tvText.setTextColor(Color.WHITE);
+            }
         } else {
             setConversationDetails(conversation.getUser1(), holder.tvUsername, holder.ivProfilePic);
+            if (!conversation.getReadUser2()) {
+                holder.tvText.setTypeface(null, Typeface.BOLD);
+                holder.tvText.setTextColor(Color.WHITE);
+            }
         }
 
         if (conversation.getLastMessage() == null) {
             holder.tvText.setText("No messages yet! Start talking...");
             holder.tvTimestamp.setText("");
         } else {
-            holder.tvText.setText(conversation.getLastMessage().getText());
+            Message lastMessage = conversation.getLastMessage();
+            if (lastMessage.getSender().getObjectId().equals(currentUser.getObjectId())) {
+                holder.tvText.setText("You: " + lastMessage.getText());
+            } else {
+                holder.tvText.setText(lastMessage.getText());
+            }
             holder.tvTimestamp.setText(conversation.getTimestamp());
         }
     }

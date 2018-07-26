@@ -153,6 +153,8 @@ public class SearchFragment extends Fragment {
                         // possible to get first/last name?
                         Toast.makeText(getActivity(), "Match found! " + conversation.getUser1().getUsername(), Toast.LENGTH_LONG).show();
                         conversation.setUser2(currentUser);
+                        conversation.setReadUser2(false);
+                        conversation.setReadUser1(false);
                         conversation.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {

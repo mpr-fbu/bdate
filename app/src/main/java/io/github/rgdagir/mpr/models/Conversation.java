@@ -17,6 +17,8 @@ public class Conversation extends ParseObject {
     private static final String KEY_USER2 = "user2";
     private static final String KEY_LAST_MSG = "lastMessage";
     private static final String KEY_EXCHANGES = "exchanges";
+    private static final String KEY_READ1 = "readUser1";
+    private static final String KEY_READ2 = "readUser2";
 
     public ParseUser getUser1() {
         return getParseUser(KEY_USER1);
@@ -91,5 +93,21 @@ public class Conversation extends ParseObject {
 
     public int getMatchRange() {
         return getInt("matchRange");
+    }
+
+    public boolean getReadUser1() {
+        return getBoolean(KEY_READ1);
+    }
+
+    public void setReadUser1(boolean value) {
+        put(KEY_READ1, value);
+    }
+
+    public boolean getReadUser2() {
+        return getBoolean(KEY_READ2);
+    }
+
+    public void setReadUser2(boolean value) {
+        put(KEY_READ2, value);
     }
 }
