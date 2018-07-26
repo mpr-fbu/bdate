@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +36,7 @@ public class EditProfileFragment extends Fragment {
     private SeekBar rangeSeekBar;
     private ImageView profilePic;
     private ParseUser currUser;
+    private TextView displayProgress;
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -54,6 +57,7 @@ public class EditProfileFragment extends Fragment {
         setupViews(v);
         fetchCurrentUserAndLoadPage();
         setupSpinners(v);
+        setupRangeBar();
         return v;
     }
 
@@ -74,6 +78,7 @@ public class EditProfileFragment extends Fragment {
         myGenderSpinner = v.findViewById(R.id.myGender);
         interestedInSpinner = v.findViewById(R.id.interestedInGender);
         rangeSeekBar = v.findViewById(R.id.rangeSeekBar);
+        displayProgress = v.findViewById(R.id.displayProgress);
     }
 
     public void fetchCurrentUserAndLoadPage(){
@@ -120,7 +125,7 @@ public class EditProfileFragment extends Fragment {
         rangeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                displayProgress.setText(Integer.toString(progress));
             }
 
             @Override
@@ -134,4 +139,5 @@ public class EditProfileFragment extends Fragment {
             }
         });
     }
+
 }

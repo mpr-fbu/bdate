@@ -58,9 +58,6 @@
 
             <SeekBar
                 android:id="@+id/rangeSeekBar"
-                android:max="100"
-                android:min="1"
-                android:progress="1"
                 android:layout_width="296dp"
                 android:layout_height="29dp"
                 android:layout_marginBottom="8dp"
@@ -69,10 +66,13 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:max="100"
+                android:min="1"
+                android:progress="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editBirthDate" />
+                app:layout_constraintTop_toBottomOf="@+id/displayProgress" />
 
             <EditText
                 android:id="@+id/editWebpage"
@@ -158,6 +158,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editBio" />
+
+            <TextView
+                android:id="@+id/displayProgress"
+                android:layout_width="76dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.806"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editBirthDate" />
 
         </android.support.constraint.ConstraintLayout>
 
