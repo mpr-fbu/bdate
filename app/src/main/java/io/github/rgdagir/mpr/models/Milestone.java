@@ -14,37 +14,34 @@ public class Milestone {
 
     public static boolean canSeeName(Conversation conversation) {
         int currentPoints = conversation.getExchanges();
-        if (currentPoints == NAME_SCORE) {
-            ChatActivity.showSnackbar("name");
-            return true;
-        }
-        return (currentPoints > NAME_SCORE);
+        return (currentPoints >= NAME_SCORE);
     }
 
     public static boolean canSeeAge(Conversation conversation) {
         int currentPoints = conversation.getExchanges();
-        if (currentPoints == AGE_SCORE) {
-            ChatActivity.showSnackbar("age");
-            return true;
-        }
-        return (currentPoints > AGE_SCORE);
+        return (currentPoints >= AGE_SCORE);
     }
 
     public static boolean canSeeDistanceAway(Conversation conversation) {
         int currentPoints = conversation.getExchanges();
-        if (currentPoints == DISTANCE_AWAY_SCORE) {
-            ChatActivity.showSnackbar("distance away");
-            return true;
-        }
-        return (currentPoints > DISTANCE_AWAY_SCORE);
+        return (currentPoints >= DISTANCE_AWAY_SCORE);
     }
 
     public static boolean canSeeProfilePicture(Conversation conversation) {
         int currentPoints = conversation.getExchanges();
-        if (currentPoints == PROFILE_PICTURE_SCORE) {
+        return (currentPoints >= PROFILE_PICTURE_SCORE);
+    }
+
+    public static void showNotification(Conversation conversation) {
+        int currentPoints = conversation.getExchanges();
+        if (currentPoints == NAME_SCORE) {
+            ChatActivity.showSnackbar("name");
+        } else if (currentPoints == AGE_SCORE) {
+            ChatActivity.showSnackbar("age");
+        } else if (currentPoints == DISTANCE_AWAY_SCORE) {
+            ChatActivity.showSnackbar("distance away");
+        } else if (currentPoints == PROFILE_PICTURE_SCORE){
             ChatActivity.showSnackbar("profile picture");
-            return true;
         }
-        return (currentPoints > PROFILE_PICTURE_SCORE);
     }
 }

@@ -126,7 +126,19 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom)
             {
-                rvMessages.scrollToPosition(0);
+                if(bottom != oldBottom) {
+                    new Thread(){
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    rvMessages.scrollToPosition(0);
+                                }
+                            });
+                        }
+                    }.start();
+                }
+
             }
         });
     }
@@ -214,6 +226,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void checkNewUnlockedMilestones(Conversation conversation) {
         if (Milestone.canSeeProfilePicture(conversation)) {
+            Milestone.showNotification(conversation);
             //also need to update chatlist adapter to show pro pics properly
             runOnUiThread(new Runnable() {
                 @Override
@@ -222,10 +235,13 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
         } else if (Milestone.canSeeDistanceAway(conversation)) {
+            Milestone.showNotification(conversation);
             //show distance away in both user profiles
         } else if (Milestone.canSeeAge(conversation)) {
+            Milestone.showNotification(conversation);
             //show age in both user profiles
         } else if (Milestone.canSeeName(conversation)) {
+            Milestone.showNotification(conversation);
             //also need to update chatlist adapter to show name properly
             runOnUiThread(new Runnable() {
                 @Override
