@@ -57,7 +57,7 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<Message> mMessages;
     ParseUser currUser;
     ParseUser otherUser;
-    ParseLiveQueryClient parseLiveQueryClient;
+    public ParseLiveQueryClient parseLiveQueryClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +177,6 @@ public class ChatActivity extends AppCompatActivity {
         ParseQuery<Message> messagesQuery = ParseQuery.getQuery(Message.class);
         messagesQuery.whereEqualTo("conversation", conversation);
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(messagesQuery);
-
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.ENTER, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
                     @Override
@@ -271,16 +270,12 @@ public class ChatActivity extends AppCompatActivity {
         final ParseQuery<Message> messagesQuery = new Message.Query();
         messagesQuery.include("sender").whereEqualTo("conversation", conversation);
         messagesQuery.addDescendingOrder("createdAt");
-        /* if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
+        if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
             conversation.setReadUser1(true);
         } else {
             conversation.setReadUser2(true);
         }
-        conversation.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-            }
-        }); */
+        conversation.saveInBackground();
         messagesQuery.findInBackground(new FindCallback<Message>() {
             @Override
             public void done(List<Message> objects, ParseException e) {
@@ -418,19 +413,13 @@ public class ChatActivity extends AppCompatActivity {
         newMessage.setConversation(conversation);
         newMessage.setText(messageText);
         conversation.setLastMessage(newMessage);
-        /* if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
+        if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
             conversation.setReadUser1(true);
             conversation.setReadUser2(false);
         } else {
             conversation.setReadUser1(false);
             conversation.setReadUser2(true);
-        } */
-        /* conversation.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                Log.d("ChatActivity", "Conversation update success!");
-            }
-        }); */
+        }
 
         newMessage.saveInBackground(new SaveCallback() {
             @Override

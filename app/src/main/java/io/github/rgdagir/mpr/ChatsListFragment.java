@@ -80,7 +80,12 @@ public class ChatsListFragment extends Fragment {
                 SubscriptionHandling.HandleEventCallback<Conversation>() {
                     @Override
                     public void onEvent(ParseQuery<Conversation> query, Conversation object) {
-                        refreshConversations();
+                        boolean isUser1 = object.getUser1().getObjectId().equals(currUser.getObjectId());
+                        boolean isUser2 = object.getUser2().getObjectId().equals(currUser.getObjectId());
+                        if (isUser1 || isUser2) {
+                            refreshConversations();
+                            Log.d("ChatListFragment", "STUFF REFRESHED ONCE");
+                        }
                     }
                 });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
