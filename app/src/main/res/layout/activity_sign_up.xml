@@ -9,51 +9,52 @@
         android:id="@+id/firstNameSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/lastNameSignUp"
-        android:layout_alignStart="@+id/lastNameSignUp"
+        android:layout_above="@+id/fakeNameSignUp"
+        android:layout_alignLeft="@+id/fakeNameSignUp"
+        android:layout_alignStart="@+id/fakeNameSignUp"
         android:ems="10"
+        android:hint="First name"
         android:inputType="textPersonName"
-        android:text="Name"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="53dp"
-        android:layout_alignLeft="@+id/lastNameSignUp" />
+        tools:layout_editor_absoluteY="53dp" />
 
     <EditText
-        android:id="@+id/lastNameSignUp"
+        android:id="@+id/fakeNameSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/emailSignUp"
+        android:layout_alignLeft="@+id/emailSignUp"
         android:layout_alignStart="@+id/emailSignUp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="116dp"
-        android:layout_alignLeft="@+id/emailSignUp" />
+        tools:layout_editor_absoluteY="116dp" />
 
     <EditText
         android:id="@+id/emailSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/passwordSignUp"
+        android:layout_alignLeft="@+id/passwordSignUp"
         android:layout_alignStart="@+id/passwordSignUp"
         android:ems="10"
+        android:hint="Email"
         android:inputType="textEmailAddress"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="183dp"
-        android:layout_alignLeft="@+id/passwordSignUp" />
+        tools:layout_editor_absoluteY="183dp" />
 
     <EditText
         android:id="@+id/passwordSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/signUpBtn"
+        android:layout_alignLeft="@+id/signUpBtn"
         android:layout_alignStart="@+id/signUpBtn"
         android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="251dp"
-        android:layout_alignLeft="@+id/signUpBtn" />
+        tools:layout_editor_absoluteY="251dp" />
 
     <Button
         android:id="@+id/signUpBtn"
@@ -68,4 +69,12 @@
         tools:layout_editor_absoluteY="311dp"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="31dp" />
+
+    <Button
+        android:id="@+id/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/firstNameSignUp"
+        android:layout_toEndOf="@+id/firstNameSignUp"
+        android:text="Refresh" />
 </RelativeLayout>
