@@ -64,14 +64,6 @@
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
-        <Button
-            android:id="@+id/btnSendNotification"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:text="send love" />
-
     </RelativeLayout>
 
 </FrameLayout>
