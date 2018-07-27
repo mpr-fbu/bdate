@@ -8,7 +8,7 @@ public class Milestone {
     private static final int AGE_SCORE = 5;
     private static final int DISTANCE_AWAY_SCORE = 7;
     private static final int OCCUPATION_SCORE = 8;
-    private static final int PROFILE_PICTURE_SCORE = 20;
+    private static final int PROFILE_PICTURE_SCORE = 9;
 
     public Milestone() {
     }
