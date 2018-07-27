@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +25,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.LiveQueryException;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
@@ -51,6 +51,7 @@ public class ChatActivity extends AppCompatActivity {
     private EditText etMessage;
     private TextView tvUsername;
     private ParseImageView ivProfilePic;
+    private ImageView defaultProfilePic;
     private static Button btnSend;
     private RecyclerView rvMessages;
     private MessageAdapter mMessageAdapter;
@@ -139,6 +140,7 @@ public class ChatActivity extends AppCompatActivity {
         etMessage = findViewById(R.id.etMessage);
         tvUsername = findViewById(R.id.toolbar_title);
         ivProfilePic = findViewById(R.id.ivProfilePic);
+        defaultProfilePic = findViewById(R.id.defaultImageView);
         btnSend = findViewById(R.id.btnSend);
         rvMessages = findViewById(R.id.rvMessages);
     }
@@ -261,8 +263,11 @@ public class ChatActivity extends AppCompatActivity {
     private void displayProfilePicture() {
         if (Milestone.canSeeProfilePicture(conversation)) {
             displayActualProfilePicture();
+            ivProfilePic.setVisibility(View.VISIBLE);
+            defaultProfilePic.setVisibility(View.INVISIBLE);
         } else {
-            displayDefaultProfilePicture();
+            ivProfilePic.setVisibility(View.INVISIBLE);
+            defaultProfilePic.setVisibility(View.VISIBLE);
         }
     }
 
@@ -358,29 +363,6 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void displayDefaultProfilePicture() {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("objectId", "Bhg8VXqMbu");
-        query.getFirstInBackground(new GetCallback<ParseUser>() {
-            @Override
-            public void done(ParseUser defaultUser, ParseException e) {
-                Glide.with(getApplicationContext()).load(defaultUser.getParseFile("profilePic").getUrl())
-                        .asBitmap().centerCrop().dontAnimate()
-                        .placeholder(R.drawable.ic_action_name)
-                        .error(R.drawable.ic_action_name)
-                        .into(new BitmapImageViewTarget(ivProfilePic) {
-                            @Override
-                            protected void setResource(Bitmap resource) {
-                                RoundedBitmapDrawable circularBitmapDrawable =
-                                        RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
-                                circularBitmapDrawable.setCircular(true);
-                                ivProfilePic.setImageDrawable(circularBitmapDrawable);
-                            }
-                        });
-            }
-        });
-    }
-
     private void displayActualProfilePicture() {
         if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
             otherUser = conversation.getUser2();
@@ -401,6 +383,8 @@ public class ChatActivity extends AppCompatActivity {
                             ivProfilePic.setImageDrawable(circularBitmapDrawable);
                         }
                     });
+            ivProfilePic.setVisibility(View.VISIBLE);
+            defaultProfilePic.setVisibility(View.INVISIBLE);
         } catch (ParseException e) {
             Log.e("ChatActivity", "Error displaying actual profile picture");
             e.printStackTrace();

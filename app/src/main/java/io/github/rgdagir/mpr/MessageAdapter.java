@@ -131,29 +131,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-//    private void displayDefaultProfilePicture(final ParseImageView defaultImage) {
-//        ParseQuery<ParseUser> query = ParseUser.getQuery();
-//        query.whereEqualTo("objectId", "Bhg8VXqMbu");
-//        query.getFirstInBackground(new GetCallback<ParseUser>() {
-//            @Override
-//            public void done(ParseUser defaultUser, ParseException e) {
-//                Glide.with(getApplicationContext()).load(defaultUser.getParseFile("profilePic").getUrl())
-//                        .asBitmap().centerCrop().dontAnimate()
-//                        .placeholder(R.drawable.ic_action_name)
-//                        .error(R.drawable.ic_action_name)
-//                        .into(new BitmapImageViewTarget(defaultImage) {
-//                            @Override
-//                            protected void setResource(Bitmap resource) {
-//                                RoundedBitmapDrawable circularBitmapDrawable =
-//                                        RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
-//                                circularBitmapDrawable.setCircular(true);
-//                                defaultImage.setImageDrawable(circularBitmapDrawable);
-//                            }
-//                        });
-//            }
-//        });
-//    }
-
     @Override
     public int getItemCount() {
         return mMessages.size();
