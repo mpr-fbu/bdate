@@ -273,8 +273,8 @@ public class SearchFragment extends Fragment {
 
     public boolean checkIfInRange(Conversation conversation, ParseUser user){
         // get distance (in miles) between user who started the conversation and the one trying to match
-        double distanceFromMatch = calcDistance(conversation.getMatchLocation().getLatitude(),
-                conversation.getMatchLocation().getLongitude(), user.getParseGeoPoint("lastLocation").getLatitude(),
+        double distanceFromMatch = calcDistance(conversation.getMatchLocation().getLatitude(), user.getParseGeoPoint("lastLocation").getLatitude(),
+                conversation.getMatchLocation().getLongitude(),
                 user.getParseGeoPoint("lastLocation").getLongitude(), 0, 0);
         return (distanceFromMatch <= conversation.getMatchRange());
     }
