@@ -8,8 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.parse.LogInCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -23,14 +23,15 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etLoginPassword;
     private Button loginBtn;
     private Button toSignUpBtn;
-    Context context;
+    private Context context;
+    private ProgressBar progressBar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         context = this;
-
+        progressBar = (ProgressBar) findViewById(R.id.loginProgressBar);
         etLoginEmail = findViewById(R.id.loginEmail);
         etLoginPassword = findViewById(R.id.loginPassword);
         loginBtn = findViewById(R.id.loginButton);
@@ -49,9 +50,11 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 ParseUser.logInInBackground(etLoginEmail.getText().toString(), etLoginPassword.getText().toString(), new LogInCallback() {
                     public void done(ParseUser user, ParseException e) {
                         if (user != null) {
+                            progressBar.setVisibility(View.INVISIBLE);
                             launchMainActivity();
                         } else {
                             // Sign in failed. Look at the ParseException to see what happened.

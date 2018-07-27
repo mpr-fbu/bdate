@@ -20,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/ivProfilePic"
-                android:layout_width="307dp"
-                android:layout_height="match_parent"
+                android:layout_width="328dp"
+                android:layout_height="278dp"
                 android:layout_weight="1"
                 app:srcCompat="@android:color/black" />
 
@@ -34,8 +34,7 @@
                 <EditText
                     android:id="@+id/tvProfileName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/tvProfileAge"
@@ -52,11 +51,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Edit Your Profile" />
-                <Button
-                    android:id="@+id/logoutBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Log Out" />
 
             </LinearLayout>
 
@@ -71,6 +65,12 @@
             android:id="@+id/tvProfileWebpage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/logoutBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log Out" />
 
     </LinearLayout>
 
