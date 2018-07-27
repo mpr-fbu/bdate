@@ -239,14 +239,22 @@ public class ChatActivity extends AppCompatActivity {
     private void displayUsernameAtTop() {
         if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
             otherUser = conversation.getUser2();
-            try {
-                tvUsername.setText(otherUser.fetchIfNeeded().getUsername());
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if (Milestone.canSeeName(conversation)) {
+                tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
+            } else {
+                try {
+                    tvUsername.setText(otherUser.fetchIfNeeded().getUsername());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             otherUser = conversation.getUser1();
-            tvUsername.setText(otherUser.getUsername());
+            if (Milestone.canSeeName(conversation)) {
+                tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
+            } else {
+                tvUsername.setText(otherUser.getUsername());
+            }
         }
     }
 
@@ -338,6 +346,7 @@ public class ChatActivity extends AppCompatActivity {
             Milestone.showNotification(conversation);
             // show age in both user profiles
         } else if (Milestone.canSeeName(conversation)) {
+            Milestone.showNotification(conversation);
             Milestone.showNotification(conversation);
             // also need to update chatList adapter to show name properly
             runOnUiThread(new Runnable() {
