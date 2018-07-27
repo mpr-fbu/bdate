@@ -172,7 +172,7 @@ public class SearchFragment extends Fragment {
                 for (int i = 0; i < openConvos.size(); i++) {
                     final Conversation conversation = openConvos.get(i);
                     if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results))
-                            //&& checkIfInRange(conversation, currentUser)
+                            && checkIfInRange(conversation, currentUser)
                             ) {
                         // possible to get first/last name?
                         Toast.makeText(getActivity(), "Match found! " + conversation.getUser1().getUsername(), Toast.LENGTH_LONG).show();
@@ -273,8 +273,8 @@ public class SearchFragment extends Fragment {
 
     public boolean checkIfInRange(Conversation conversation, ParseUser user){
         // get distance (in miles) between user who started the conversation and the one trying to match
-        double distanceFromMatch = calcDistance(conversation.getMatchLocation().getLatitude(),
-                conversation.getMatchLocation().getLongitude(), user.getParseGeoPoint("lastLocation").getLatitude(),
+        double distanceFromMatch = calcDistance(conversation.getMatchLocation().getLatitude(), user.getParseGeoPoint("lastLocation").getLatitude(),
+                conversation.getMatchLocation().getLongitude(),
                 user.getParseGeoPoint("lastLocation").getLongitude(), 0, 0);
         return (distanceFromMatch <= conversation.getMatchRange());
     }
