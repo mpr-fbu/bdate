@@ -55,6 +55,8 @@ public class SignUpActivity extends AppCompatActivity {
                 int random = rng(fakeNames.size());
                 user.put("firstName", etFirstNameSignUp.getText().toString());
                 user.put("lastName", etLastNameSignUp.getText().toString());
+                user.put("minAge", 18);
+                user.put("maxAge", 500);
                 user.put("fakeName", fakeNames.get(random));
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(ParseException e) {

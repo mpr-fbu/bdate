@@ -19,16 +19,19 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".ChatActivity" />
+        <activity android:name=".SignUpActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ChatActivity"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name="com.parse.fcm.ParseFirebaseInstanceIdService"
@@ -65,7 +68,7 @@
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" />
+            android:resource="@color/pastelPink" />
         <meta-data
             android:name="com.parse.push.notification_icon"
             android:resource="@drawable/ic_stat_ic_notification" />
