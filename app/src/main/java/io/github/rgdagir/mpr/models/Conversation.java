@@ -19,6 +19,8 @@ public class Conversation extends ParseObject {
     private static final String KEY_EXCHANGES = "exchanges";
     private static final String KEY_READ1 = "readUser1";
     private static final String KEY_READ2 = "readUser2";
+    private static final String KEY_USER1AGE = "user1Age";
+    private static final String KEY_USER1GENDER = "user1Gender";
 
     public ParseUser getUser1() {
         return getParseUser(KEY_USER1);
@@ -109,5 +111,21 @@ public class Conversation extends ParseObject {
 
     public void setReadUser2(boolean value) {
         put(KEY_READ2, value);
+    }
+
+    public void setUser1Age(Integer age) {
+        put("user1Age", age);
+    }
+
+    public Integer getUser1Age() {
+        return getInt(KEY_USER1AGE);
+    }
+
+    public void setUser1Gender(String gender) {
+        put("user1Gender", gender);
+    }
+
+    public String getUser1Gender() {
+        return getString(KEY_USER1GENDER);
     }
 }
