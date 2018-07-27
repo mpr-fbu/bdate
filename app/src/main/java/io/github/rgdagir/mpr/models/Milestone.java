@@ -35,13 +35,13 @@ public class Milestone {
     public static void showNotification(Conversation conversation) {
         int currentPoints = conversation.getExchanges();
         if (currentPoints == NAME_SCORE) {
-            ChatActivity.showSnackbar("name");
+            ChatActivity.showTextViewNotification("name");
         } else if (currentPoints == AGE_SCORE) {
-            ChatActivity.showSnackbar("age");
+            ChatActivity.showTextViewNotification("age");
         } else if (currentPoints == DISTANCE_AWAY_SCORE) {
-            ChatActivity.showSnackbar("distance away");
+            ChatActivity.showTextViewNotification("distance away");
         } else if (currentPoints == PROFILE_PICTURE_SCORE){
-            ChatActivity.showSnackbar("profile picture");
+            ChatActivity.showTextViewNotification("profile picture");
         }
     }
 }

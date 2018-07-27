@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,6 +52,7 @@ public class ChatActivity extends AppCompatActivity {
     private TextView tvUsername;
     private ParseImageView ivProfilePic;
     private ImageView defaultProfilePic;
+    private static TextView notification;
     private static Button btnSend;
     private RecyclerView rvMessages;
     private MessageAdapter mMessageAdapter;
@@ -142,6 +143,7 @@ public class ChatActivity extends AppCompatActivity {
         ivProfilePic = findViewById(R.id.ivProfilePic);
         defaultProfilePic = findViewById(R.id.defaultImageView);
         btnSend = findViewById(R.id.btnSend);
+        notification = findViewById(R.id.notification);
         rvMessages = findViewById(R.id.rvMessages);
     }
 
@@ -151,6 +153,8 @@ public class ChatActivity extends AppCompatActivity {
         mMessages = new ArrayList<>();
         mMessageAdapter = new MessageAdapter(mMessages, conversation);
         rvMessages.setAdapter(mMessageAdapter);
+        notification.setVisibility(View.INVISIBLE);
+        notification.setGravity(Gravity.CENTER);
     }
 
     private void setUpRecyclerView() {
@@ -391,25 +395,31 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    public static void showSnackbar(String milestone) {
+    public static void showTextViewNotification(String milestone) {
         switch (milestone) {
             case "name":
-                Snackbar.make(btnSend, R.string.snackbar_name, Snackbar.LENGTH_LONG)
-                        .show();
+                animateTextView(R.string.snackbar_name);
                 return;
             case "age":
-                Snackbar.make(btnSend, R.string.snackbar_age, Snackbar.LENGTH_LONG)
-                        .show();
+                animateTextView(R.string.snackbar_age);
                 return;
             case "distance away":
-                Snackbar.make(btnSend, R.string.snackbar_distance_away, Snackbar.LENGTH_LONG)
-                        .show();
+                animateTextView(R.string.snackbar_distance_away);
                 return;
             case "profile picture":
-                Snackbar.make(btnSend, R.string.snackbar_profile_pic, Snackbar.LENGTH_LONG)
-                        .show();
+                animateTextView(R.string.snackbar_profile_pic);
                 return;
         }
+    }
+
+    private static void animateTextView(int unlockMessage) {
+        notification.setText(unlockMessage);
+        notification.setVisibility(View.VISIBLE);
+        notification.postDelayed(new Runnable() {
+            public void run() {
+                notification.setVisibility(View.INVISIBLE);
+            }
+        }, 3000);
     }
 
     private void unmatch() {
