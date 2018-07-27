@@ -24,10 +24,11 @@ public class SignUpActivity extends AppCompatActivity {
 
     private static String ACTIVITY_TAG = "SIGN UP";
     private EditText etFirstNameSignUp;
-    private EditText etLastNameSignUp;
+    private EditText etFakeNameSignUp;
     private EditText etEmailSignUp;
     private EditText etPasswordSignUp;
     private Button signupBtn;
+    private Button refresh;
     private List<String> fakeNames = new ArrayList<>(Arrays.asList("Anonymous Anon", "Mysterious Stranger", "?????"));
 
     @Override
@@ -36,10 +37,14 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         etFirstNameSignUp = findViewById(R.id.firstNameSignUp);
-        etLastNameSignUp = findViewById(R.id.lastNameSignUp);
+        etFakeNameSignUp = findViewById(R.id.fakeNameSignUp);
         etEmailSignUp = findViewById(R.id.emailSignUp);
         etPasswordSignUp = findViewById(R.id.passwordSignUp);
         signupBtn = findViewById(R.id.signUpBtn);
+        refresh = findViewById(R.id.refresh);
+
+        int random = rng(fakeNames.size());
+        etFakeNameSignUp.setText(fakeNames.get(random));
 
         // Invoke signUpInBackground when user clicks the button
         signupBtn.setOnClickListener(new View.OnClickListener() {
@@ -52,12 +57,10 @@ public class SignUpActivity extends AppCompatActivity {
                 user.setPassword(etPasswordSignUp.getText().toString());
                 user.setEmail(etEmailSignUp.getText().toString());
                 // Set custom properties
-                int random = rng(fakeNames.size());
                 user.put("firstName", etFirstNameSignUp.getText().toString());
-                user.put("lastName", etLastNameSignUp.getText().toString());
                 user.put("minAge", 18);
                 user.put("maxAge", 500);
-                user.put("fakeName", fakeNames.get(random));
+                user.put("fakeName", etFakeNameSignUp.getText().toString());
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
@@ -78,6 +81,15 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     }
                 });
+            }
+        });
+
+        //refresh fake name when clicked
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int random = rng(fakeNames.size());
+                etFakeNameSignUp.setText(fakeNames.get(random));
             }
         });
     }

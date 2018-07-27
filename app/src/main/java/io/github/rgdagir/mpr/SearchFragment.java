@@ -172,7 +172,7 @@ public class SearchFragment extends Fragment {
                 for (int i = 0; i < openConvos.size(); i++) {
                     final Conversation conversation = openConvos.get(i);
                     if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results))
-                            //&& checkIfInRange(conversation, currentUser)
+                            && checkIfInRange(conversation, currentUser)
                             ) {
                         // possible to get first/last name?
                         Toast.makeText(getActivity(), "Match found! " + conversation.getUser1().getUsername(), Toast.LENGTH_LONG).show();
