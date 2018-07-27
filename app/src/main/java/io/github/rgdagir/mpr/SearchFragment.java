@@ -114,7 +114,7 @@ public class SearchFragment extends Fragment {
         if (currentUser != null) {
             final Conversation.Query openConvosQuery = new Conversation.Query();
             openConvosQuery.whereDoesNotExist("user2").include("user1");
-            //ilterForAgeAndGender(openConvosQuery, currentUser);
+            //filterForAgeAndGender(openConvosQuery, currentUser);
             openConvosQuery.findInBackground(new FindCallback<Conversation>() {
                 @Override
                 public void done(final List<Conversation> objects, ParseException e) {
@@ -172,7 +172,7 @@ public class SearchFragment extends Fragment {
                 for (int i = 0; i < openConvos.size(); i++) {
                     final Conversation conversation = openConvos.get(i);
                     if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results))
-                            && checkIfInRange(conversation, currentUser)
+                            //&& checkIfInRange(conversation, currentUser)
                             ) {
                         // possible to get first/last name?
                         Toast.makeText(getActivity(), "Match found! " + conversation.getUser1().getUsername(), Toast.LENGTH_LONG).show();
@@ -208,24 +208,30 @@ public class SearchFragment extends Fragment {
 
     private void createConversation(final ParseUser currentUser) {
         final Conversation newConvo = new Conversation();
-        newConvo.setUser1(currentUser);
-        newConvo.setExchanges(0);
-        newConvo.setUser1MinAge((Integer) currentUser.getNumber("minAge"));
-        newConvo.setUser1MaxAge((Integer) currentUser.getNumber("maxAge"));
-        newConvo.setUser1Gender(currentUser.getString("gender"));
-        if (myLoc != null){
-            newConvo.setMatchLocation(myLoc);
-        }
-        newConvo.setMatchRange(currentUser.getInt("matchRange"));
 
-        newConvo.saveInBackground(new SaveCallback() {
+        currentUser.fetchInBackground(new GetCallback<ParseUser>() {
             @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("SearchFragment", "Create conversation success!");
-                } else {
-                    Log.e("SearchFragment", "Creating conversation failed :(");
+            public void done(ParseUser currentUser, ParseException e) {
+                newConvo.setUser1MinAge((Integer) currentUser.getNumber("minAge"));
+                newConvo.setUser1MaxAge((Integer) currentUser.getNumber("maxAge"));
+                newConvo.setUser1(currentUser);
+                newConvo.setExchanges(0);
+                newConvo.setUser1Gender(currentUser.getString("gender"));
+                if (myLoc != null){
+                    newConvo.setMatchLocation(myLoc);
                 }
+                newConvo.setMatchRange(currentUser.getInt("matchRange"));
+
+                newConvo.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Log.d("SearchFragment", "Create conversation success!");
+                        } else {
+                            Log.e("SearchFragment", "Creating conversation failed :(");
+                        }
+                    }
+                });
             }
         });
     }
