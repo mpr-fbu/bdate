@@ -95,7 +95,7 @@ public class ProfileFragment extends Fragment {
                     // the list should ideally have only one element, given users are unique
                     ParseUser userData = userDataList.get(0);
 
-                    String name = userData.get("firstName").toString() + " " + userData.get("lastName").toString();
+                    String name = userData.get("firstName").toString();
                     String age = userData.get("age").toString();
                     String bio = userData.get("bio").toString();
                     String webpage = userData.get("webpage").toString();

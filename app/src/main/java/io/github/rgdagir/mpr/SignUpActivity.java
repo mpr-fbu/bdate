@@ -54,7 +54,6 @@ public class SignUpActivity extends AppCompatActivity {
                 // Set custom properties
                 int random = rng(fakeNames.size());
                 user.put("firstName", etFirstNameSignUp.getText().toString());
-                user.put("lastName", etLastNameSignUp.getText().toString());
                 user.put("minAge", 18);
                 user.put("maxAge", 500);
                 user.put("fakeName", fakeNames.get(random));
