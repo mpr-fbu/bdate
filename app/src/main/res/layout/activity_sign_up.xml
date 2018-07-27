@@ -15,7 +15,8 @@
         android:inputType="textPersonName"
         android:text="Name"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="53dp" />
+        tools:layout_editor_absoluteY="53dp"
+        android:layout_alignLeft="@+id/lastNameSignUp" />
 
     <EditText
         android:id="@+id/lastNameSignUp"
@@ -27,7 +28,8 @@
         android:inputType="textPersonName"
         android:text="Name"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="116dp" />
+        tools:layout_editor_absoluteY="116dp"
+        android:layout_alignLeft="@+id/emailSignUp" />
 
     <EditText
         android:id="@+id/emailSignUp"
@@ -38,7 +40,8 @@
         android:ems="10"
         android:inputType="textEmailAddress"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="183dp" />
+        tools:layout_editor_absoluteY="183dp"
+        android:layout_alignLeft="@+id/passwordSignUp" />
 
     <EditText
         android:id="@+id/passwordSignUp"
@@ -49,7 +52,8 @@
         android:ems="10"
         android:inputType="textPassword"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="251dp" />
+        tools:layout_editor_absoluteY="251dp"
+        android:layout_alignLeft="@+id/signUpBtn" />
 
     <Button
         android:id="@+id/signUpBtn"
@@ -61,5 +65,7 @@
         android:layout_marginStart="31dp"
         android:text="Sign up now!"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="311dp" />
+        tools:layout_editor_absoluteY="311dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="31dp" />
 </RelativeLayout>

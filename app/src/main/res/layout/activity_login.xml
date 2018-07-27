@@ -16,7 +16,8 @@
         android:ems="10"
         android:inputType="textPersonName"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="86dp" />
+        tools:layout_editor_absoluteY="86dp"
+        android:layout_alignParentLeft="true" />
 
     <EditText
         android:id="@+id/loginPassword"
@@ -28,7 +29,8 @@
         android:ems="10"
         android:inputType="textPassword"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="165dp" />
+        tools:layout_editor_absoluteY="165dp"
+        android:layout_alignParentLeft="true" />
 
 
     <Button
@@ -39,7 +41,8 @@
         android:layout_centerVertical="true"
         android:text="Log In! "
         tools:layout_editor_absoluteX="121dp"
-        tools:layout_editor_absoluteY="239dp" />
+        tools:layout_editor_absoluteY="239dp"
+        android:layout_alignParentLeft="true" />
 
     <Button
         android:id="@+id/toSignUpButton"
@@ -47,7 +50,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/loginButton"
-        android:text="Don't have an account? Sign Up!" />
+        android:text="Don't have an account? Sign Up!"
+        android:layout_alignParentLeft="true" />
 
     <ImageView
         android:id="@+id/logo"
@@ -56,6 +60,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        app:srcCompat="@android:color/holo_red_dark" />
+        app:srcCompat="@color/pastelBlue" />
 
 </RelativeLayout>

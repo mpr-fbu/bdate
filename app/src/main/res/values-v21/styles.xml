@@ -1,6 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowActionBar">false</item>
         <!-- Customize your theme here. -->
@@ -9,6 +9,6 @@
         <item name="colorAccent">@color/peach</item>
         <item name="android:colorBackground">@color/babyWhite</item>
         <item name="android:colorForeground">@color/offBlack</item>
+        <item name="android:statusBarColor">@color/pastelPurple</item>
     </style>
-
 </resources>

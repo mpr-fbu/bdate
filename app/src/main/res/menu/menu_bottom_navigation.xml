@@ -4,19 +4,19 @@
     <item
         android:id="@+id/action_chats"
         android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/chats_button_select"
         android:title="Chats"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_search"
         android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/chats_button_select"
         android:title="Search"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_profile"
         android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/chats_button_select"
         android:title="Profile"
         app:showAsAction="ifRoom" />
 </menu>
