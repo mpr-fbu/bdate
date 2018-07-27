@@ -6,31 +6,38 @@ import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.List;
 
+import io.github.rgdagir.mpr.models.Conversation;
 import io.github.rgdagir.mpr.models.Message;
+import io.github.rgdagir.mpr.models.Milestone;
 
 import static com.parse.Parse.getApplicationContext;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Message> mMessages;
+    private Conversation mConversation;
+    private ParseUser currUser;
+    private ParseUser otherUser;
 
-    public MessageAdapter(List<Message> messages) {
+    public MessageAdapter(List<Message> messages, Conversation conversation) {
         mMessages = messages;
+        mConversation = conversation;
+        currUser = ParseUser.getCurrentUser();
     }
 
     @NonNull
@@ -66,14 +73,24 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 final ViewHolderOther viewHolderOther = (ViewHolderOther) holder;
                 viewHolderOther.mInfoOther.setText(message.getTimestamp());
                 viewHolderOther.mMessageOther.setText(message.getText());
-                displayDefaultProfilePicture(viewHolderOther.mProfilePic);
+                if (Milestone.canSeeProfilePicture(mConversation)) {
+                    displayActualProfilePicture(viewHolderOther.mProfilePic);
+                    viewHolderOther.mDefaultProPic.setVisibility(View.INVISIBLE);
+                    viewHolderOther.mProfilePic.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolderOther.mDefaultProPic.setVisibility(View.VISIBLE);
+                    viewHolderOther.mProfilePic.setVisibility(View.INVISIBLE);
+                }
                 break;
         }
     }
 
+    public void setConversation(Conversation conversation) {
+        mConversation = conversation;
+    }
+
     private void displayMyProfilePicture(final ParseImageView myProfilePic) {
-        ParseUser me = ParseUser.getCurrentUser();
-        Glide.with(getApplicationContext()).load(me.getParseFile("profilePic").getUrl())
+        Glide.with(getApplicationContext()).load(currUser.getParseFile("profilePic").getUrl())
                 .asBitmap().centerCrop().dontAnimate()
                 .placeholder(R.drawable.ic_action_name)
                 .error(R.drawable.ic_action_name)
@@ -88,28 +105,54 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 });
     }
 
-    private void displayDefaultProfilePicture(final ParseImageView defaultImage) {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("objectId", "Bhg8VXqMbu");
-        query.getFirstInBackground(new GetCallback<ParseUser>() {
-            @Override
-            public void done(ParseUser defaultUser, ParseException e) {
-                Glide.with(getApplicationContext()).load(defaultUser.getParseFile("profilePic").getUrl())
-                        .asBitmap().centerCrop().dontAnimate()
-                        .placeholder(R.drawable.ic_action_name)
-                        .error(R.drawable.ic_action_name)
-                        .into(new BitmapImageViewTarget(defaultImage) {
-                            @Override
-                            protected void setResource(Bitmap resource) {
-                                RoundedBitmapDrawable circularBitmapDrawable =
-                                        RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
-                                circularBitmapDrawable.setCircular(true);
-                                defaultImage.setImageDrawable(circularBitmapDrawable);
-                            }
-                        });
-            }
-        });
+    private void displayActualProfilePicture(final ParseImageView otherProfilePic) {
+        if (currUser.getObjectId().equals(mConversation.getUser1().getObjectId())) {
+            otherUser = mConversation.getUser2();
+        } else {
+            otherUser = mConversation.getUser1();
+        }
+        try {
+            Glide.with(getApplicationContext()).load(otherUser.fetchIfNeeded().getParseFile("profilePic").getUrl())
+                    .asBitmap().centerCrop().dontAnimate()
+                    .placeholder(R.drawable.ic_action_name)
+                    .error(R.drawable.ic_action_name)
+                    .into(new BitmapImageViewTarget(otherProfilePic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            otherProfilePic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        } catch (ParseException e) {
+            Log.e("ChatActivity", "Error displaying actual profile picture");
+            e.printStackTrace();
+        }
     }
+
+//    private void displayDefaultProfilePicture(final ParseImageView defaultImage) {
+//        ParseQuery<ParseUser> query = ParseUser.getQuery();
+//        query.whereEqualTo("objectId", "Bhg8VXqMbu");
+//        query.getFirstInBackground(new GetCallback<ParseUser>() {
+//            @Override
+//            public void done(ParseUser defaultUser, ParseException e) {
+//                Glide.with(getApplicationContext()).load(defaultUser.getParseFile("profilePic").getUrl())
+//                        .asBitmap().centerCrop().dontAnimate()
+//                        .placeholder(R.drawable.ic_action_name)
+//                        .error(R.drawable.ic_action_name)
+//                        .into(new BitmapImageViewTarget(defaultImage) {
+//                            @Override
+//                            protected void setResource(Bitmap resource) {
+//                                RoundedBitmapDrawable circularBitmapDrawable =
+//                                        RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
+//                                circularBitmapDrawable.setCircular(true);
+//                                defaultImage.setImageDrawable(circularBitmapDrawable);
+//                            }
+//                        });
+//            }
+//        });
+//    }
 
     @Override
     public int getItemCount() {
@@ -145,12 +188,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView mMessageOther;
         TextView mInfoOther;
         ParseImageView mProfilePic;
+        ImageView mDefaultProPic;
 
         public ViewHolderOther(View itemView) {
             super(itemView);
             mMessageOther = itemView.findViewById(R.id.tvMessageOther);
             mInfoOther = itemView.findViewById(R.id.tvInfoOther);
             mProfilePic = itemView.findViewById(R.id.ivProfilePic);
+            mDefaultProPic = itemView.findViewById(R.id.defaultImageView);
         }
     }
 }

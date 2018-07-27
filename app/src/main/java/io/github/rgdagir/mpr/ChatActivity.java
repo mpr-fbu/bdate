@@ -147,7 +147,7 @@ public class ChatActivity extends AppCompatActivity {
         conversation = Parcels.unwrap(getIntent().getParcelableExtra("conversation"));
         currUser = ParseUser.getCurrentUser();
         mMessages = new ArrayList<>();
-        mMessageAdapter = new MessageAdapter(mMessages);
+        mMessageAdapter = new MessageAdapter(mMessages, conversation);
         rvMessages.setAdapter(mMessageAdapter);
     }
 
@@ -221,8 +221,11 @@ public class ChatActivity extends AppCompatActivity {
                 SubscriptionHandling.HandleEventCallback<Conversation>() {
                     @Override
                     public void onEvent(ParseQuery<Conversation> query, Conversation conv) {
+                        int oldExchanges = conversation.getExchanges();
                         conversation = conv;
-                        checkNewUnlockedMilestones(conversation);
+                        if(conversation.getExchanges() > oldExchanges) {
+                            checkNewUnlockedMilestones(conversation);
+                        }
                     }
                 });
         subscriptionHandlingConversations.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
@@ -275,34 +278,56 @@ public class ChatActivity extends AppCompatActivity {
         } else {
             conversation.setReadUser2(true);
         }
-        conversation.saveInBackground();
-        messagesQuery.findInBackground(new FindCallback<Message>() {
+        conversation.saveInBackground(new SaveCallback() {
             @Override
-            public void done(List<Message> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); ++i) {
-                        Message message = objects.get(i);
-                        mMessages.add(message);
-                        mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
-                        rvMessages.scrollToPosition(0);
-                        Log.d("Messages", "a message has been loaded!");
+            public void done(ParseException e) {
+                messagesQuery.findInBackground(new FindCallback<Message>() {
+                    @Override
+                    public void done(List<Message> objects, ParseException e) {
+                        if (e == null) {
+                            for (int i = 0; i < objects.size(); ++i) {
+                                Message message = objects.get(i);
+                                mMessages.add(message);
+                                mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
+                                Log.d("Messages", "a message has been loaded!");
+                            }
+                        } else {
+                            Log.d("ChatActivity", "Error querying for messages" + e);
+                        }
                     }
-                } else {
-                    Log.d("ChatActivity", "Error querying for messages" + e);
-                }
+                });
+                conversation.saveInBackground();
+                messagesQuery.findInBackground(new FindCallback<Message>() {
+                    @Override
+                    public void done(List<Message> objects, ParseException e) {
+                        if (e == null) {
+                            for (int i = 0; i < objects.size(); ++i) {
+                                Message message = objects.get(i);
+                                mMessages.add(message);
+                                mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
+                                rvMessages.scrollToPosition(0);
+                                Log.d("Messages", "a message has been loaded!");
+                            }
+                        } else {
+                            Log.d("ChatActivity", "Error querying for messages" + e);
+                        }
+                    }
+                });
             }
         });
     }
 
     /* Helpers for other methods */
 
-    private void checkNewUnlockedMilestones(Conversation conversation) {
+    private void checkNewUnlockedMilestones(final Conversation conversation) {
         if (Milestone.canSeeProfilePicture(conversation)) {
             Milestone.showNotification(conversation);
             // also need to update chatList adapter to show pro pics properly
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    mMessageAdapter.setConversation(conversation);
+                    mMessageAdapter.notifyDataSetChanged();
                     displayActualProfilePicture();
                 }
             });
@@ -464,4 +489,5 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
     }
+
 }
