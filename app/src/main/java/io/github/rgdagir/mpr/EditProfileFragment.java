@@ -1,5 +1,7 @@
 package io.github.rgdagir.mpr;
 
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -53,6 +55,7 @@ public class EditProfileFragment extends Fragment {
     private Button submitEdits;
     private HashMap changes;
     private EditProfileFragment.OnFragmentInteractionListener mListener;
+    private Button dateBtn;
 
 
     public EditProfileFragment(){
@@ -99,6 +102,7 @@ public class EditProfileFragment extends Fragment {
         rangeSeekBar = v.findViewById(R.id.rangeSeekBar);
         displayProgress = v.findViewById(R.id.displayProgress);
         submitEdits = v.findViewById(R.id.submitEdits);
+        dateBtn = v.findViewById(R.id.dateBtn);
 
         // adding listeners to buttons
         changeprofilePic.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +117,18 @@ public class EditProfileFragment extends Fragment {
             public void onClick(View v) {
                 saveUpdatedUser();
                 mListener.goBackToProfile();
+            }
+        });
+
+        dateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragment fragment2 = new DatePickerFragment();
+                FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.flContainer,fragment2,"tag");
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 

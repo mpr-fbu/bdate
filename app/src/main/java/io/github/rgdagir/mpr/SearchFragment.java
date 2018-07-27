@@ -23,6 +23,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -113,7 +114,7 @@ public class SearchFragment extends Fragment {
         if (currentUser != null) {
             final Conversation.Query openConvosQuery = new Conversation.Query();
             openConvosQuery.whereDoesNotExist("user2").include("user1");
-            filterForAgeAndGender(openConvosQuery, currentUser);
+            //filterForAgeAndGender(openConvosQuery, currentUser);
             openConvosQuery.findInBackground(new FindCallback<Conversation>() {
                 @Override
                 public void done(final List<Conversation> objects, ParseException e) {
@@ -134,18 +135,23 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    private void filterForAgeAndGender(Conversation.Query query, ParseUser currentUser) {
-        if (currentUser.getString("interestedIn").equals("Male")) {
-            query.whereEqualTo("user1Gender", "Male");
-        } else if (currentUser.getString("interestedIn").equals("Female")) {
-            query.whereEqualTo("user1Gender", "Female");
-        }
-        if (currentUser.getString("user1MaxAge") != null) {
-            query.whereGreaterThan("user1MaxAge", (Integer) currentUser.getNumber("age") - 1);
-        }
-        if (currentUser.getString("user1MinAge") != null) {
-            query.whereLessThan("user1MinAge", (Integer) currentUser.getNumber("age") + 1);
-        }
+    private void filterForAgeAndGender(final Conversation.Query query, ParseUser user) {
+        user.fetchInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser currentUser, ParseException e) {
+                if (currentUser.getString("interestedIn").equals("Male")) {
+                    query.whereEqualTo("user1Gender", "Male");
+                } else if (currentUser.getString("interestedIn").equals("Female")) {
+                    query.whereEqualTo("user1Gender", "Female");
+                }
+                if (currentUser.getString("user1MaxAge") != null) {
+                    query.whereGreaterThan("user1MaxAge", (Integer) currentUser.getNumber("age") - 1);
+                }
+                if (currentUser.getString("user1MinAge") != null) {
+                    query.whereLessThan("user1MinAge", (Integer) currentUser.getNumber("age") + 1);
+                }
+            }
+        });
     }
 
     private void searchForMatches(final List<Conversation> openConvos, final ParseUser currentUser) {
@@ -166,7 +172,8 @@ public class SearchFragment extends Fragment {
                 for (int i = 0; i < openConvos.size(); i++) {
                     final Conversation conversation = openConvos.get(i);
                     if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results))
-                            && checkIfInRange(conversation, currentUser)) {
+                            //&& checkIfInRange(conversation, currentUser)
+                            ) {
                         // possible to get first/last name?
                         Toast.makeText(getActivity(), "Match found! " + conversation.getUser1().getUsername(), Toast.LENGTH_LONG).show();
                         conversation.setUser2(currentUser);
@@ -201,24 +208,30 @@ public class SearchFragment extends Fragment {
 
     private void createConversation(final ParseUser currentUser) {
         final Conversation newConvo = new Conversation();
-        newConvo.setUser1(currentUser);
-        newConvo.setExchanges(0);
-        newConvo.setUser1MinAge((Integer) currentUser.getNumber("minAge"));
-        newConvo.setUser1MaxAge((Integer) currentUser.getNumber("maxAge"));
-        newConvo.setUser1Gender(currentUser.getString("gender"));
-        if (myLoc != null){
-            newConvo.setMatchLocation(myLoc);
-        }
-        newConvo.setMatchRange(currentUser.getInt("matchRange"));
 
-        newConvo.saveInBackground(new SaveCallback() {
+        currentUser.fetchInBackground(new GetCallback<ParseUser>() {
             @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("SearchFragment", "Create conversation success!");
-                } else {
-                    Log.e("SearchFragment", "Creating conversation failed :(");
+            public void done(ParseUser currentUser, ParseException e) {
+                newConvo.setUser1MinAge((Integer) currentUser.getNumber("minAge"));
+                newConvo.setUser1MaxAge((Integer) currentUser.getNumber("maxAge"));
+                newConvo.setUser1(currentUser);
+                newConvo.setExchanges(0);
+                newConvo.setUser1Gender(currentUser.getString("gender"));
+                if (myLoc != null){
+                    newConvo.setMatchLocation(myLoc);
                 }
+                newConvo.setMatchRange(currentUser.getInt("matchRange"));
+
+                newConvo.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Log.d("SearchFragment", "Create conversation success!");
+                        } else {
+                            Log.e("SearchFragment", "Creating conversation failed :(");
+                        }
+                    }
+                });
             }
         });
     }
