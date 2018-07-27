@@ -50,12 +50,20 @@
             android:layout_marginRight="10dp"
             android:text="conversations" />
 
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/ivProfilePic"
+            android:background="@color/mediumGrey" />
+
         <android.support.v4.widget.SwipeRefreshLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/swipeContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ivProfilePic" >
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/line" >
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvConversations"

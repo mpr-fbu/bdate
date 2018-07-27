@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp"
     android:fitsSystemWindows="true"
     android:windowSoftInputMode="adjustResize"
     tools:context=".ChatActivity">
@@ -19,28 +18,25 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.019" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMessages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         app:layout_constraintBottom_toTopOf="@+id/btnSend"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/dropshadow" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:background="@color/mediumGrey"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar" >
 
         <RelativeLayout
@@ -83,6 +79,15 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <View
+        android:id="@+id/dropshadow"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/dropshadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
+
     <EditText
         android:id="@+id/etMessage"
         android:layout_width="0dp"
@@ -91,6 +96,9 @@
         android:layout_alignParentLeft="true"
         android:hint="Type message here..."
         android:inputType="text"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnSend"
         app:layout_constraintStart_toStartOf="parent" />
@@ -102,6 +110,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="Send"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

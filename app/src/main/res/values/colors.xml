@@ -9,4 +9,8 @@
     <color name="babyWhite">#FCFFFC</color>
     <color name="offBlack">#292829</color>
     <color name="mediumGrey">#575556</color>
+    <color name="lightGrey">#d3d3d3</color>
+    <color name="mediumBlue">#3BCBEE</color>
+    <color name="aqua">#14FFDB</color>
+    <color name="oceanBlue">#6095FF</color>
 </resources>

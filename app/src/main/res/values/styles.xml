@@ -4,11 +4,12 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowActionBar">false</item>
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/pastelPink</item>
-        <item name="colorPrimaryDark">@color/mediumGrey</item>
-        <item name="colorAccent">@color/peach</item>
+        <item name="colorPrimary">@color/mediumBlue</item>
+        <item name="colorPrimaryDark">@color/oceanBlue</item>
+        <item name="colorAccent">@color/mediumBlue</item>
         <item name="android:colorBackground">@color/babyWhite</item>
         <item name="android:colorForeground">@color/offBlack</item>
+        <item name="colorControlNormal">@color/mediumBlue</item>
     </style>
 
 </resources>
