@@ -397,7 +397,7 @@ public class ChatActivity extends AppCompatActivity {
 
     public static void showTextViewNotification(String milestone) {
         switch (milestone) {
-            case "name":
+            case "name and gender":
                 animateTextView(R.string.snackbar_name);
                 return;
             case "age":
