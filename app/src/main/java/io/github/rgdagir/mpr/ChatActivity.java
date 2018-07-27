@@ -83,6 +83,7 @@ public class ChatActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("ACTIVEINFO", MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.putBoolean("active", true);
+        ed.putString("conversationId", conversation.getObjectId());
         ed.commit();
     }
 
@@ -191,18 +192,17 @@ public class ChatActivity extends AppCompatActivity {
                                 rvMessages.scrollToPosition(0);
                             }
                         });
-                        // update read status of conversation
-                        /* if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
-                            conversation.setReadUser1(true);
-                        } else {
-                            conversation.setReadUser2(true);
-                        }
-                        conversation.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                Log.d("ChatActivity", "IT WAS READ");
+                        SharedPreferences sp = getSharedPreferences("ACTIVEINFO", MODE_PRIVATE);
+                        boolean chatActive = sp.getBoolean("active", false);
+                        String conversationId = sp.getString("conversationId", "");
+                        if (chatActive && conversationId.equals(conversation.getObjectId())) {
+                            if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
+                                conversation.setReadUser1(true);
+                            } else {
+                                conversation.setReadUser2(true);
                             }
-                        }); */
+                            conversation.saveInBackground();
+                        }
                     }
                 });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Message>() {

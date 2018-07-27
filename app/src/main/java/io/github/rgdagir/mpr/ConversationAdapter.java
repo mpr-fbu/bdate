@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
 import com.parse.ParseUser;
@@ -71,17 +72,19 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             holder.tvTimestamp.setText("");
         } else {
             Message lastMessage = conversation.getLastMessage();
-            try {
-                Message message = lastMessage.fetchIfNeeded();
-                /* if (message.getSender().getObjectId().equals(currentUser.getObjectId())) {
-                    holder.tvText.setText("You: " + lastMessage.getText());
-                } else {
-                    holder.tvText.setText(lastMessage.getText());
-                } */
-                holder.tvText.setText(lastMessage.getText());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            final ParseUser cUser = currentUser;
+            final ConversationAdapter.ViewHolder h = holder;
+            final Message lMsg = lastMessage;
+            lastMessage.fetchInBackground(new GetCallback<Message>() {
+                @Override
+                public void done(Message object, ParseException e) {
+                    if (object.getSender().getObjectId().equals(cUser.getObjectId())) {
+                        h.tvText.setText("You: " + lMsg.getText());
+                    } else {
+                        h.tvText.setText(lMsg.getText());
+                    }
+                }
+            });
             holder.tvTimestamp.setText(conversation.getTimestamp());
         }
     }
