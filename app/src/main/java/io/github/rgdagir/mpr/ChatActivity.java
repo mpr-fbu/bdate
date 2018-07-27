@@ -246,7 +246,7 @@ public class ChatActivity extends AppCompatActivity {
         if (currUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
             otherUser = conversation.getUser2();
             if (Milestone.canSeeName(conversation)) {
-                tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
+                tvUsername.setText(otherUser.getString("firstName"));
             } else {
                 try {
                     tvUsername.setText(otherUser.fetchIfNeeded().getString("fakeName"));
@@ -257,7 +257,7 @@ public class ChatActivity extends AppCompatActivity {
         } else {
             otherUser = conversation.getUser1();
             if (Milestone.canSeeName(conversation)) {
-                tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
+                tvUsername.setText(otherUser.getString("firstName") );
             } else {
                 tvUsername.setText(otherUser.getString("fakeName"));
             }
@@ -344,7 +344,7 @@ public class ChatActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
+                    tvUsername.setText(otherUser.getString("firstName"));
                 }
             });
         }

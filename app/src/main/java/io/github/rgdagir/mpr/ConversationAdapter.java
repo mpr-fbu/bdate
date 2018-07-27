@@ -144,7 +144,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     private void setConversationDetails(ParseUser user, TextView tvUsername, final ParseImageView ivProfilePic,
                                         ImageView ivDefaultPic, Conversation conversation) {
         if (Milestone.canSeeProfilePicture(conversation)) {
-            tvUsername.setText(user.getString("firstName") + " " + user.getString("lastName"));
+            tvUsername.setText(user.getString("firstName"));
             ivDefaultPic.setVisibility(View.INVISIBLE);
             ivProfilePic.setVisibility(View.VISIBLE);
             if (user.getParseFile("profilePic") != null) {
@@ -163,7 +163,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                         });
             }
         } else if (Milestone.canSeeName(conversation)) {
-            tvUsername.setText(user.getString("firstName") + " " + user.getString("lastName"));
+            tvUsername.setText(user.getString("firstName"));
             ivDefaultPic.setVisibility(View.VISIBLE);
             ivProfilePic.setVisibility(View.INVISIBLE);
         } else {
