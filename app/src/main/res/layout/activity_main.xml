@@ -23,8 +23,6 @@
         android:layout_alignParentBottom="true"
         app:itemBackground="@color/babyWhite"
         android:background="@drawable/shadow"
-        app:itemIconTint="@color/mediumBlue"
-        app:itemTextColor="@color/mediumBlue"
         android:paddingTop="8dp"
         app:menu="@menu/menu_bottom_navigation" />
 

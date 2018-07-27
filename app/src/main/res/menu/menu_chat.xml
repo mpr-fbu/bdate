@@ -4,7 +4,7 @@
     <item
         android:id="@+id/chat_options"
         android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/ic_menu_dots"
         app:showAsAction="always"
         android:title="Chats">
         <menu>

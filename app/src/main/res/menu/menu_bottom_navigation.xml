@@ -5,18 +5,18 @@
         android:id="@+id/action_chats"
         android:enabled="true"
         android:icon="@drawable/chats_button_select"
-        android:title="Chats"
+        android:title=""
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_search"
         android:enabled="true"
-        android:icon="@drawable/chats_button_select"
-        android:title="Search"
+        android:icon="@drawable/add_button_select"
+        android:title=""
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_profile"
         android:enabled="true"
-        android:icon="@drawable/chats_button_select"
-        android:title="Profile"
+        android:icon="@drawable/profile_button_select"
+        android:title=""
         app:showAsAction="ifRoom" />
 </menu>
