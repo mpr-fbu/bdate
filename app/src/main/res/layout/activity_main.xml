@@ -21,6 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="59dp"
         android:layout_alignParentBottom="true"
+        app:itemBackground="@color/babyWhite"
+        android:background="@drawable/shadow"
+        app:itemIconTint="@color/pastelPink"
+        app:itemTextColor="@color/pastelPink"
+        android:paddingTop="8dp"
         app:menu="@menu/menu_bottom_navigation" />
 
 </RelativeLayout>
