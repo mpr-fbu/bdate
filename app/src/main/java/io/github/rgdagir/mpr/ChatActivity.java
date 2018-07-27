@@ -249,7 +249,7 @@ public class ChatActivity extends AppCompatActivity {
                 tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
             } else {
                 try {
-                    tvUsername.setText(otherUser.fetchIfNeeded().getUsername());
+                    tvUsername.setText(otherUser.fetchIfNeeded().getString("fakeName"));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -259,7 +259,7 @@ public class ChatActivity extends AppCompatActivity {
             if (Milestone.canSeeName(conversation)) {
                 tvUsername.setText(otherUser.getString("firstName") + " " + otherUser.getString("lastName"));
             } else {
-                tvUsername.setText(otherUser.getUsername());
+                tvUsername.setText(otherUser.getString("fakeName"));
             }
         }
     }

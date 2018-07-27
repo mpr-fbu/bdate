@@ -162,8 +162,12 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                             }
                         });
             }
+        } else if (Milestone.canSeeName(conversation)) {
+            tvUsername.setText(user.getString("firstName") + " " + user.getString("lastName"));
+            ivDefaultPic.setVisibility(View.VISIBLE);
+            ivProfilePic.setVisibility(View.INVISIBLE);
         } else {
-            tvUsername.setText("bae " + user.getObjectId());
+            tvUsername.setText(user.getString("fakeName"));
             ivDefaultPic.setVisibility(View.VISIBLE);
             ivProfilePic.setVisibility(View.INVISIBLE);
         }
