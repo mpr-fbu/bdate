@@ -37,8 +37,8 @@
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/toSignUpButton"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
         android:text="Log In! "
         tools:layout_editor_absoluteX="121dp"
         tools:layout_editor_absoluteY="239dp"
@@ -48,8 +48,9 @@
         android:id="@+id/toSignUpButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/loginButton"
+        android:layout_marginBottom="152dp"
         android:text="Don't have an account? Sign Up!"
         android:layout_alignParentLeft="true" />
 
@@ -61,5 +62,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         app:srcCompat="@color/pastelBlue" />
+
+    <ProgressBar
+        android:id="@+id/loginProgressBar"
+        android:indeterminate="true"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="229dp"
+        android:visibility="gone"
+        style="@android:style/Widget.ProgressBar.Large"/>
 
 </RelativeLayout>

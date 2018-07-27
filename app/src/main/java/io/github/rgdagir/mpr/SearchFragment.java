@@ -113,11 +113,7 @@ public class SearchFragment extends Fragment {
         if (currentUser != null) {
             final Conversation.Query openConvosQuery = new Conversation.Query();
             openConvosQuery.whereDoesNotExist("user2").include("user1");
-            if (currentUser.getString("interestedIn").equals("Male")) {
-                openConvosQuery.whereEqualTo("user1Gender", "Male");
-            } else if (currentUser.getString("interestedIn").equals("Female")) {
-                openConvosQuery.whereEqualTo("user1Gender", "Female");
-            }
+            filterForAgeAndGender(openConvosQuery, currentUser);
             openConvosQuery.findInBackground(new FindCallback<Conversation>() {
                 @Override
                 public void done(final List<Conversation> objects, ParseException e) {
@@ -135,6 +131,20 @@ public class SearchFragment extends Fragment {
             });
         } else {
             Log.e("SearchFragment", "Current user is somehow null");
+        }
+    }
+
+    private void filterForAgeAndGender(Conversation.Query query, ParseUser currentUser) {
+        if (currentUser.getString("interestedIn").equals("Male")) {
+            query.whereEqualTo("user1Gender", "Male");
+        } else if (currentUser.getString("interestedIn").equals("Female")) {
+            query.whereEqualTo("user1Gender", "Female");
+        }
+        if (currentUser.getString("user1MaxAge") != null) {
+            query.whereGreaterThan("user1MaxAge", (Integer) currentUser.getNumber("age") - 1);
+        }
+        if (currentUser.getString("user1MinAge") != null) {
+            query.whereLessThan("user1MinAge", (Integer) currentUser.getNumber("age") + 1);
         }
     }
 
@@ -193,7 +203,8 @@ public class SearchFragment extends Fragment {
         final Conversation newConvo = new Conversation();
         newConvo.setUser1(currentUser);
         newConvo.setExchanges(0);
-        newConvo.setUser1Age((Integer) currentUser.getNumber("age"));
+        newConvo.setUser1MinAge((Integer) currentUser.getNumber("minAge"));
+        newConvo.setUser1MaxAge((Integer) currentUser.getNumber("maxAge"));
         newConvo.setUser1Gender(currentUser.getString("gender"));
         if (myLoc != null){
             newConvo.setMatchLocation(myLoc);

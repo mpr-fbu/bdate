@@ -19,7 +19,8 @@ public class Conversation extends ParseObject {
     private static final String KEY_EXCHANGES = "exchanges";
     private static final String KEY_READ1 = "readUser1";
     private static final String KEY_READ2 = "readUser2";
-    private static final String KEY_USER1AGE = "user1Age";
+    private static final String KEY_USER1_MIN_AGE = "user1MinAge";
+    private static final String KEY_USER1_MAX_AGE = "user1MaxAge";
     private static final String KEY_USER1GENDER = "user1Gender";
 
     public ParseUser getUser1() {
@@ -113,12 +114,20 @@ public class Conversation extends ParseObject {
         put(KEY_READ2, value);
     }
 
-    public void setUser1Age(Integer age) {
-        put("user1Age", age);
+    public void setUser1MinAge(Integer age) {
+        put("user1MinAge", age);
     }
 
-    public Integer getUser1Age() {
-        return getInt(KEY_USER1AGE);
+    public Integer getUser1MinAge() {
+        return getInt(KEY_USER1_MIN_AGE);
+    }
+
+    public void setUser1MaxAge(Integer age) {
+        put("user1MaxAge", age);
+    }
+
+    public Integer getUser1MaxAge() {
+        return getInt(KEY_USER1_MAX_AGE);
     }
 
     public void setUser1Gender(String gender) {
