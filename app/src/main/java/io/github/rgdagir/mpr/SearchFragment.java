@@ -104,6 +104,7 @@ public class SearchFragment extends Fragment {
 
     /* Search for convos that have only one user, and
        match current user to other user if they're not already matched.
+       Filters for age and gender.
        If all convos are full, create a new convo with only the current user.
        A new convo must only have User1; User2 should be null
        Users cannot open more than one new convo */
@@ -112,6 +113,11 @@ public class SearchFragment extends Fragment {
         if (currentUser != null) {
             final Conversation.Query openConvosQuery = new Conversation.Query();
             openConvosQuery.whereDoesNotExist("user2").include("user1");
+            if (currentUser.getString("interestedIn").equals("Male")) {
+                openConvosQuery.whereEqualTo("user1Gender", "Male");
+            } else if (currentUser.getString("interestedIn").equals("Female")) {
+                openConvosQuery.whereEqualTo("user1Gender", "Female");
+            }
             openConvosQuery.findInBackground(new FindCallback<Conversation>() {
                 @Override
                 public void done(final List<Conversation> objects, ParseException e) {
@@ -187,6 +193,8 @@ public class SearchFragment extends Fragment {
         final Conversation newConvo = new Conversation();
         newConvo.setUser1(currentUser);
         newConvo.setExchanges(0);
+        newConvo.setUser1Age((Integer) currentUser.getNumber("age"));
+        newConvo.setUser1Gender(currentUser.getString("gender"));
         if (myLoc != null){
             newConvo.setMatchLocation(myLoc);
         }
@@ -310,7 +318,7 @@ public class SearchFragment extends Fragment {
 
     // Returns distance in miles between two coordinates
     public static double calcDistance(double lat1, double lat2, double lon1,
-                                  double lon2, double el1, double el2) {
+                                      double lon2, double el1, double el2) {
 
         final int R = 6371; // Radius of the earth
 

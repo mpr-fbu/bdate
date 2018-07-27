@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // Sign in failed. Look at the ParseException to see what happened.
                             Log.d(ACTIVITY_TAG, "Login failed :(");
+                            e.printStackTrace();
                             Toast.makeText(context, "Login failed, please try again.", Toast.LENGTH_SHORT).show();
                         }
                     }

@@ -12,10 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
 import com.parse.ParseUser;
@@ -26,6 +28,7 @@ import java.util.List;
 
 import io.github.rgdagir.mpr.models.Conversation;
 import io.github.rgdagir.mpr.models.Message;
+import io.github.rgdagir.mpr.models.Milestone;
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder> {
     List<Conversation> mConversations;
@@ -53,13 +56,15 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         final Conversation conversation = mConversations.get(position);
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser.getObjectId().equals(conversation.getUser1().getObjectId())) {
-            setConversationDetails(conversation.getUser2(), holder.tvUsername, holder.ivProfilePic);
+            setConversationDetails(conversation.getUser2(), holder.tvUsername, holder.ivProfilePic,
+                    holder.ivDefaultPic, conversation);
             if (!conversation.getReadUser1()) {
                 holder.tvText.setTypeface(null, Typeface.BOLD);
                 holder.tvText.setTextColor(Color.WHITE);
             }
         } else {
-            setConversationDetails(conversation.getUser1(), holder.tvUsername, holder.ivProfilePic);
+            setConversationDetails(conversation.getUser1(), holder.tvUsername, holder.ivProfilePic,
+                    holder.ivDefaultPic, conversation);
             if (!conversation.getReadUser2()) {
                 holder.tvText.setTypeface(null, Typeface.BOLD);
                 holder.tvText.setTextColor(Color.WHITE);
@@ -71,17 +76,19 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             holder.tvTimestamp.setText("");
         } else {
             Message lastMessage = conversation.getLastMessage();
-            try {
-                Message message = lastMessage.fetchIfNeeded();
-                /* if (message.getSender().getObjectId().equals(currentUser.getObjectId())) {
-                    holder.tvText.setText("You: " + lastMessage.getText());
-                } else {
-                    holder.tvText.setText(lastMessage.getText());
-                } */
-                holder.tvText.setText(lastMessage.getText());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            final ParseUser cUser = currentUser;
+            final ConversationAdapter.ViewHolder h = holder;
+            final Message lMsg = lastMessage;
+            lastMessage.fetchInBackground(new GetCallback<Message>() {
+                @Override
+                public void done(Message object, ParseException e) {
+                    if (object.getSender().getObjectId().equals(cUser.getObjectId())) {
+                        h.tvText.setText("You: " + lMsg.getText());
+                    } else {
+                        h.tvText.setText(lMsg.getText());
+                    }
+                }
+            });
             holder.tvTimestamp.setText(conversation.getTimestamp());
         }
     }
@@ -103,6 +110,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ParseImageView ivProfilePic;
+        public ImageView ivDefaultPic;
         public TextView tvUsername;
         public TextView tvTimestamp;
         public TextView tvText;
@@ -112,6 +120,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
             // do all them findViewByIds
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+            ivDefaultPic = itemView.findViewById(R.id.defaultProfilePic);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
             tvText = itemView.findViewById(R.id.tvConversation);
@@ -132,22 +141,35 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         }
     }
 
-    private void setConversationDetails(ParseUser user, TextView tvUsername, final ParseImageView ivProfilePic) {
-        tvUsername.setText(user.getUsername());
-        if (user.getParseFile("profilePic") != null) {
-            Glide.with(context).load(user.getParseFile("profilePic").getUrl())
-                    .asBitmap().centerCrop().dontAnimate()
-                    .placeholder(R.drawable.ic_action_name)
-                    .error(R.drawable.ic_action_name)
-                    .into(new BitmapImageViewTarget(ivProfilePic) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                            circularBitmapDrawable.setCircular(true);
-                            ivProfilePic.setImageDrawable(circularBitmapDrawable);
-                        }
-                    });
+    private void setConversationDetails(ParseUser user, TextView tvUsername, final ParseImageView ivProfilePic,
+                                        ImageView ivDefaultPic, Conversation conversation) {
+        if (Milestone.canSeeProfilePicture(conversation)) {
+            tvUsername.setText(user.getString("firstName") + " " + user.getString("lastName"));
+            ivDefaultPic.setVisibility(View.INVISIBLE);
+            ivProfilePic.setVisibility(View.VISIBLE);
+            if (user.getParseFile("profilePic") != null) {
+                Glide.with(context).load(user.getParseFile("profilePic").getUrl())
+                        .asBitmap().centerCrop().dontAnimate()
+                        .placeholder(R.drawable.ic_action_name)
+                        .error(R.drawable.ic_action_name)
+                        .into(new BitmapImageViewTarget(ivProfilePic) {
+                            @Override
+                            protected void setResource(Bitmap resource) {
+                                RoundedBitmapDrawable circularBitmapDrawable =
+                                        RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                                circularBitmapDrawable.setCircular(true);
+                                ivProfilePic.setImageDrawable(circularBitmapDrawable);
+                            }
+                        });
+            }
+        } else if (Milestone.canSeeName(conversation)) {
+            tvUsername.setText(user.getString("firstName") + " " + user.getString("lastName"));
+            ivDefaultPic.setVisibility(View.VISIBLE);
+            ivProfilePic.setVisibility(View.INVISIBLE);
+        } else {
+            tvUsername.setText(user.getString("fakeName"));
+            ivDefaultPic.setVisibility(View.VISIBLE);
+            ivProfilePic.setVisibility(View.INVISIBLE);
         }
     }
 }

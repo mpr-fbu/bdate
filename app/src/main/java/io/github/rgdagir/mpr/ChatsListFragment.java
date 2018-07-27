@@ -14,14 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.FindCallback;
 import com.parse.LiveQueryException;
-import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
 import com.parse.ParseLiveQueryClient;
@@ -30,7 +28,6 @@ import com.parse.ParseUser;
 import com.parse.SubscriptionHandling;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import io.github.rgdagir.mpr.models.Conversation;
@@ -41,7 +38,6 @@ public class ChatsListFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private SwipeRefreshLayout swipeContainer;
 
-    private Button btnSendNotification;
     private ParseImageView ivProfilePic;
     private TextView tvUsername;
     private TextView tvNumConversations;
@@ -97,18 +93,6 @@ public class ChatsListFragment extends Fragment {
 
         // set up and populate views
         populateViewsLayouts();
-        // populate recycler view with conversations
-        // populateConversations();
-
-        // TESTING ONLY: to be removed once notifications are done
-        btnSendNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HashMap<String, String> payload = new HashMap<>();
-                payload.put("newData", "You got a match, what a miracle! :O");
-                ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
-            }
-        });
 
         return view;
     }
@@ -212,7 +196,6 @@ public class ChatsListFragment extends Fragment {
         tvUsername = view.findViewById(R.id.tvUsername);
         tvNumConversations = view.findViewById(R.id.tvNumMessages);
         rvConversations = view.findViewById(R.id.rvConversations);
-        btnSendNotification = view.findViewById(R.id.btnSendNotification);
 
         // Lookup the swipe container view
         swipeContainer = view.findViewById(R.id.swipeContainer);

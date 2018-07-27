@@ -15,6 +15,11 @@ import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 public class SignUpActivity extends AppCompatActivity {
 
     private static String ACTIVITY_TAG = "SIGN UP";
@@ -23,7 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText etEmailSignUp;
     private EditText etPasswordSignUp;
     private Button signupBtn;
-
+    private List<String> fakeNames = new ArrayList<>(Arrays.asList("Anonymous Anon", "Mysterious Stranger", "?????"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +52,10 @@ public class SignUpActivity extends AppCompatActivity {
                 user.setPassword(etPasswordSignUp.getText().toString());
                 user.setEmail(etEmailSignUp.getText().toString());
                 // Set custom properties
+                int random = rng(fakeNames.size());
                 user.put("firstName", etFirstNameSignUp.getText().toString());
                 user.put("lastName", etLastNameSignUp.getText().toString());
+                user.put("fakeName", fakeNames.get(random));
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
@@ -71,6 +78,11 @@ public class SignUpActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private int rng(int size) {
+        Random rand = new Random();
+        return rand.nextInt(size);
     }
 
     private void launchMainActivity() {

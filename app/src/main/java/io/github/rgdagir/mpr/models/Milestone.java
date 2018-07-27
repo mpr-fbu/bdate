@@ -4,17 +4,18 @@ import io.github.rgdagir.mpr.ChatActivity;
 
 public class Milestone {
 
-    private static final int NAME_SCORE = 3;
+    private static final int NAME_AND_GENDER_SCORE = 3;
     private static final int AGE_SCORE = 5;
     private static final int DISTANCE_AWAY_SCORE = 7;
-    private static final int PROFILE_PICTURE_SCORE = 9;
+    private static final int OCCUPATION_SCORE = 8;
+    private static final int PROFILE_PICTURE_SCORE = 20;
 
     public Milestone() {
     }
 
     public static boolean canSeeName(Conversation conversation) {
         int currentPoints = conversation.getExchanges();
-        return (currentPoints >= NAME_SCORE);
+        return (currentPoints >= NAME_AND_GENDER_SCORE);
     }
 
     public static boolean canSeeAge(Conversation conversation) {
@@ -34,14 +35,14 @@ public class Milestone {
 
     public static void showNotification(Conversation conversation) {
         int currentPoints = conversation.getExchanges();
-        if (currentPoints == NAME_SCORE) {
-            ChatActivity.showSnackbar("name");
+        if (currentPoints == NAME_AND_GENDER_SCORE) {
+            ChatActivity.showTextViewNotification("name and gender");
         } else if (currentPoints == AGE_SCORE) {
-            ChatActivity.showSnackbar("age");
+            ChatActivity.showTextViewNotification("age");
         } else if (currentPoints == DISTANCE_AWAY_SCORE) {
-            ChatActivity.showSnackbar("distance away");
+            ChatActivity.showTextViewNotification("distance away");
         } else if (currentPoints == PROFILE_PICTURE_SCORE){
-            ChatActivity.showSnackbar("profile picture");
+            ChatActivity.showTextViewNotification("profile picture");
         }
     }
 }
