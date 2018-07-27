@@ -313,23 +313,6 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     }
                 });
-                conversation.saveInBackground();
-                messagesQuery.findInBackground(new FindCallback<Message>() {
-                    @Override
-                    public void done(List<Message> objects, ParseException e) {
-                        if (e == null) {
-                            for (int i = 0; i < objects.size(); ++i) {
-                                Message message = objects.get(i);
-                                mMessages.add(message);
-                                mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
-                                rvMessages.scrollToPosition(0);
-                                Log.d("Messages", "a message has been loaded!");
-                            }
-                        } else {
-                            Log.d("ChatActivity", "Error querying for messages" + e);
-                        }
-                    }
-                });
             }
         });
     }
