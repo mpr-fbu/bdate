@@ -229,7 +229,7 @@ public class ChatsListFragment extends Fragment {
                         }
                     });
         }
-        tvUsername.setText(currUser.getString("firstName") + " " + currUser.getString("lastName"));
+        tvUsername.setText(currUser.getString("firstName"));
 
         mConversations = new ArrayList<>();
         conversationAdapter = new ConversationAdapter(mConversations);
