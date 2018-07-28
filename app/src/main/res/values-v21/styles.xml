@@ -10,6 +10,6 @@
         <item name="android:colorBackground">@color/babyWhite</item>
         <item name="android:colorForeground">@color/offBlack</item>
         <item name="android:statusBarColor">@color/oceanBlue</item>
-        <item name="colorControlNormal">@color/mediumBlue</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back_arrow</item>
     </style>
 </resources>

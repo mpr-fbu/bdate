@@ -19,8 +19,9 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$PROJECT_DIR$/app/src/main/res/drawable-xxxhdpi/outline_person_outline_black_24.png" />
-                                      <entry key="outputName" value="ic_profile_empty" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/res/drawable-xxxhdpi/baseline_arrow_back_black_24.png" />
+                                      <entry key="outputName" value="ic_back_arrow" />
+                                      <entry key="theme" value="CUSTOM" />
                                     </map>
                                   </option>
                                 </PersistentState>
