@@ -1,5 +1,12 @@
 package io.github.rgdagir.mpr;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
@@ -9,6 +16,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.Editable;
@@ -24,7 +32,9 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -56,7 +66,8 @@ public class EditProfileFragment extends Fragment {
     private HashMap changes;
     private EditProfileFragment.OnFragmentInteractionListener mListener;
     private Button dateBtn;
-
+    private static final int READ_STORAGE_PERMISSION = 1;
+    public final static int PICK_PHOTO_CODE = 1046;
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -102,7 +113,6 @@ public class EditProfileFragment extends Fragment {
         rangeSeekBar = v.findViewById(R.id.rangeSeekBar);
         displayProgress = v.findViewById(R.id.displayProgress);
         submitEdits = v.findViewById(R.id.submitEdits);
-        dateBtn = v.findViewById(R.id.dateBtn);
 
         // adding listeners to buttons
         changeprofilePic.setOnClickListener(new View.OnClickListener() {
@@ -120,15 +130,10 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        dateBtn.setOnClickListener(new View.OnClickListener() {
+        changeprofilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerFragment fragment2 = new DatePickerFragment();
-                FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.flContainer,fragment2,"tag");
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                onPickPhoto(v);
             }
         });
 
@@ -311,6 +316,73 @@ public class EditProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // Placeholder, to be inserted when clicking is introduced
         void goBackToProfile();
+    }
+
+    // Setting up the change profile pic button, accessing media from the phone TODO - flow to launch camera
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void z(){
+        // 1) Use the support library version ContextCompat.checkSelfPermission(...) to avoid
+        // checking the build version since Context.checkSelfPermission(...) is only available
+        // in Marshmallow
+        // 2) Always check for permission (even if permission has already been granted)
+        // since the user can revoke permissions at any time through Settings
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // If the statement above is true, then no permission was granted
+            // Check if the user has been asked about this permission already and denied
+            // it. If so, we want to give more explanation about why the permission is needed.
+            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                // if the statement above is false, it means that the user has previously denied the request for that permission
+                // TODO - give user an explanation of how location will be used before the actual request is made
+            }
+            // Request permission
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_STORAGE_PERMISSION);
+        }
+    }
+
+    // Callback function for location request
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == READ_STORAGE_PERMISSION) {
+            if (grantResults.length == 1
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(context, "Read storage permission granted", Toast.LENGTH_SHORT).show();
+            } else {
+                boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION);
+                if (showRationale) {
+                    // TODO - handle this situation when the user has denied permission
+                } else {
+                    Toast.makeText(context, "read Storage permission denied", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    public void onPickPhoto(View view) {
+        // Create intent for picking a photo from the gallery
+        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (i.resolveActivity(context.getPackageManager()) != null) {
+            // Bring up gallery to select a photo
+            startActivityForResult(i, PICK_PHOTO_CODE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            Uri photoUri = data.getData();
+            // Do something with the photo based on Uri
+            Bitmap selectedImage = null;
+            try {
+                selectedImage = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photoUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Load the selected image into a preview
+            profilePic.setImageBitmap(selectedImage);
+        }
     }
 
 }

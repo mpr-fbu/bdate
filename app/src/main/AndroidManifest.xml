@@ -26,11 +26,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity"
+        <activity
+            android:name=".SignUpActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ChatActivity"
+        <activity
+            android:name=".ChatActivity"
             android:theme="@style/AppTheme" />
 
         <service
@@ -73,6 +76,7 @@
             android:name="com.parse.push.notification_icon"
             android:resource="@drawable/ic_stat_ic_notification" />
 
+        <activity android:name=".CustomPhotoGallery"></activity>
     </application>
 
 </manifest>
