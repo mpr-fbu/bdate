@@ -440,7 +440,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private void sendMessage() {
         updateExchanges();
-        checkNewUnlockedMilestones(conversation);
+        if (mMessages.size() != 0) {
+            if (!mMessages.get(0).getSender().getObjectId().equals(currUser.getObjectId())) {
+                checkNewUnlockedMilestones(conversation);
+            }
+        }
         final Message newMessage = new Message();
         String messageText = etMessage.getText().toString();
 
