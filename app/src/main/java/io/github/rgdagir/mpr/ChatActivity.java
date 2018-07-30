@@ -381,16 +381,22 @@ public class ChatActivity extends AppCompatActivity {
     public static void showTextViewNotification(String milestone) {
         switch (milestone) {
             case "name and gender":
-                animateTextView(R.string.snackbar_name);
+                animateTextView(R.string.notification_name_and_gender);
                 return;
             case "age":
-                animateTextView(R.string.snackbar_age);
+                animateTextView(R.string.notification_age);
                 return;
             case "distance away":
-                animateTextView(R.string.snackbar_distance_away);
+                animateTextView(R.string.notification_distance_away);
+                return;
+            case "occupation":
+                animateTextView(R.string.notification_occupation);
                 return;
             case "profile picture":
-                animateTextView(R.string.snackbar_profile_pic);
+                animateTextView(R.string.notification_profile_pic);
+                return;
+            case "gallery":
+                animateTextView(R.string.notification_gallery);
                 return;
         }
     }

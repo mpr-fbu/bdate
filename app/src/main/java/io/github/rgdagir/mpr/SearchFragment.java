@@ -183,12 +183,7 @@ public class SearchFragment extends Fragment {
                                 if (e == null) {
                                     Log.d("SearchFragment", "You have joined the conversation!");
                                     // start chat activity between currentUser and objects.get(i).getUser1()
-                                    // other user gets notification of new match
-                                    HashMap<String, String> payload = new HashMap<>();
-                                    ParseUser recipient = conversation.getUser1();
-                                    payload.put("receiver", recipient.getObjectId());
-                                    payload.put("newData", getString(R.string.new_conversation_notification));
-                                    ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
+                                    sendPushNotification(conversation);
                                 } else {
                                     Log.e("SearchFragment", "Error when joining conversation");
                                 }
@@ -269,8 +264,13 @@ public class SearchFragment extends Fragment {
         return true;
     }
 
-    private void sendPushNotification() {
-
+    private void sendPushNotification(Conversation conversation) {
+        // other user gets notification of new match
+        HashMap<String, String> payload = new HashMap<>();
+        ParseUser recipient = conversation.getUser1();
+        payload.put("receiver", recipient.getObjectId());
+        payload.put("newData", getString(R.string.new_conversation_notification));
+        ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
     }
 
     public boolean checkIfInRange(Conversation conversation, ParseUser user){

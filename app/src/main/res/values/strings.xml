@@ -7,10 +7,12 @@
     <string name="password">Password...</string>
     <string name="confirmPassword">Confirm password...</string>
     <string name="email">Email...</string>
-    <string name="snackbar_name">Name and gender unlocked!</string>
-    <string name="snackbar_age">Age unlocked!</string>
-    <string name="snackbar_distance_away">Distance away unlocked!</string>
-    <string name="snackbar_profile_pic">Profile picture unlocked!</string>
+    <string name="notification_name_and_gender">Name and gender unlocked!</string>
+    <string name="notification_age">Age unlocked!</string>
+    <string name="notification_distance_away">Distance away unlocked!</string>
+    <string name="notification_occupation">Occupation unlocked!</string>
+    <string name="notification_profile_pic">Profile picture unlocked!</string>
+    <string name="notification_gallery">Gallery pictures unlocked!</string>
     <string name="new_message_notification">You received a new message!</string>
     <string name="new_conversation_notification">You have been matched to a new conversation!</string>
     <string-array name="genders">
