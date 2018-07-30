@@ -111,47 +111,45 @@ public class SearchFragment extends Fragment {
        Users cannot open more than one new convo */
     public void searchForOpenConvos() {
         final ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null) {
-            final Conversation.Query openConvosQuery = new Conversation.Query();
-            openConvosQuery.whereDoesNotExist("user2").include("user1");
-            //filterForAgeAndGender(openConvosQuery, currentUser);
-            openConvosQuery.findInBackground(new FindCallback<Conversation>() {
-                @Override
-                public void done(final List<Conversation> objects, ParseException e) {
-                    if (e == null) {
-                        // objects has list of open conversations
-                        if (hasOpenConvo(currentUser, objects)) {
-                            Toast.makeText(context, "Already searching...", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                        searchForMatches(objects, currentUser);
-                    } else {
-                        Log.e("SearchFragment", "Error querying for open conversations");
-                    }
-                }
-            });
-        } else {
-            Log.e("SearchFragment", "Current user is somehow null");
-        }
-    }
+        final Conversation.Query openConvosQuery = new Conversation.Query();
+        openConvosQuery.whereDoesNotExist("user2");
+        filterForAgeAndGender(openConvosQuery);
 
-    private void filterForAgeAndGender(final Conversation.Query query, ParseUser user) {
-        user.fetchInBackground(new GetCallback<ParseUser>() {
+        final ParseQuery<Conversation> currentUserQuery = new Conversation.Query();
+        currentUserQuery.whereDoesNotExist("user2");
+        currentUserQuery.whereEqualTo("user1", currentUser);
+
+        List<ParseQuery<Conversation>> queries = new ArrayList<>();
+        queries.add(openConvosQuery);
+        queries.add(currentUserQuery);
+
+        ParseQuery<Conversation> query = ParseQuery.or(queries).include("user1");
+        query.findInBackground(new FindCallback<Conversation>() {
             @Override
-            public void done(ParseUser currentUser, ParseException e) {
-                if (currentUser.getString("interestedIn").equals("Male")) {
-                    query.whereEqualTo("user1Gender", "Male");
-                } else if (currentUser.getString("interestedIn").equals("Female")) {
-                    query.whereEqualTo("user1Gender", "Female");
-                }
-                if (currentUser.getString("user1MaxAge") != null) {
-                    query.whereGreaterThan("user1MaxAge", (Integer) currentUser.getNumber("age") - 1);
-                }
-                if (currentUser.getString("user1MinAge") != null) {
-                    query.whereLessThan("user1MinAge", (Integer) currentUser.getNumber("age") + 1);
+            public void done(final List<Conversation> objects, ParseException e) {
+                if (e == null) {
+                    // objects has list of open conversations
+                    if (hasOpenConvo(currentUser, objects)) {
+                        Toast.makeText(context, "Already searching...", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    searchForMatches(objects, currentUser);
+                } else {
+                    Log.e("SearchFragment", "Error querying for open conversations");
                 }
             }
         });
+    }
+
+    private void filterForAgeAndGender(final Conversation.Query query) {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser.getString("interestedIn").equals("Male")) {
+            query.whereEqualTo("user1Gender", "Male");
+        } else if (currentUser.getString("interestedIn").equals("Female")) {
+            query.whereEqualTo("user1Gender", "Female");
+        }
+        //query.whereGreaterThan("user1MaxAge", (Integer) currentUser.getNumber("age") - 1);
+        //query.whereLessThan("user1MinAge", (Integer) currentUser.getNumber("age") + 1);
     }
 
     private void searchForMatches(final List<Conversation> openConvos, final ParseUser currentUser) {
@@ -161,13 +159,13 @@ public class SearchFragment extends Fragment {
         final ParseQuery<Conversation> fullConvosQuery2 = new Conversation.Query();
         fullConvosQuery2.whereEqualTo("user2", currentUser);
 
-        List<ParseQuery<Conversation>> queries = new ArrayList<ParseQuery<Conversation>>();
+        List<ParseQuery<Conversation>> queries = new ArrayList<>();
         queries.add(fullConvosQuery1);
         queries.add(fullConvosQuery2);
 
         ParseQuery<Conversation> mainQuery = ParseQuery.or(queries).include("user1").include("user2");
         mainQuery.findInBackground(new FindCallback<Conversation>() {
-            public void done(List<Conversation> results, ParseException e) {
+            public void done(final List<Conversation> results, ParseException e) {
                 // results has the list of full conversations in which the current user is participating in
                 for (int i = 0; i < openConvos.size(); i++) {
                     final Conversation conversation = openConvos.get(i);
@@ -200,7 +198,7 @@ public class SearchFragment extends Fragment {
                     }
                 }
                 // create new convo if there does not already exist open convo with only current user
-                Toast.makeText(getActivity(), "Match not found... starting new conversation...", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Match not found... starting new conversation...", Toast.LENGTH_LONG).show();
                 createConversation(currentUser);
             }
         });
@@ -237,7 +235,7 @@ public class SearchFragment extends Fragment {
     }
 
     // returns true if current user has open convo, otherwise returns false
-    public boolean hasOpenConvo(ParseUser currentUser, List<Conversation> openConvos) {
+    private boolean hasOpenConvo(ParseUser currentUser, List<Conversation> openConvos) {
         for (int i = 0; i < openConvos.size(); i++) {
             if (openConvos.get(i).getUser1().getObjectId().equals(currentUser.getObjectId())) {
                 return true;
@@ -248,7 +246,7 @@ public class SearchFragment extends Fragment {
 
     // goes through full conversations containing current user
     // returns a list of users already matched with the current user
-    public List<ParseUser> listAlreadyMatched(ParseUser currentUser, List<Conversation> fullConvos) {
+    private List<ParseUser> listAlreadyMatched(ParseUser currentUser, List<Conversation> fullConvos) {
         List<ParseUser> currentMatches = new ArrayList<>();
 
         for (int i = 0; i < fullConvos.size(); i++) {
@@ -262,13 +260,17 @@ public class SearchFragment extends Fragment {
     }
 
     // returns true if the users are not already matched, otherwise returns false
-    public boolean checkNotAlreadyMatched(ParseUser otherUser, List<ParseUser> currentMatches) {
+    private boolean checkNotAlreadyMatched(ParseUser otherUser, List<ParseUser> currentMatches) {
         for (int i = 0; i < currentMatches.size(); i++) {
             if (otherUser.getObjectId().equals(currentMatches.get(i).getObjectId())) {
                 return false;
             }
         }
         return true;
+    }
+
+    private void sendPushNotification() {
+
     }
 
     public boolean checkIfInRange(Conversation conversation, ParseUser user){
