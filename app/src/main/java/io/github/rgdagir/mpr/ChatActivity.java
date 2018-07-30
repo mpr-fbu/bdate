@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -60,6 +61,7 @@ public class ChatActivity extends AppCompatActivity {
     ParseUser currUser;
     ParseUser otherUser;
     public ParseLiveQueryClient parseLiveQueryClient;
+    Milestone milestone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +154,7 @@ public class ChatActivity extends AppCompatActivity {
         currUser = ParseUser.getCurrentUser();
         mMessages = new ArrayList<>();
         mMessageAdapter = new MessageAdapter(mMessages, conversation);
+        milestone = new Milestone();
         rvMessages.setAdapter(mMessageAdapter);
         notification.setVisibility(View.INVISIBLE);
         notification.setGravity(Gravity.CENTER);
@@ -320,26 +323,31 @@ public class ChatActivity extends AppCompatActivity {
     /* Helpers for other methods */
 
     private void checkNewUnlockedMilestones(final Conversation conversation) {
-        if (Milestone.canSeeProfilePicture(conversation)) {
-            Milestone.showNotification(conversation);
+        if (Milestone.canSeeGallery(conversation)) {
+            milestone.showNotification(conversation);
+            // show distance away in both user profiles
+        } else if (Milestone.canSeeProfilePicture(conversation)) {
+            milestone.showNotification(conversation);
             // also need to update chatList adapter to show pro pics properly
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    displayActualProfilePicture();
                     mMessageAdapter.setConversation(conversation);
                     mMessageAdapter.notifyDataSetChanged();
-                    displayActualProfilePicture();
                 }
             });
+        } else if (Milestone.canSeeOccupation(conversation)) {
+            milestone.showNotification(conversation);
+            // show distance away in both user profiles
         } else if (Milestone.canSeeDistanceAway(conversation)) {
-            Milestone.showNotification(conversation);
+            milestone.showNotification(conversation);
             // show distance away in both user profiles
         } else if (Milestone.canSeeAge(conversation)) {
-            Milestone.showNotification(conversation);
+            milestone.showNotification(conversation);
             // show age in both user profiles
-        } else if (Milestone.canSeeName(conversation)) {
-            Milestone.showNotification(conversation);
-            Milestone.showNotification(conversation);
+        } else if (Milestone.canSeeName(conversation) && Milestone.canSeeGender(conversation)) {
+            milestone.showNotification(conversation);
             // also need to update chatList adapter to show name properly
             runOnUiThread(new Runnable() {
                 @Override
@@ -378,7 +386,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    public static void showTextViewNotification(String milestone) {
+    public void showTextViewNotification(String milestone) {
         switch (milestone) {
             case "name and gender":
                 animateTextView(R.string.notification_name_and_gender);
@@ -401,14 +409,23 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private static void animateTextView(int unlockMessage) {
-        notification.setText(unlockMessage);
-        notification.setVisibility(View.VISIBLE);
-        notification.postDelayed(new Runnable() {
+    private void animateTextView(final int unlockMessage) {
+        runOnUiThread(new Runnable() {
+            @Override
             public void run() {
-                notification.setVisibility(View.INVISIBLE);
+                notification.setText(unlockMessage);
+                notification.setBackgroundResource(R.color.oceanBlue);
+                notification.setVisibility(View.VISIBLE);
+                notification.postDelayed(new Runnable() {
+                    public void run() {
+                        AlphaAnimation fadeOut = new AlphaAnimation( 1.0f , 0.0f );
+                        fadeOut.setDuration(1200);
+                        notification.startAnimation(fadeOut);
+                        notification.setVisibility(View.INVISIBLE);
+                    }
+                }, 3000);
             }
-        }, 3000);
+        });
     }
 
     private void unmatch() {

@@ -10,8 +10,10 @@ public class Milestone {
     private static final int OCCUPATION_SCORE = 8;
     private static final int PROFILE_PICTURE_SCORE = 9;
     private static final int GALLERY_SCORE = 11;
+    ChatActivity activity;
 
     public Milestone() {
+        activity = new ChatActivity();
     }
 
     public static boolean canSeeName(Conversation conversation) {
@@ -49,20 +51,20 @@ public class Milestone {
         return (currentPoints >= GALLERY_SCORE);
     }
 
-    public static void showNotification(Conversation conversation) {
+    public void showNotification(Conversation conversation) {
         int currentPoints = conversation.getExchanges();
         if (currentPoints == NAME_AND_GENDER_SCORE) {
-            ChatActivity.showTextViewNotification("name and gender");
+            activity.showTextViewNotification("name and gender");
         } else if (currentPoints == AGE_SCORE) {
-            ChatActivity.showTextViewNotification("age");
+            activity.showTextViewNotification("age");
         } else if (currentPoints == DISTANCE_AWAY_SCORE) {
-            ChatActivity.showTextViewNotification("distance away");
+            activity.showTextViewNotification("distance away");
         } else if (currentPoints == OCCUPATION_SCORE) {
-            ChatActivity.showTextViewNotification("occupation");
+            activity.showTextViewNotification("occupation");
         } else if (currentPoints == PROFILE_PICTURE_SCORE){
-            ChatActivity.showTextViewNotification("profile picture");
+            activity.showTextViewNotification("profile picture");
         } else if (currentPoints == GALLERY_SCORE){
-            ChatActivity.showTextViewNotification("gallery");
+            activity.showTextViewNotification("gallery");
         }
     }
 }
