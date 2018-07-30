@@ -1,21 +1,19 @@
 package io.github.rgdagir.mpr;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -34,6 +32,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -41,11 +44,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 public class EditProfileFragment extends Fragment {
     private Context context;
@@ -114,14 +112,17 @@ public class EditProfileFragment extends Fragment {
         displayProgress = v.findViewById(R.id.displayProgress);
         submitEdits = v.findViewById(R.id.submitEdits);
 
+        setupButtonListeners();
+        setupTextContainerListeners();
+    }
+
+    private void setupButtonListeners() {
         // adding listeners to buttons
         changeprofilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
-
         submitEdits.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,75 +130,60 @@ public class EditProfileFragment extends Fragment {
                 mListener.goBackToProfile();
             }
         });
-
         changeprofilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onPickPhoto(v);
             }
         });
+    }
 
+    private void setupTextContainerListeners() {
         // adding listeners to text containers
         editName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 changes.put("firstName", s);
             }
         });
-
         editEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 changes.put("email", s.toString());
                 changes.put("username", s.toString());
             }
         });
-
         editWebpage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 changes.put("webpage", s.toString());
             }
         });
-
         editBio.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 changes.put("bio", s.toString());

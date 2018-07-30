@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.parse.LogInCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -31,14 +32,26 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         context = this;
+        final ParseUser currentUser = ParseUser.getCurrentUser();
+        findViews();
+        setOnClickListeners();
+
+        if (currentUser != null) {
+            // persistence if the user is already signed in
+            launchMainActivity();
+        }
+
+    }
+
+    private void findViews() {
         progressBar = (ProgressBar) findViewById(R.id.loginProgressBar);
         etLoginEmail = findViewById(R.id.loginEmail);
         etLoginPassword = findViewById(R.id.loginPassword);
         loginBtn = findViewById(R.id.loginButton);
         toSignUpBtn = findViewById(R.id.toSignUpButton);
+    }
 
-        final ParseUser currentUser = ParseUser.getCurrentUser();
-
+    private void setOnClickListeners() {
         toSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,12 +79,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
-
-        if (currentUser != null) {
-            // persistence if the user is already signed in
-            launchMainActivity();
-        }
-
     }
 
     private void launchMainActivity() {

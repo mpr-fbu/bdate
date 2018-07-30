@@ -45,6 +45,7 @@ public class SearchFragment extends Fragment {
     private static final int LOCATION_PERMISSION_REQUEST = 1;
     private Context context;
     private ParseGeoPoint myLoc;
+    ParseUser currentUser;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -53,6 +54,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentUser = ParseUser.getCurrentUser();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -63,20 +65,18 @@ public class SearchFragment extends Fragment {
         context = getActivity();
         getLocationPermissions();
         getLastLoc();
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
-        // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
         searchButton = view.findViewById(R.id.btnSearch);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchForOpenConvos();
+                searchForOpenConversations();
             }
         });
     }
@@ -109,18 +109,19 @@ public class SearchFragment extends Fragment {
        If all convos are full, create a new convo with only the current user.
        A new convo must only have User1; User2 should be null
        Users cannot open more than one new convo */
-    public void searchForOpenConvos() {
-        final ParseUser currentUser = ParseUser.getCurrentUser();
-        final Conversation.Query openConvosQuery = new Conversation.Query();
-        openConvosQuery.whereDoesNotExist("user2");
-        filterForAgeAndGender(openConvosQuery);
 
+    public void searchForOpenConversations() {
+        final Conversation.Query openConversationsQuery = new Conversation.Query();
+        openConversationsQuery.whereDoesNotExist("user2");
+        filterForAgeAndGender(openConversationsQuery);
+
+        //ensures that currentUser is not filtered out if they have a conversation open
         final ParseQuery<Conversation> currentUserQuery = new Conversation.Query();
         currentUserQuery.whereDoesNotExist("user2");
         currentUserQuery.whereEqualTo("user1", currentUser);
 
         List<ParseQuery<Conversation>> queries = new ArrayList<>();
-        queries.add(openConvosQuery);
+        queries.add(openConversationsQuery);
         queries.add(currentUserQuery);
 
         ParseQuery<Conversation> query = ParseQuery.or(queries).include("user1");
@@ -130,7 +131,7 @@ public class SearchFragment extends Fragment {
                 if (e == null) {
                     // objects has list of open conversations
                     if (hasOpenConvo(currentUser, objects)) {
-                        Toast.makeText(context, "Already searching...", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Still searching...", Toast.LENGTH_LONG).show();
                         return;
                     }
                     searchForMatches(objects, currentUser);
@@ -142,61 +143,65 @@ public class SearchFragment extends Fragment {
     }
 
     private void filterForAgeAndGender(final Conversation.Query query) {
-        ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser.getString("interestedIn").equals("Male")) {
             query.whereEqualTo("user1Gender", "Male");
         } else if (currentUser.getString("interestedIn").equals("Female")) {
             query.whereEqualTo("user1Gender", "Female");
         }
-        //query.whereGreaterThan("user1MaxAge", (Integer) currentUser.getNumber("age") - 1);
-        //query.whereLessThan("user1MinAge", (Integer) currentUser.getNumber("age") + 1);
+        query.whereGreaterThan("user1MaxAge", (Integer) currentUser.getNumber("age") - 1);
+        query.whereLessThan("user1MinAge", (Integer) currentUser.getNumber("age") + 1);
     }
 
-    private void searchForMatches(final List<Conversation> openConvos, final ParseUser currentUser) {
-        final ParseQuery<Conversation> fullConvosQuery1 = new Conversation.Query();
-        fullConvosQuery1.whereEqualTo("user1", currentUser);
+    private void searchForMatches(final List<Conversation> openConversations, final ParseUser currentUser) {
+        final ParseQuery<Conversation> fullConversationsQuery1 = new Conversation.Query();
+        fullConversationsQuery1.whereEqualTo("user1", currentUser);
 
-        final ParseQuery<Conversation> fullConvosQuery2 = new Conversation.Query();
-        fullConvosQuery2.whereEqualTo("user2", currentUser);
+        final ParseQuery<Conversation> fullConversationsQuery2 = new Conversation.Query();
+        fullConversationsQuery2.whereEqualTo("user2", currentUser);
 
         List<ParseQuery<Conversation>> queries = new ArrayList<>();
-        queries.add(fullConvosQuery1);
-        queries.add(fullConvosQuery2);
+        queries.add(fullConversationsQuery1);
+        queries.add(fullConversationsQuery2);
 
         ParseQuery<Conversation> mainQuery = ParseQuery.or(queries).include("user1").include("user2");
         mainQuery.findInBackground(new FindCallback<Conversation>() {
             public void done(final List<Conversation> results, ParseException e) {
                 // results has the list of full conversations in which the current user is participating in
-                for (int i = 0; i < openConvos.size(); i++) {
-                    final Conversation conversation = openConvos.get(i);
+                for (int i = 0; i < openConversations.size(); i++) {
+                    final Conversation conversation = openConversations.get(i);
                     if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results))
                             && checkIfInRange(conversation, currentUser)
                             ) {
-                        // possible to get first/last name?
-                        Toast.makeText(getActivity(), "Match found! " + conversation.getUser1().getUsername(), Toast.LENGTH_LONG).show();
-                        conversation.setUser2(currentUser);
-                        conversation.setReadUser2(false);
-                        conversation.setReadUser1(false);
-                        conversation.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    Log.d("SearchFragment", "You have joined the conversation!");
-                                    // start chat activity between currentUser and objects.get(i).getUser1()
-                                    sendPushNotification(conversation);
-                                } else {
-                                    Log.e("SearchFragment", "Error when joining conversation");
-                                }
-                            }
-                        });
+                        Toast.makeText(getActivity(), "Match found! Say hello to "
+                                + conversation.getUser1().getString("fakeName") + "!", Toast.LENGTH_LONG).show();
+                        addCurrentUserToConversation(conversation);
                         return;
                     }
                 }
                 // create new convo if there does not already exist open convo with only current user
-                Toast.makeText(getContext(), "Match not found... starting new conversation...", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Searching...", Toast.LENGTH_LONG).show();
                 createConversation(currentUser);
             }
         });
+    }
+
+    private void addCurrentUserToConversation(final Conversation conversation) {
+        conversation.setUser2(currentUser);
+        conversation.setReadUser2(false);
+        conversation.setReadUser1(false);
+        conversation.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("SearchFragment", "You have joined the conversation!");
+                    // start chat activity between currentUser and objects.get(i).getUser1()
+                    sendPushNotification(conversation);
+                } else {
+                    Log.e("SearchFragment", "Error when joining conversation");
+                }
+            }
+        });
+        //goToChatList();
     }
 
     private void createConversation(final ParseUser currentUser) {
@@ -230,9 +235,9 @@ public class SearchFragment extends Fragment {
     }
 
     // returns true if current user has open convo, otherwise returns false
-    private boolean hasOpenConvo(ParseUser currentUser, List<Conversation> openConvos) {
-        for (int i = 0; i < openConvos.size(); i++) {
-            if (openConvos.get(i).getUser1().getObjectId().equals(currentUser.getObjectId())) {
+    private boolean hasOpenConvo(ParseUser currentUser, List<Conversation> openConversations) {
+        for (int i = 0; i < openConversations.size(); i++) {
+            if (openConversations.get(i).getUser1().getObjectId().equals(currentUser.getObjectId())) {
                 return true;
             }
         }
@@ -241,14 +246,14 @@ public class SearchFragment extends Fragment {
 
     // goes through full conversations containing current user
     // returns a list of users already matched with the current user
-    private List<ParseUser> listAlreadyMatched(ParseUser currentUser, List<Conversation> fullConvos) {
+    private List<ParseUser> listAlreadyMatched(ParseUser currentUser, List<Conversation> fullConversations) {
         List<ParseUser> currentMatches = new ArrayList<>();
 
-        for (int i = 0; i < fullConvos.size(); i++) {
-            if (fullConvos.get(i).getUser1().getObjectId().equals(currentUser.getObjectId())) {
-                currentMatches.add(fullConvos.get(i).getUser2());
-            } else if (fullConvos.get(i).getUser2().getObjectId().equals(currentUser.getObjectId())) {
-                currentMatches.add(fullConvos.get(i).getUser1());
+        for (int i = 0; i < fullConversations.size(); i++) {
+            if (fullConversations.get(i).getUser1().getObjectId().equals(currentUser.getObjectId())) {
+                currentMatches.add(fullConversations.get(i).getUser2());
+            } else if (fullConversations.get(i).getUser2().getObjectId().equals(currentUser.getObjectId())) {
+                currentMatches.add(fullConversations.get(i).getUser1());
             }
         }
         return currentMatches;

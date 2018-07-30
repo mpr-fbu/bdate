@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
@@ -62,7 +61,6 @@ public class ProfileFragment extends Fragment {
         profileWebpage = view.findViewById(R.id.tvProfileWebpage);
         editProfileBtn = view.findViewById(R.id.editProfileButton);
         logoutBtn = view.findViewById(R.id.logoutBtn);
-
         editProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,8 +78,6 @@ public class ProfileFragment extends Fragment {
         fetchUserProfileData(currentUser);
         return view;
     }
-
-
 
     private void fetchUserProfileData (ParseUser user){
         ParseQuery<ParseUser> profileDataQuery = ParseUser.getQuery();

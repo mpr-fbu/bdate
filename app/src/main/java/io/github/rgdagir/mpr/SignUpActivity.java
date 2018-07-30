@@ -35,17 +35,22 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        findViews();
+        int random = rng(fakeNames.size());
+        etFakeNameSignUp.setText(fakeNames.get(random));
+        setOnClickListeners();
+    }
 
+    private void findViews() {
         etFirstNameSignUp = findViewById(R.id.firstNameSignUp);
         etFakeNameSignUp = findViewById(R.id.fakeNameSignUp);
         etEmailSignUp = findViewById(R.id.emailSignUp);
         etPasswordSignUp = findViewById(R.id.passwordSignUp);
         signupBtn = findViewById(R.id.signUpBtn);
         refresh = findViewById(R.id.refresh);
+    }
 
-        int random = rng(fakeNames.size());
-        etFakeNameSignUp.setText(fakeNames.get(random));
-
+    private void setOnClickListeners() {
         // Invoke signUpInBackground when user clicks the button
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,12 +73,12 @@ public class SignUpActivity extends AppCompatActivity {
                             Log.d(ACTIVITY_TAG, "Success!");
                             ParseUser.logInInBackground(etEmailSignUp.getText().toString(),
                                     etPasswordSignUp.getText().toString(), new LogInCallback() {
-                                public void done(ParseUser user, ParseException e) {
-                                    if (user != null) {
-                                        launchMainActivity();
-                                    }
-                                }
-                            });
+                                        public void done(ParseUser user, ParseException e) {
+                                            if (user != null) {
+                                                launchMainActivity();
+                                            }
+                                        }
+                                    });
                         } else {
                             // Sign up didn't succeed.
                             // Look at the ParseException to figure out what went wrong
@@ -83,7 +88,6 @@ public class SignUpActivity extends AppCompatActivity {
                 });
             }
         });
-
         //refresh fake name when clicked
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
