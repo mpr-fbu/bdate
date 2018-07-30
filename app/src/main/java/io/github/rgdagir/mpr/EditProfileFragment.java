@@ -39,6 +39,8 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -54,7 +56,7 @@ public class EditProfileFragment extends Fragment {
     private EditText editEmail;
     private EditText editWebpage;
     private EditText editBio;
-    private EditText editBirthDate;
+    private TextView editBirthDate;
     private FloatingActionButton changeprofilePic;
     private Spinner myGenderSpinner;
     private Spinner interestedInSpinner;
@@ -66,8 +68,6 @@ public class EditProfileFragment extends Fragment {
     private Button submitEdits;
     private HashMap changes;
     private EditProfileFragment.OnFragmentInteractionListener mListener;
-    private Button datePickerBtn;
-    private static final int READ_STORAGE_PERMISSION = 1;
     public final static int PICK_PHOTO_CODE = 1046;
 
     public EditProfileFragment(){
@@ -114,7 +114,6 @@ public class EditProfileFragment extends Fragment {
         rangeSeekBar = v.findViewById(R.id.rangeSeekBar);
         displayProgress = v.findViewById(R.id.displayProgress);
         submitEdits = v.findViewById(R.id.submitEdits);
-        datePickerBtn = v.findViewById(R.id.datePickerBtn);
 
         setupButtonListeners();
         setupTextContainerListeners();
@@ -140,7 +139,7 @@ public class EditProfileFragment extends Fragment {
                 onPickPhoto(v);
             }
         });
-        datePickerBtn.setOnClickListener(new View.OnClickListener() {
+        editBirthDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePicker();
@@ -162,22 +161,12 @@ public class EditProfileFragment extends Fragment {
         // Set up callback to retrieve date info
         dateFragment.setCallBack(new DatePickerDialog.OnDateSetListener(){
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
-                datePickerBtn.setText(String.valueOf(dayOfMonth) + "/" + String.valueOf(monthOfYear+1) + "/"+String.valueOf(year));
+                editBirthDate.setText(String.valueOf(dayOfMonth) + "/" + String.valueOf(monthOfYear+1) + "/"+String.valueOf(year));
             }
         });
         dateFragment.show(getFragmentManager(), "Date Picker");
 
     }
-
-//    DatePickerDialog.OnDateSetListener ondate = new DatePickerDialog.OnDateSetListener() {
-//
-//        public void onDateSet(DatePicker view, int year, int monthOfYear,
-//                              int dayOfMonth) {
-//
-//            datePickerBtn.setText(String.valueOf(dayOfMonth) + "-" + String.valueOf(monthOfYear+1)
-//                    + "-" + String.valueOf(year));
-//        }
-//    };
 
     private void setupTextContainerListeners() {
         // adding listeners to text containers
@@ -230,6 +219,22 @@ public class EditProfileFragment extends Fragment {
                 changes.put("bio", s.toString());
             }
         });
+        editBirthDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                changes.put("dob", s.toString());
+            }
+        });
     }
 
     public void fetchCurrentUserAndLoadPage(){
@@ -238,19 +243,19 @@ public class EditProfileFragment extends Fragment {
         editEmail.setText(currUser.getString("email").toString());
         editWebpage.setText(currUser.getString("webpage").toString());
         editBio.setText(currUser.getString("bio").toString());
-//        Date inputDate = currUser.getDate("dob");
-//        DateFormat dataFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-//        String strDate = dataFormat.format(inputDate);
-//        DateFormat inputFormatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-//        Date date = null;
-//        try {
-//            date = inputFormatter.parse(strDate);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        DateFormat outputFormatter = new SimpleDateFormat("MM/dd/yyyy");
-//        String output = outputFormatter.format(date);
-//        editBirthDate.setText(output);
+        Date inputDate = currUser.getDate("dob");
+        DateFormat dataFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+        String strDate = dataFormat.format(inputDate);
+        DateFormat inputFormatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+        Date date = null;
+        try {
+            date = inputFormatter.parse(strDate);
+            DateFormat outputFormatter = new SimpleDateFormat("MM/dd/yyyy");
+            String output = outputFormatter.format(date);
+            editBirthDate.setText(output);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         Glide.with(context).load(currUser.getParseFile("profilePic").getUrl())
                 .asBitmap().centerCrop().dontAnimate()
                 .placeholder(R.drawable.ic_action_name)
@@ -291,7 +296,7 @@ public class EditProfileFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 displayProgress.setText(Integer.toString(progress));
                 rangeMatch = progress;
-                //changes.put("matchRange", Integer.toString(progress));
+                changes.put("matchRange", Integer.toString(progress));
             }
 
             @Override
@@ -310,6 +315,21 @@ public class EditProfileFragment extends Fragment {
         Iterator it = changes.entrySet().iterator();
         while (it.hasNext()) {
             HashMap.Entry entry = (HashMap.Entry)it.next();
+            if (entry.getKey().toString() == "dob") { // handle birth dates
+                String sDate = entry.getValue().toString();
+                try {
+                    Date date = new SimpleDateFormat("dd/MM/yyyy").parse(sDate);
+                    currUser.put("dob", date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                continue;
+            }
+            if (entry.getKey().toString() == "matchRange"){
+                int range = Integer.parseInt(entry.getValue().toString());
+                currUser.put("matchRange", range);
+                continue;
+            }
             currUser.put(entry.getKey().toString(), entry.getValue().toString());
             System.out.println("key: " + entry.getKey().toString() + "value: " + entry.getValue().toString());
             it.remove(); // avoids a ConcurrentModificationException
@@ -345,47 +365,6 @@ public class EditProfileFragment extends Fragment {
         void goBackToProfile();
     }
 
-    // Setting up the change profile pic button, accessing media from the phone TODO - flow to launch camera
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void z(){
-        // 1) Use the support library version ContextCompat.checkSelfPermission(...) to avoid
-        // checking the build version since Context.checkSelfPermission(...) is only available
-        // in Marshmallow
-        // 2) Always check for permission (even if permission has already been granted)
-        // since the user can revoke permissions at any time through Settings
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // If the statement above is true, then no permission was granted
-            // Check if the user has been asked about this permission already and denied
-            // it. If so, we want to give more explanation about why the permission is needed.
-            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                // if the statement above is false, it means that the user has previously denied the request for that permission
-                // TODO - give user an explanation of how location will be used before the actual request is made
-            }
-            // Request permission
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_STORAGE_PERMISSION);
-        }
-    }
-
-    // Callback function for location request
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == READ_STORAGE_PERMISSION) {
-            if (grantResults.length == 1
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(context, "Read storage permission granted", Toast.LENGTH_SHORT).show();
-            } else {
-                boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION);
-                if (showRationale) {
-                    // TODO - handle this situation when the user has denied permission
-                } else {
-                    Toast.makeText(context, "read Storage permission denied", Toast.LENGTH_SHORT).show();
-                }
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
 
     public void onPickPhoto(View view) {
         // Create intent for picking a photo from the gallery
