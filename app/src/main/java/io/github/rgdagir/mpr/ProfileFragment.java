@@ -90,36 +90,41 @@ public class ProfileFragment extends Fragment {
                     Log.e("ProfileQuerySuccess", Integer.toString(userDataList.size()));
                     // the list should ideally have only one element, given users are unique
                     ParseUser userData = userDataList.get(0);
-
-                    String name = userData.get("firstName").toString();
-                    String age = userData.get("age").toString();
-                    String bio = userData.get("bio").toString();
-                    String webpage = userData.get("webpage").toString();
-
-                    profileName.setText(name);
-                    profileAge.setText(age);
-                    Glide.with(context).load(userData.getParseFile("profilePic").getUrl())
-                            .asBitmap().centerCrop().dontAnimate()
-                            .placeholder(R.drawable.ic_action_name)
-                            .error(R.drawable.ic_action_name)
-                            .into(new BitmapImageViewTarget(profilePic) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                            circularBitmapDrawable.setCircular(true);
-                            profilePic.setImageDrawable(circularBitmapDrawable);
-                        }
-                    });
-                    profileBio.setText(bio);
-                    profileWebpage.setText(webpage);
-
+                    setUserDetails(userData);
                 } else {
                     Log.e("ProfileQuery", "Failed");
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    private void setUserDetails(ParseUser user) {
+        String name = user.get("firstName").toString();
+        String age = user.get("age").toString();
+        String bio = user.get("bio").toString();
+        String webpage = user.get("webpage").toString();
+        profileName.setText(name);
+        profileAge.setText(age);
+        setProfilePicture(user);
+        profileBio.setText(bio);
+        profileWebpage.setText(webpage);
+    }
+
+    private void setProfilePicture(ParseUser user) {
+        Glide.with(context).load(user.getParseFile("profilePic").getUrl())
+                .asBitmap().centerCrop().dontAnimate()
+                .placeholder(R.drawable.ic_action_name)
+                .error(R.drawable.ic_action_name)
+                .into(new BitmapImageViewTarget(profilePic) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        profilePic.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
     }
 
     public void logout(ParseUser user){

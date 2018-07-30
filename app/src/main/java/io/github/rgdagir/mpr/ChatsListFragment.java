@@ -61,27 +61,19 @@ public class ChatsListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
-
         // Set class variables (views, user, swipe container etc.)
         setupFragmentVariables(view);
-
         // Make sure the Parse server is setup to configured for live queries
         // URL for server is determined by Parse.initialize() call.
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-
         ParseQuery<Conversation> conversationsQuery = ParseQuery.getQuery(Conversation.class);
         conversationsQuery.include("lastMessage");
         SubscriptionHandling<Conversation> subscriptionHandling = parseLiveQueryClient.subscribe(conversationsQuery);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
                 SubscriptionHandling.HandleEventCallback<Conversation>() {
                     @Override
-                    public void onEvent(ParseQuery<Conversation> query, Conversation object) {
-                        boolean isUser1 = object.getUser1().getObjectId().equals(currUser.getObjectId());
-                        boolean isUser2 = object.getUser2().getObjectId().equals(currUser.getObjectId());
-                        if (isUser1 || isUser2) {
-                            refreshConversations();
-                            Log.d("ChatListFragment", "STUFF REFRESHED ONCE");
-                        }
+                    public void onEvent(ParseQuery<Conversation> query, Conversation conversation) {
+                        checkForRefresh(conversation);
                     }
                 });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Conversation>() {
@@ -90,10 +82,8 @@ public class ChatsListFragment extends Fragment {
                 Log.d("Live Query", "Callback failed");
             }
         });
-
         // set up and populate views
         populateViewsLayouts();
-
         return view;
     }
 
@@ -130,6 +120,15 @@ public class ChatsListFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // Placeholder, to be inserted when clicking is introduced
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void checkForRefresh(Conversation conversation) {
+        boolean isUser1 = conversation.getUser1().getObjectId().equals(currUser.getObjectId());
+        boolean isUser2 = conversation.getUser2().getObjectId().equals(currUser.getObjectId());
+        if (isUser1 || isUser2) {
+            refreshConversations();
+            Log.d("ChatListFragment", "STUFF REFRESHED ONCE");
+        }
     }
 
     private void populateConversations() {
@@ -230,7 +229,6 @@ public class ChatsListFragment extends Fragment {
                     });
         }
         tvUsername.setText(currUser.getString("firstName"));
-
         mConversations = new ArrayList<>();
         conversationAdapter = new ConversationAdapter(mConversations);
         rvConversations.setLayoutManager(new LinearLayoutManager(context));
