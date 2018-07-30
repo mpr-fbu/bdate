@@ -1,6 +1,7 @@
 package io.github.rgdagir.mpr;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -41,6 +43,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -63,7 +66,7 @@ public class EditProfileFragment extends Fragment {
     private Button submitEdits;
     private HashMap changes;
     private EditProfileFragment.OnFragmentInteractionListener mListener;
-    private Button dateBtn;
+    private Button datePickerBtn;
     private static final int READ_STORAGE_PERMISSION = 1;
     public final static int PICK_PHOTO_CODE = 1046;
 
@@ -111,6 +114,7 @@ public class EditProfileFragment extends Fragment {
         rangeSeekBar = v.findViewById(R.id.rangeSeekBar);
         displayProgress = v.findViewById(R.id.displayProgress);
         submitEdits = v.findViewById(R.id.submitEdits);
+        datePickerBtn = v.findViewById(R.id.datePickerBtn);
 
         setupButtonListeners();
         setupTextContainerListeners();
@@ -136,7 +140,44 @@ public class EditProfileFragment extends Fragment {
                 onPickPhoto(v);
             }
         });
+        datePickerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker();
+            }
+        });
     }
+
+    private void showDatePicker() {
+        DatePickerFragment dateFragment = new DatePickerFragment();
+
+        // Set up current date Into dialog
+        Calendar cal = Calendar.getInstance();
+        Bundle args = new Bundle();
+        args.putInt("year", cal.get(Calendar.YEAR));
+        args.putInt("month", cal.get(Calendar.MONTH));
+        args.putInt("day", cal.get(Calendar.DAY_OF_MONTH));
+        dateFragment.setArguments(args);
+
+        // Set up callback to retrieve date info
+        dateFragment.setCallBack(new DatePickerDialog.OnDateSetListener(){
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
+                datePickerBtn.setText(String.valueOf(dayOfMonth) + "/" + String.valueOf(monthOfYear+1) + "/"+String.valueOf(year));
+            }
+        });
+        dateFragment.show(getFragmentManager(), "Date Picker");
+
+    }
+
+//    DatePickerDialog.OnDateSetListener ondate = new DatePickerDialog.OnDateSetListener() {
+//
+//        public void onDateSet(DatePicker view, int year, int monthOfYear,
+//                              int dayOfMonth) {
+//
+//            datePickerBtn.setText(String.valueOf(dayOfMonth) + "-" + String.valueOf(monthOfYear+1)
+//                    + "-" + String.valueOf(year));
+//        }
+//    };
 
     private void setupTextContainerListeners() {
         // adding listeners to text containers
@@ -197,19 +238,19 @@ public class EditProfileFragment extends Fragment {
         editEmail.setText(currUser.getString("email").toString());
         editWebpage.setText(currUser.getString("webpage").toString());
         editBio.setText(currUser.getString("bio").toString());
-        Date inputDate = currUser.getDate("dob");
-        DateFormat dataFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-        String strDate = dataFormat.format(inputDate);
-        DateFormat inputFormatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-        Date date = null;
-        try {
-            date = inputFormatter.parse(strDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        DateFormat outputFormatter = new SimpleDateFormat("MM/dd/yyyy");
-        String output = outputFormatter.format(date);
-        editBirthDate.setText(output);
+//        Date inputDate = currUser.getDate("dob");
+//        DateFormat dataFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+//        String strDate = dataFormat.format(inputDate);
+//        DateFormat inputFormatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+//        Date date = null;
+//        try {
+//            date = inputFormatter.parse(strDate);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        DateFormat outputFormatter = new SimpleDateFormat("MM/dd/yyyy");
+//        String output = outputFormatter.format(date);
+//        editBirthDate.setText(output);
         Glide.with(context).load(currUser.getParseFile("profilePic").getUrl())
                 .asBitmap().centerCrop().dontAnimate()
                 .placeholder(R.drawable.ic_action_name)
