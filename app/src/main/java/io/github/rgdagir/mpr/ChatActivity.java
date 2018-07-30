@@ -190,28 +190,8 @@ public class ChatActivity extends AppCompatActivity {
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.ENTER, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
                     @Override
-                    public void onEvent(ParseQuery<Message> query, Message object) {
-                        mMessages.add(0, object);
-                        Log.e("Message received", object.getText().toString());
-                        // RecyclerView updates need to be run on the UI thread
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mMessageAdapter.notifyDataSetChanged();
-                                rvMessages.scrollToPosition(0);
-                            }
-                        });
-                        SharedPreferences sp = getSharedPreferences("ACTIVEINFO", MODE_PRIVATE);
-                        boolean chatActive = sp.getBoolean("active", false);
-                        String conversationId = sp.getString("conversationId", "");
-                        if (chatActive && conversationId.equals(conversation.getObjectId())) {
-                            if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
-                                conversation.setReadUser1(true);
-                            } else {
-                                conversation.setReadUser2(true);
-                            }
-                            conversation.saveInBackground();
-                        }
+                    public void onEvent(ParseQuery<Message> query, Message message) {
+                        processNewMessage(message);
                     }
                 });
         subscriptionHandling.handleError(new SubscriptionHandling.HandleErrorCallback<Message>() {
@@ -220,6 +200,30 @@ public class ChatActivity extends AppCompatActivity {
                 Log.d("Live Query", "Callback failed");
             }
         });
+    }
+
+    private void processNewMessage(Message message) {
+        mMessages.add(0, message);
+        Log.e("Message received", message.getText().toString());
+        // RecyclerView updates need to be run on the UI thread
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mMessageAdapter.notifyDataSetChanged();
+                rvMessages.scrollToPosition(0);
+            }
+        });
+        SharedPreferences sp = getSharedPreferences("ACTIVEINFO", MODE_PRIVATE);
+        boolean chatActive = sp.getBoolean("active", false);
+        String conversationId = sp.getString("conversationId", "");
+        if (chatActive && conversationId.equals(conversation.getObjectId())) {
+            if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
+                conversation.setReadUser1(true);
+            } else {
+                conversation.setReadUser2(true);
+            }
+            conversation.saveInBackground();
+        }
     }
 
     private void subscribeToConversations() {
@@ -459,23 +463,13 @@ public class ChatActivity extends AppCompatActivity {
             conversation.setReadUser1(false);
             conversation.setReadUser2(true);
         }
-
         newMessage.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("ChatActivity", "Sending message success!");
                     // send push notification to other user
-                    HashMap<String, String> payload = new HashMap<>();
-                    ParseUser recipient;
-                    if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
-                        recipient = conversation.getUser2();
-                    } else {
-                        recipient = conversation.getUser1();
-                    }
-                    payload.put("receiver", recipient.getObjectId());
-                    payload.put("newData", getString(R.string.new_message_notification));
-                    ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
+                    sendMessagePushNotification();
                 } else {
                     Log.e("ChatActivity", "Sending message failed :(");
                     e.printStackTrace();
@@ -483,6 +477,19 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
         etMessage.setText(null);
+    }
+
+    private void sendMessagePushNotification() {
+        HashMap<String, String> payload = new HashMap<>();
+        ParseUser recipient;
+        if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
+            recipient = conversation.getUser2();
+        } else {
+            recipient = conversation.getUser1();
+        }
+        payload.put("receiver", recipient.getObjectId());
+        payload.put("newData", getString(R.string.new_message_notification));
+        ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
     }
 
     private void updateExchanges() {

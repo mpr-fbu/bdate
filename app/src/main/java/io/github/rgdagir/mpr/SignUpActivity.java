@@ -57,35 +57,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Create the ParseUser
                 ParseUser user = new ParseUser();
-                // Set core properties
-                user.setUsername(etEmailSignUp.getText().toString());
-                user.setPassword(etPasswordSignUp.getText().toString());
-                user.setEmail(etEmailSignUp.getText().toString());
-                // Set custom properties
-                user.put("firstName", etFirstNameSignUp.getText().toString());
-                user.put("minAge", 18);
-                user.put("maxAge", 500);
-                user.put("fakeName", etFakeNameSignUp.getText().toString());
-                user.signUpInBackground(new SignUpCallback() {
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            // Hooray! Let them use the app now.
-                            Log.d(ACTIVITY_TAG, "Success!");
-                            ParseUser.logInInBackground(etEmailSignUp.getText().toString(),
-                                    etPasswordSignUp.getText().toString(), new LogInCallback() {
-                                        public void done(ParseUser user, ParseException e) {
-                                            if (user != null) {
-                                                launchMainActivity();
-                                            }
-                                        }
-                                    });
-                        } else {
-                            // Sign up didn't succeed.
-                            // Look at the ParseException to figure out what went wrong
-                            Log.d(ACTIVITY_TAG, "Failed :(");
-                        }
-                    }
-                });
+                createNewUser(user);
             }
         });
         //refresh fake name when clicked
@@ -94,6 +66,36 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int random = rng(fakeNames.size());
                 etFakeNameSignUp.setText(fakeNames.get(random));
+            }
+        });
+    }
+
+    private void createNewUser(ParseUser user) {
+        user.setUsername(etEmailSignUp.getText().toString());
+        user.setPassword(etPasswordSignUp.getText().toString());
+        user.setEmail(etEmailSignUp.getText().toString());
+        user.put("firstName", etFirstNameSignUp.getText().toString());
+        user.put("minAge", 18);
+        user.put("maxAge", 500);
+        user.put("fakeName", etFakeNameSignUp.getText().toString());
+        user.signUpInBackground(new SignUpCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    // Hooray! Let them use the app now.
+                    Log.d(ACTIVITY_TAG, "Success!");
+                    ParseUser.logInInBackground(etEmailSignUp.getText().toString(),
+                            etPasswordSignUp.getText().toString(), new LogInCallback() {
+                                public void done(ParseUser user, ParseException e) {
+                                    if (user != null) {
+                                        launchMainActivity();
+                                    }
+                                }
+                            });
+                } else {
+                    // Sign up didn't succeed.
+                    // Look at the ParseException to figure out what went wrong
+                    Log.d(ACTIVITY_TAG, "Failed :(");
+                }
             }
         });
     }

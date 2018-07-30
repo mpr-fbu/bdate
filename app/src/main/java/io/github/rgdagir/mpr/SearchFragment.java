@@ -195,7 +195,7 @@ public class SearchFragment extends Fragment {
                 if (e == null) {
                     Log.d("SearchFragment", "You have joined the conversation!");
                     // start chat activity between currentUser and objects.get(i).getUser1()
-                    sendPushNotification(conversation);
+                    sendConversationPushNotification(conversation);
                 } else {
                     Log.e("SearchFragment", "Error when joining conversation");
                 }
@@ -269,7 +269,7 @@ public class SearchFragment extends Fragment {
         return true;
     }
 
-    private void sendPushNotification(Conversation conversation) {
+    private void sendConversationPushNotification(Conversation conversation) {
         // other user gets notification of new match
         HashMap<String, String> payload = new HashMap<>();
         ParseUser recipient = conversation.getUser1();
