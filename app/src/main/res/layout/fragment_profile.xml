@@ -5,78 +5,214 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <com.parse.ParseImageView
+        android:id="@+id/ivCoverImage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
+        android:layout_height="200dp"
         android:layout_alignParentTop="true"
-        android:orientation="vertical"
-        android:layout_alignParentLeft="true">
+        android:background="@color/mediumGrey"
+        app:srcCompat="@android:color/darker_gray" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="148dp"
-            android:orientation="horizontal">
+    <com.parse.ParseImageView
+        android:id="@+id/ivProfilePic"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="160dp"
+        android:foreground="@drawable/profile_border"
+        app:srcCompat="@android:color/darker_gray" />
 
-            <ImageView
-                android:id="@+id/ivProfilePic"
-                android:layout_width="328dp"
-                android:layout_height="278dp"
-                android:layout_weight="1"
-                app:srcCompat="@android:color/black" />
+    <TextView
+        android:id="@+id/tvProfileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivProfilePic"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:text="Name"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        android:textColor="@color/offBlack" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <EditText
-                    android:id="@+id/tvProfileName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/tvProfileAge"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/tvProfileGender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <Button
-                    android:id="@+id/editProfileButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Edit Your Profile" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rlBasicInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_below="@+id/tvProfileName"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp">
 
         <TextView
-            android:id="@+id/tvProfileBio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:id="@+id/tvProfileAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="Age: --" />
+
+        <ImageView
+            android:id="@+id/ivDividerDot"
+            android:layout_width="7dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/tvProfileAge"
+            android:layout_toRightOf="@+id/tvProfileAge"
+            app:srcCompat="@drawable/divider_dot"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp" />
 
         <TextView
-            android:id="@+id/tvProfileWebpage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:id="@+id/tvDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/ivDividerDot"
+            android:layout_toRightOf="@+id/ivDividerDot"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="Distance: --- mi." />
 
-        <Button
-            android:id="@+id/logoutBtn"
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlMoreInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlBasicInfo">
+
+        <TextView
+            android:id="@+id/tvStatusTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="Status: "
+            android:textStyle="bold"
+            android:layout_marginLeft="20dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:id="@+id/tvStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log Out" />
+            android:layout_alignTop="@+id/tvStatusTitle"
+            android:layout_toEndOf="@+id/tvStatusTitle"
+            android:text="looking for a snacc..."
+            android:layout_marginRight="20dp"
+            android:textColor="@color/mediumGrey"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_toRightOf="@+id/tvStatusTitle" />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/ivOccupation"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignStart="@+id/tvStatusTitle"
+            android:layout_below="@+id/tvStatusTitle"
+            app:srcCompat="@drawable/ic_occupation"
+            android:layout_marginTop="5dp"
+            android:layout_alignLeft="@+id/tvStatusTitle" />
 
-    <FrameLayout
-        android:id="@+id/child_fragment_container"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvOccupation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvStatusTitle"
+            android:layout_toEndOf="@+id/ivOccupation"
+            android:layout_marginTop="5dp"
+            android:text="Job at Company"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="20dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_toRightOf="@+id/ivOccupation" />
+
+        <ImageView
+            android:id="@+id/ivEducation"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignStart="@+id/tvStatusTitle"
+            android:layout_below="@+id/ivOccupation"
+            app:srcCompat="@drawable/ic_education"
+            android:layout_marginTop="5dp"
+            android:layout_alignLeft="@+id/tvStatusTitle" />
+
+        <TextView
+            android:id="@+id/tvEducation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivOccupation"
+            android:layout_toEndOf="@+id/ivOccupation"
+            android:text="University of School"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="20dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_toRightOf="@+id/ivOccupation" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/rlMoreInfo"
+        android:background="@color/mediumGrey"
+        android:layout_margin="5dp" />
+
+    <RelativeLayout
+        android:id="@+id/rlInterests"
+        android:layout_below="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp" >
+
+        <TextView
+            android:id="@+id/tvInterestsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Interests: "
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:text="(Common interests are highlighted)"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/mediumGrey"
+            android:layout_alignParentRight="true" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvInterests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvInterestsTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="5dp" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/editProfileBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ivCoverImage"
+        android:text="Edit Profile"
+        android:layout_alignParentLeft="true" />
+
+    <Button
+        android:id="@+id/logoutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/ivCoverImage"
+        android:text="Logout"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>

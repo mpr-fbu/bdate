@@ -8,19 +8,19 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseImageView;
 import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -29,11 +29,14 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
     private ProfileFragment.OnFragmentInteractionListener mListener;
-    private EditText profileName;
+    private ParseImageView profilePic;
+    private TextView profileName;
     private TextView profileAge;
-    private ImageView profilePic;
-    private TextView profileBio;
-    private TextView profileWebpage;
+    private TextView profileDistance;
+    private TextView profileStatus;
+    private TextView profileOccupation;
+    private TextView profileEducation;
+    private RecyclerView rvInterests;
     private Button editProfileBtn;
     private Button logoutBtn;
     private Context context;
@@ -54,20 +57,23 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         context = getActivity();
         final ParseUser currentUser = ParseUser.getCurrentUser();
+
+        profilePic = view.findViewById(R.id.ivProfilePic);
         profileName = view.findViewById(R.id.tvProfileName);
         profileAge = view.findViewById(R.id.tvProfileAge);
-        profilePic = view.findViewById(R.id.ivProfilePic);
-        profileBio = view.findViewById(R.id.tvProfileBio);
-        profileWebpage = view.findViewById(R.id.tvProfileWebpage);
-        editProfileBtn = view.findViewById(R.id.editProfileButton);
+        profileDistance = view.findViewById(R.id.tvDistance);
+        profileStatus = view.findViewById(R.id.tvStatus);
+        profileOccupation = view.findViewById(R.id.tvOccupation);
+        profileEducation = view.findViewById(R.id.tvEducation);
+        editProfileBtn = view.findViewById(R.id.editProfileBtn);
         logoutBtn = view.findViewById(R.id.logoutBtn);
+
         editProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.goToEditProfile();
             }
         });
-
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,11 +99,10 @@ public class ProfileFragment extends Fragment {
 
                     String name = userData.get("firstName").toString();
                     String age = userData.get("age").toString();
-                    String bio = userData.get("bio").toString();
-                    String webpage = userData.get("webpage").toString();
+                    String status = userData.get("bio").toString();
 
                     profileName.setText(name);
-                    profileAge.setText(age);
+                    profileAge.setText("Age: " + age);
                     Glide.with(context).load(userData.getParseFile("profilePic").getUrl())
                             .asBitmap().centerCrop().dontAnimate()
                             .placeholder(R.drawable.ic_action_name)
@@ -111,9 +116,7 @@ public class ProfileFragment extends Fragment {
                             profilePic.setImageDrawable(circularBitmapDrawable);
                         }
                     });
-                    profileBio.setText(bio);
-                    profileWebpage.setText(webpage);
-
+                    profileStatus.setText(status);
                 } else {
                     Log.e("ProfileQuery", "Failed");
                     e.printStackTrace();
@@ -152,7 +155,6 @@ public class ProfileFragment extends Fragment {
 
 
     public interface OnFragmentInteractionListener {
-        // Placeholder, to be inserted when clicking is introduced
         void goToEditProfile();
     }
 }
