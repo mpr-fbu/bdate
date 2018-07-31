@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.mpr.sign_up;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import io.github.rgdagir.mpr.MainActivity;
+import io.github.rgdagir.mpr.R;
 
 public class SignUpActivity extends AppCompatActivity {
 

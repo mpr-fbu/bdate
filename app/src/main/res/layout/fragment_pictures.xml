@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp"
+        android:text="Snapshots of you" />
+
+    <TextView
+        android:id="@+id/explanation"
+        android:layout_width="269dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:text="Add a profile photo and gallery photos to show off your interests and individuality." />
+
+    <Button
+        android:id="@+id/finish"
+        android:layout_width="273dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="113dp"
+        android:text="Finish" />
+
+    <ImageView
+        android:id="@+id/profilePic"
+        android:layout_width="107dp"
+        android:layout_height="107dp"
+        android:layout_above="@+id/galleryPicTwo"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="76dp"
+        app:srcCompat="@drawable/ic_add_photo_profile" />
+
+    <ImageView
+        android:id="@+id/galleryPicOne"
+        android:layout_width="107dp"
+        android:layout_height="105dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="155dp"
+        android:layout_toEndOf="@+id/profilePic"
+        app:srcCompat="@drawable/ic_add_photo_gallery" />
+
+    <ImageView
+        android:id="@+id/galleryPicTwo"
+        android:layout_width="108dp"
+        android:layout_height="107dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="201dp"
+        android:layout_toStartOf="@+id/galleryPicOne"
+        app:srcCompat="@drawable/ic_add_photo_gallery" />
+
+    <ImageView
+        android:id="@+id/galleryPicThree"
+        android:layout_width="106dp"
+        android:layout_height="107dp"
+        android:layout_alignStart="@+id/galleryPicOne"
+        android:layout_alignTop="@+id/galleryPicTwo"
+        app:srcCompat="@drawable/ic_add_photo_gallery" />
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Back" />
+
+</RelativeLayout>

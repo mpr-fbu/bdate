@@ -19,9 +19,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/res 2/drawable-xxxhdpi/outline_school_black_24.png" />
-                                      <entry key="outputName" value="ic_education" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/plus (1).png" />
+                                      <entry key="outputName" value="ic_add_photo_profile" />
                                       <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="14ffdb" />
                                     </map>
                                   </option>
                                 </PersistentState>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:text="About you" />
+
+    <TextView
+        android:id="@+id/explanation"
+        android:layout_width="269dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:text="Fill out the details below to personalize your account." />
+
+    <TextView
+        android:id="@+id/gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/explanation"
+        android:layout_marginTop="133dp"
+        android:text="I identify as " />
+
+    <EditText
+        android:id="@+id/placeholderGender"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/explanation"
+        android:layout_below="@+id/gender"
+        android:ems="10"
+        android:hint="Male Female Other"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/btnContinue"
+        android:layout_width="273dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:text="Continue" />
+
+    <TextView
+        android:id="@+id/birthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/explanation"
+        android:layout_marginTop="212dp"
+        android:text="Birthday" />
+
+    <EditText
+        android:id="@+id/placeholderBirthday"
+        android:layout_width="271dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/explanation"
+        android:layout_below="@+id/birthday"
+        android:ems="10"
+        android:hint="MM / DD / YYYY"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/explanation"
+        android:layout_marginBottom="256dp"
+        android:text="Name" />
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/explanation"
+        android:layout_below="@+id/Name"
+        android:layout_marginTop="-256dp"
+        android:ems="10"
+        android:hint="Add your first name "
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/alias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/explanation"
+        android:layout_marginBottom="182dp"
+        android:text="Alias" />
+
+    <EditText
+        android:id="@+id/etAlias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/explanation"
+        android:layout_below="@+id/alias"
+        android:layout_marginTop="-182dp"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/aliasNote"
+        android:layout_width="284dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/etAlias"
+        android:layout_marginEnd="31dp"
+        android:text="*Your display name for other users. Please do not use your real name." />
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Back" />
+
+</RelativeLayout>

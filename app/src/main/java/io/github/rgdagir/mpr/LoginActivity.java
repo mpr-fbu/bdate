@@ -17,6 +17,8 @@ import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 
+import io.github.rgdagir.mpr.sign_up.SignUpActivity;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static String ACTIVITY_TAG = "LOGIN";
