@@ -1,21 +1,16 @@
 package io.github.rgdagir.mpr;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.Editable;
@@ -33,17 +28,11 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -65,7 +54,6 @@ public class EditProfileFragment extends Fragment {
     private ImageView profilePic;
     private ParseUser currUser;
     private TextView displayProgress;
-    private int rangeMatch;
     private Button submitEdits;
     private HashMap changes;
     private EditProfileFragment.OnFragmentInteractionListener mListener;
@@ -303,7 +291,6 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 displayProgress.setText(Integer.toString(progress));
-                rangeMatch = progress;
                 changes.put("matchRange", Integer.toString(progress));
             }
 
