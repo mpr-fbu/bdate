@@ -16,8 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,7 +54,7 @@ public class ChatActivity extends AppCompatActivity {
     private ParseImageView ivProfilePic;
     private ImageView defaultProfilePic;
     private static TextView notification;
-    private static Button btnSend;
+    private static ImageButton btnSend;
     private RecyclerView rvMessages;
     private MessageAdapter mMessageAdapter;
     private ArrayList<Message> mMessages;
