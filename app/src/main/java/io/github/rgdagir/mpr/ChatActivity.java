@@ -16,8 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,7 +54,7 @@ public class ChatActivity extends AppCompatActivity {
     private ParseImageView ivProfilePic;
     private ImageView defaultProfilePic;
     private static TextView notification;
-    private static Button btnSend;
+    private static ImageButton btnSend;
     private RecyclerView rvMessages;
     private MessageAdapter mMessageAdapter;
     private ArrayList<Message> mMessages;
@@ -62,6 +62,7 @@ public class ChatActivity extends AppCompatActivity {
     ParseUser otherUser;
     public ParseLiveQueryClient parseLiveQueryClient;
     Milestone milestone;
+    private boolean sent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +174,6 @@ public class ChatActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             rvMessages.smoothScrollToPosition(0);
-
                         }
                     }, 50);
                 }
@@ -314,6 +314,7 @@ public class ChatActivity extends AppCompatActivity {
                                 mMessages.add(message);
                                 mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
                                 Log.d("Messages", "a message has been loaded!");
+                                rvMessages.scrollToPosition(0);
                             }
                         } else {
                             Log.d("ChatActivity", "Error querying for messages" + e);
@@ -473,10 +474,35 @@ public class ChatActivity extends AppCompatActivity {
                 } else {
                     Log.e("ChatActivity", "Sending message failed :(");
                     e.printStackTrace();
+                    // retry sending message
+                    sent = false;
+                    int retries = 0;
+                    while (retrySending(newMessage) | retries == 5){
+                        retries++;
+                    }
                 }
             }
         });
         etMessage.setText(null);
+    }
+
+    public boolean retrySending(Message message){
+        message.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    sent = true;
+                    Log.d("ChatActivity", "Retrial was successful!");
+                    // send push notification to other user
+                    sendMessagePushNotification();
+                } else {
+                    sent = false;
+                    Log.e("ChatActivity", "Retrial failed :(");
+                    e.printStackTrace();
+                }
+            }
+        });
+        return sent;
     }
 
     private void sendMessagePushNotification() {

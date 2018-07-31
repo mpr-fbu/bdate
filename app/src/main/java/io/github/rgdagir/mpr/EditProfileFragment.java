@@ -1,21 +1,16 @@
 package io.github.rgdagir.mpr;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.Editable;
@@ -24,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -32,15 +28,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -54,7 +45,6 @@ public class EditProfileFragment extends Fragment {
     private Context context;
     private EditText editName;
     private EditText editEmail;
-    private EditText editWebpage;
     private EditText editBio;
     private TextView editBirthDate;
     private FloatingActionButton changeprofilePic;
@@ -64,7 +54,6 @@ public class EditProfileFragment extends Fragment {
     private ImageView profilePic;
     private ParseUser currUser;
     private TextView displayProgress;
-    private int rangeMatch;
     private Button submitEdits;
     private HashMap changes;
     private EditProfileFragment.OnFragmentInteractionListener mListener;
@@ -104,7 +93,6 @@ public class EditProfileFragment extends Fragment {
         // associating views from xml file with the Java class
         editName = v.findViewById(R.id.editName);
         editEmail = v.findViewById(R.id.editEmail);
-        editWebpage = v.findViewById(R.id.editWebpage);
         editBio = v.findViewById(R.id.editBio);
         editBirthDate = v.findViewById(R.id.editBirthDate);
         changeprofilePic = v.findViewById(R.id.changeProfilePicBtn);
@@ -195,18 +183,7 @@ public class EditProfileFragment extends Fragment {
                 changes.put("username", s.toString());
             }
         });
-        editWebpage.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                changes.put("webpage", s.toString());
-            }
-        });
+
         editBio.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -241,7 +218,6 @@ public class EditProfileFragment extends Fragment {
         // populate screen
         editName.setText(currUser.getString("firstName"));
         editEmail.setText(currUser.getString("email").toString());
-        editWebpage.setText(currUser.getString("webpage").toString());
         editBio.setText(currUser.getString("bio").toString());
         Date inputDate = currUser.getDate("dob");
         DateFormat dataFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
@@ -274,6 +250,7 @@ public class EditProfileFragment extends Fragment {
     public void setupSpinners(View v){
         String userGender = currUser.getString("gender");
         String userInterest = currUser.getString("interestedIn");
+        final String[] genders = getResources().getStringArray(R.array.genders);
         // create spinners
         myGenderSpinner = v.findViewById(R.id.myGender);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -288,6 +265,25 @@ public class EditProfileFragment extends Fragment {
         // Apply the adapter to the spinner
         interestedInSpinner.setAdapter(adapter);
         interestedInSpinner.setSelection(adapter.getPosition(userInterest), true);
+        myGenderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                changes.put("gender", genders[position]);
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        interestedInSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                changes.put("interestedIn", genders[position]);
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
     }
 
     public void setupRangeBar(){
@@ -295,7 +291,6 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 displayProgress.setText(Integer.toString(progress));
-                rangeMatch = progress;
                 changes.put("matchRange", Integer.toString(progress));
             }
 

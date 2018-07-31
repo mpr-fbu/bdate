@@ -19,6 +19,6 @@
         <item>Choose one...</item>
         <item>Male</item>
         <item>Female</item>
-        <item>Other...</item>
+        <item>Other</item>
     </string-array>
 </resources>

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -37,7 +38,7 @@ public class ProfileFragment extends Fragment {
     private TextView profileOccupation;
     private TextView profileEducation;
     private RecyclerView rvInterests;
-    private Button editProfileBtn;
+    private ImageButton editProfileBtn;
     private Button logoutBtn;
     private Context context;
 
