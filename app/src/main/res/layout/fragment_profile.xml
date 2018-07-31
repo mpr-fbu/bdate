@@ -1,218 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.parse.ParseImageView
-        android:id="@+id/ivCoverImage"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:background="@color/mediumGrey"
-        app:srcCompat="@android:color/darker_gray" />
-
-    <com.parse.ParseImageView
-        android:id="@+id/ivProfilePic"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="160dp"
-        android:foreground="@drawable/profile_border"
-        app:srcCompat="@android:color/darker_gray" />
-
-    <TextView
-        android:id="@+id/tvProfileName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivProfilePic"
-        android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true"
-        android:text="Name"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:textStyle="bold"
-        android:textColor="@color/offBlack" />
+    android:layout_height="match_parent"
+    android:fillViewport="true" >
 
     <RelativeLayout
-        android:id="@+id/rlBasicInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_below="@+id/tvProfileName"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvProfileAge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:text="Age: --" />
-
-        <ImageView
-            android:id="@+id/ivDividerDot"
-            android:layout_width="7dp"
-            android:layout_height="match_parent"
+        <com.parse.ParseImageView
+            android:id="@+id/ivCoverImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/tvProfileAge"
-            android:layout_toRightOf="@+id/tvProfileAge"
-            app:srcCompat="@drawable/divider_dot"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp" />
+            android:background="@color/mediumGrey"
+            app:srcCompat="@android:color/darker_gray" />
+
+        <com.parse.ParseImageView
+            android:id="@+id/ivProfilePic"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="160dp"
+            android:foreground="@drawable/profile_border"
+            app:srcCompat="@android:color/darker_gray" />
 
         <TextView
-            android:id="@+id/tvDistance"
+            android:id="@+id/tvProfileName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/ivDividerDot"
-            android:layout_toRightOf="@+id/ivDividerDot"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:text="Distance: --- mi." />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rlMoreInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rlBasicInfo">
-
-        <TextView
-            android:id="@+id/tvStatusTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:text="Status: "
+            android:layout_below="@+id/ivProfilePic"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:text="Name"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold"
-            android:layout_marginLeft="20dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_alignParentLeft="true" />
+            android:textColor="@color/offBlack" />
 
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/tvStatusTitle"
-            android:layout_toEndOf="@+id/tvStatusTitle"
-            android:text="looking for a snacc..."
-            android:layout_marginRight="20dp"
-            android:textColor="@color/mediumGrey"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_toRightOf="@+id/tvStatusTitle" />
-
-        <ImageView
-            android:id="@+id/ivOccupation"
-            android:layout_width="25dp"
+        <RelativeLayout
+            android:id="@+id/rlBasicInfo"
+            android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:layout_alignStart="@+id/tvStatusTitle"
-            android:layout_below="@+id/tvStatusTitle"
-            app:srcCompat="@drawable/ic_occupation"
-            android:layout_marginTop="5dp"
-            android:layout_alignLeft="@+id/tvStatusTitle" />
+            android:layout_below="@+id/tvProfileName"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp">
 
-        <TextView
-            android:id="@+id/tvOccupation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvStatusTitle"
-            android:layout_toEndOf="@+id/ivOccupation"
-            android:layout_marginTop="5dp"
-            android:text="Job at Company"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="20dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_toRightOf="@+id/ivOccupation" />
+            <TextView
+                android:id="@+id/tvProfileAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:text="Age: --" />
 
-        <ImageView
-            android:id="@+id/ivEducation"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignStart="@+id/tvStatusTitle"
-            android:layout_below="@+id/ivOccupation"
-            app:srcCompat="@drawable/ic_education"
-            android:layout_marginTop="5dp"
-            android:layout_alignLeft="@+id/tvStatusTitle" />
+            <ImageView
+                android:id="@+id/ivDividerDot"
+                android:layout_width="7dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/tvProfileAge"
+                android:layout_toRightOf="@+id/tvProfileAge"
+                app:srcCompat="@drawable/divider_dot"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp" />
 
-        <TextView
-            android:id="@+id/tvEducation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ivOccupation"
-            android:layout_toEndOf="@+id/ivOccupation"
-            android:text="University of School"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="20dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_toRightOf="@+id/ivOccupation" />
+            <TextView
+                android:id="@+id/tvDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/ivDividerDot"
+                android:layout_toRightOf="@+id/ivDividerDot"
+                android:text="--- miles away"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-    </RelativeLayout>
+        </RelativeLayout>
 
-    <View
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_below="@id/rlMoreInfo"
-        android:background="@color/mediumGrey"
-        android:layout_margin="5dp" />
-
-    <RelativeLayout
-        android:id="@+id/rlInterests"
-        android:layout_below="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp" >
-
-        <TextView
-            android:id="@+id/tvInterestsTitle"
+        <RelativeLayout
+            android:id="@+id/rlMoreInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Interests: "
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:textStyle="bold" />
+            android:layout_below="@+id/rlBasicInfo">
 
-        <TextView
-            android:id="@+id/tvHint"
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="20dp"
+                android:text="Something on my mind..."
+                android:textColor="@color/offBlack"
+                android:layout_marginBottom="5dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+            <ImageView
+                android:id="@+id/ivOccupation"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignStart="@+id/tvStatus"
+                android:layout_below="@+id/tvStatus"
+                app:srcCompat="@drawable/ic_occupation"
+                android:layout_marginTop="15dp"
+                android:layout_alignLeft="@+id/tvStatus" />
+
+            <TextView
+                android:id="@+id/tvOccupation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvStatus"
+                android:layout_toEndOf="@+id/ivOccupation"
+                android:layout_marginTop="15dp"
+                android:text="Job at Company"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_toRightOf="@+id/ivOccupation" />
+
+            <ImageView
+                android:id="@+id/ivEducation"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignStart="@+id/tvStatus"
+                android:layout_below="@+id/ivOccupation"
+                app:srcCompat="@drawable/ic_education"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_alignLeft="@+id/tvStatus" />
+
+            <TextView
+                android:id="@+id/tvEducation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivOccupation"
+                android:layout_toEndOf="@+id/ivOccupation"
+                android:text="University of School"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_toRightOf="@+id/ivOccupation" />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/rlMoreInfo"
+            android:background="@color/mediumGrey"
+            android:layout_margin="15dp" />
+
+        <RelativeLayout
+            android:id="@+id/rlInterests"
+            android:layout_below="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp" >
+
+            <TextView
+                android:id="@+id/tvInterestsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="Interests"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="@color/offBlack"
+                android:textStyle="bold"
+                android:layout_alignParentLeft="true" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvInterests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvInterestsTitle"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="5dp" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/logoutBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlInterests"
+            android:text="Logout"
+            android:layout_margin="15dp"
+            android:textColor="@color/offBlack"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_button_style"
+            android:minHeight="0dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+        <ImageButton
+            android:id="@+id/editProfileBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:text="(Common interests are highlighted)"
-            android:layout_marginTop="4dp"
-            android:textColor="@color/mediumGrey"
+            app:srcCompat="@drawable/ic_edit"
+            android:layout_margin="5dp"
             android:layout_alignParentRight="true" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvInterests"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvInterestsTitle"
-            android:layout_alignParentLeft="true"
-            android:layout_marginTop="5dp" />
-
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/editProfileBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/ivCoverImage"
-        android:text="Edit Profile"
-        android:layout_alignParentLeft="true" />
-
-    <Button
-        android:id="@+id/logoutBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/ivCoverImage"
-        android:text="Logout"
-        android:layout_alignParentRight="true" />
-
-</RelativeLayout>
+</ScrollView>

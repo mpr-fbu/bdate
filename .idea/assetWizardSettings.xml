@@ -19,8 +19,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/res 2/drawable-xxxhdpi/outline_school_black_24.png" />
-                                      <entry key="outputName" value="ic_education" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/res 4/drawable-xxxhdpi/outline_edit_black_24.png" />
+                                      <entry key="outputName" value="ic_edit" />
                                       <entry key="theme" value="CUSTOM" />
                                     </map>
                                   </option>
