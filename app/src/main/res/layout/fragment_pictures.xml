@@ -22,15 +22,6 @@
         android:layout_centerHorizontal="true"
         android:text="Add a profile photo and gallery photos to show off your interests and individuality." />
 
-    <Button
-        android:id="@+id/finish"
-        android:layout_width="273dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="113dp"
-        android:text="Finish" />
-
     <ImageView
         android:id="@+id/profilePic"
         android:layout_width="107dp"
@@ -73,5 +64,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="Back" />
+
+    <Button
+        android:id="@+id/finish"
+        android:layout_width="273dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="113dp"
+        android:text="Finish" />
 
 </RelativeLayout>

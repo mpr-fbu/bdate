@@ -39,15 +39,6 @@
         android:hint="Male Female Other"
         android:inputType="textPersonName" />
 
-    <Button
-        android:id="@+id/btnContinue"
-        android:layout_width="273dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
-        android:text="Continue" />
-
     <TextView
         android:id="@+id/birthday"
         android:layout_width="wrap_content"
@@ -68,7 +59,7 @@
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/Name"
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -81,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/explanation"
-        android:layout_below="@+id/Name"
+        android:layout_below="@+id/name"
         android:layout_marginTop="-256dp"
         android:ems="10"
         android:hint="Add your first name "
@@ -122,5 +113,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="Back" />
+
+    <Button
+        android:id="@+id/btnContinue"
+        android:layout_width="273dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:text="Continue" />
 
 </RelativeLayout>
