@@ -174,7 +174,6 @@ public class ChatActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             rvMessages.smoothScrollToPosition(0);
-
                         }
                     }, 50);
                 }
@@ -315,6 +314,7 @@ public class ChatActivity extends AppCompatActivity {
                                 mMessages.add(message);
                                 mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
                                 Log.d("Messages", "a message has been loaded!");
+                                rvMessages.scrollToPosition(0);
                             }
                         } else {
                             Log.d("ChatActivity", "Error querying for messages" + e);
