@@ -6,13 +6,14 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 @ParseClassName("Conversation")
-public class Conversation extends ParseObject {
+public class Conversation extends ParseObject implements Serializable {
     private static final String KEY_USER1 = "user1";
     private static final String KEY_USER2 = "user2";
     private static final String KEY_LAST_MSG = "lastMessage";

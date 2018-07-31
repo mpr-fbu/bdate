@@ -28,6 +28,8 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
+import io.github.rgdagir.mpr.models.Conversation;
+
 public class ProfileFragment extends Fragment {
     private ProfileFragment.OnFragmentInteractionListener mListener;
     private ParseImageView profilePic;
@@ -41,6 +43,9 @@ public class ProfileFragment extends Fragment {
     private ImageButton editProfileBtn;
     private Button logoutBtn;
     private Context context;
+    private ParseUser otherUser;
+    private boolean isMyProfile;
+    private ParseUser currentUser;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -49,6 +54,18 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentUser = ParseUser.getCurrentUser();
+        if (getArguments() == null) {
+            isMyProfile = true;
+        } else {
+            Conversation conversation = (Conversation) getArguments().getSerializable("conversation");
+            isMyProfile = false;
+            if (conversation.getUser1().getObjectId().equals(currentUser.getObjectId())) {
+                otherUser = conversation.getUser2();
+            } else {
+                otherUser = conversation.getUser1();
+            }
+        }
     }
 
     @Nullable
@@ -57,7 +74,6 @@ public class ProfileFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         context = getActivity();
-        final ParseUser currentUser = ParseUser.getCurrentUser();
 
         profilePic = view.findViewById(R.id.ivProfilePic);
         profileName = view.findViewById(R.id.tvProfileName);
@@ -69,24 +85,37 @@ public class ProfileFragment extends Fragment {
         editProfileBtn = view.findViewById(R.id.editProfileBtn);
         logoutBtn = view.findViewById(R.id.logoutBtn);
 
-        editProfileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.goToEditProfile();
-            }
-        });
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout(currentUser);
-            }
-        });
-
-        fetchUserProfileData(currentUser);
+        if (isMyProfile) {
+            fetchProfileData(currentUser);
+            editProfileBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.goToEditProfile();
+                }
+            });
+            logoutBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    logout(currentUser);
+                }
+            });
+        } else {
+            fetchProfileData(otherUser);
+            editProfileBtn.setVisibility(View.INVISIBLE);
+            logoutBtn.setVisibility(View.INVISIBLE);
+        }
         return view;
     }
 
-    private void fetchUserProfileData (ParseUser user){
+    public static ProfileFragment newInstance(Conversation conversation) {
+        ProfileFragment myFragment = new ProfileFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("conversation", conversation);
+        myFragment.setArguments(args);
+        return myFragment;
+    }
+
+    private void fetchProfileData(ParseUser user) {
         ParseQuery<ParseUser> profileDataQuery = ParseUser.getQuery();
         profileDataQuery.whereEqualTo("username", user.getUsername());
         Log.e("ProfileQuery", user.getUsername());
@@ -110,11 +139,35 @@ public class ProfileFragment extends Fragment {
         String name = user.get("firstName").toString();
         String age = user.get("age").toString();
         String status = user.get("bio").toString();
+        Object occupation = user.get("occupation");
+        Object education = user.get("education");
 
         profileName.setText(name);
         profileAge.setText("Age: " + age);
         setProfilePicture(user);
         profileStatus.setText(status);
+        if (occupation == null) {
+            profileOccupation.setText("---");
+        } else {
+            profileOccupation.setText(occupation.toString());
+        }
+        if (education == null) {
+            profileEducation.setText("---");
+        } else {
+            profileEducation.setText(education.toString());
+        }
+        if (isMyProfile) {
+            profileDistance.setText("0 miles away");
+        } else {
+            // get distance (in miles) between user who started the conversation and the one trying to match
+            double distanceFromMatch = SearchFragment.calcDistance(currentUser.getParseGeoPoint("lastLocation").getLatitude(),
+                user.getParseGeoPoint("lastLocation").getLatitude(),
+                currentUser.getParseGeoPoint("lastLocation").getLongitude(),
+                user.getParseGeoPoint("lastLocation").getLongitude(), 0, 0);
+            int roundedDistance10 = (int) (distanceFromMatch * 10);
+            double distance = roundedDistance10 / 10.0;
+            profileDistance.setText(Double.toString(distance) + " miles away");
+        }
     }
 
     private void setProfilePicture(ParseUser user) {

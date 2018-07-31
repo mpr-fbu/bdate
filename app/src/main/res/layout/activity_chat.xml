@@ -26,7 +26,9 @@
                 android:layout_alignParentTop="true"
                 android:layout_margin="5dp"
                 app:srcCompat="@mipmap/ic_launcher_foreground"
-                tools:ignore="VectorDrawableCompat" />
+                tools:ignore="VectorDrawableCompat"
+                android:clickable="true"
+                android:focusable="true" />
 
             <com.parse.ParseImageView
                 android:id="@+id/ivProfilePic"
@@ -34,7 +36,9 @@
                 android:layout_height="40dp"
                 android:layout_alignParentTop="true"
                 android:layout_margin="5dp"
-                app:srcCompat="@android:color/darker_gray" />
+                app:srcCompat="@android:color/darker_gray"
+                android:clickable="true"
+                android:focusable="true" />
 
             <TextView
                 android:id="@+id/toolbar_title"
@@ -51,7 +55,9 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="61dp"
-                tools:layout_editor_absoluteY="16dp" />
+                tools:layout_editor_absoluteY="16dp"
+                android:clickable="true"
+                android:focusable="true" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>

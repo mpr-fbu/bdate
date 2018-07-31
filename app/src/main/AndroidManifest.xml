@@ -35,6 +35,9 @@
         <activity
             android:name=".ChatActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".HolderActivity"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name="com.parse.fcm.ParseFirebaseInstanceIdService"
@@ -76,7 +79,7 @@
             android:name="com.parse.push.notification_icon"
             android:resource="@drawable/ic_stat_ic_notification" />
 
-        <activity android:name=".CustomPhotoGallery"></activity>
+        <!-- <activity android:name=".CustomPhotoGallery" /> -->
     </application>
 
 </manifest>

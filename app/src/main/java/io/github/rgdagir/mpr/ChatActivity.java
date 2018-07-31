@@ -38,6 +38,7 @@ import com.parse.SubscriptionHandling;
 
 import org.parceler.Parcels;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -289,6 +290,26 @@ public class ChatActivity extends AppCompatActivity {
                 if (etMessage.getText().toString().length() > 0) {
                     sendMessage();
                 }
+            }
+        });
+        final Intent intent = new Intent(ChatActivity.this, HolderActivity.class);
+        intent.putExtra("conversation", (Serializable) conversation);
+        tvUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intent);
+            }
+        });
+        ivProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intent);
+            }
+        });
+        defaultProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intent);
             }
         });
     }
