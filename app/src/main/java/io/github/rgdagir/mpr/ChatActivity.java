@@ -62,6 +62,7 @@ public class ChatActivity extends AppCompatActivity {
     ParseUser otherUser;
     public ParseLiveQueryClient parseLiveQueryClient;
     Milestone milestone;
+    private boolean sent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -473,10 +474,35 @@ public class ChatActivity extends AppCompatActivity {
                 } else {
                     Log.e("ChatActivity", "Sending message failed :(");
                     e.printStackTrace();
+                    // retry sending message
+                    sent = false;
+                    int retries = 0;
+                    while (retrySending(newMessage) | retries == 5){
+                        retries++;
+                    }
                 }
             }
         });
         etMessage.setText(null);
+    }
+
+    public boolean retrySending(Message message){
+        message.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    sent = true;
+                    Log.d("ChatActivity", "Retrial was successful!");
+                    // send push notification to other user
+                    sendMessagePushNotification();
+                } else {
+                    sent = false;
+                    Log.e("ChatActivity", "Retrial failed :(");
+                    e.printStackTrace();
+                }
+            }
+        });
+        return sent;
     }
 
     private void sendMessagePushNotification() {
