@@ -29,7 +29,7 @@
                 android:layout_alignParentLeft="true"
                 />
             <ImageButton
-                android:id="@+id/goBackArrow"
+                android:id="@+id/done"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentTop="true"
@@ -175,6 +175,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="Name"
@@ -201,10 +202,16 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
                 android:text="About me:"
-                app:layout_constraintTop_toBottomOf="@+id/line"
-                tools:layout_editor_absoluteX="16dp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.026"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/line" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -214,10 +221,10 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:text="About my matches:"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.025"
+                app:layout_constraintHorizontal_bias="0.032"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/line2" />
 
@@ -229,9 +236,11 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editEducation" />
@@ -274,24 +283,17 @@
             <com.crystal.crystalrangeseekbar.widgets.BubbleThumbSeekbar
                 android:id="@+id/rangeSeekbar2"
                 android:layout_width="265dp"
-                android:layout_height="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_height="14dp"
                 app:bar_color="#C69E89"
                 app:bar_highlight_color="#A54B17"
                 app:corner_radius="10"
                 app:data_type="_integer"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.68"
-                app:layout_constraintStart_toEndOf="@+id/age"
-                app:layout_constraintTop_toBottomOf="@+id/rangeSeekBar"
                 app:left_thumb_color="#775E4F"
                 app:left_thumb_color_pressed="#4C2D1A"
                 app:max_value="150"
-                app:min_value="50" />
+                app:min_value="50"
+                tools:layout_editor_absoluteX="93dp"
+                tools:layout_editor_absoluteY="663dp" />
 
             <View
                 android:id="@+id/line3"
@@ -341,17 +343,22 @@
 
             <Button
                 android:id="@+id/button"
-                android:layout_width="wrap_content"
+                android:layout_width="370dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Button"
+                android:text="Change your password"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editEmail" />
+                app:layout_constraintTop_toBottomOf="@+id/editEmail"
+                android:background="@drawable/rounded_button_style"
+                android:minHeight="0dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"/>
 
             <Spinner
                 android:id="@+id/myGender"
@@ -361,6 +368,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editBirthDate" />
@@ -373,6 +381,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/age" />
