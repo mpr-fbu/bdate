@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,10 +28,12 @@ import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rgdagir.mpr.models.Conversation;
 import io.github.rgdagir.mpr.models.Milestone;
+import me.relex.circleindicator.CircleIndicator;
 
 public class ProfileFragment extends Fragment {
     private ProfileFragment.OnFragmentInteractionListener mListener;
@@ -42,9 +45,15 @@ public class ProfileFragment extends Fragment {
     private TextView profileStatus;
     private TextView profileOccupation;
     private TextView profileEducation;
+
+    private ViewPager mPager;
+    private static int currentPage = 0;
+    private ArrayList<String> mGalleryImages;
+    private CircleIndicator indicator;
     private RecyclerView rvInterests;
     private ImageButton editProfileBtn;
     private Button logoutBtn;
+
     private Context context;
     private ParseUser otherUser;
     private boolean isMyProfile;
@@ -78,6 +87,7 @@ public class ProfileFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         context = getActivity();
+        mGalleryImages = new ArrayList<>();
 
         profilePic = view.findViewById(R.id.ivProfilePic);
         defaultProfilePic = view.findViewById(R.id.defaultProfilePic);
@@ -89,6 +99,8 @@ public class ProfileFragment extends Fragment {
         profileEducation = view.findViewById(R.id.tvEducation);
         editProfileBtn = view.findViewById(R.id.editProfileBtn);
         logoutBtn = view.findViewById(R.id.logoutBtn);
+        mPager = view.findViewById(R.id.pager);
+        indicator = view.findViewById(R.id.indicator);
 
         if (isMyProfile) {
             fetchProfileData(currentUser);
@@ -168,6 +180,7 @@ public class ProfileFragment extends Fragment {
         } else {
             profileEducation.setText(education.toString());
         }
+        populateGallery(user);
     }
 
     private void setOtherUserDetails(ParseUser user) {
@@ -220,6 +233,9 @@ public class ProfileFragment extends Fragment {
             setProfilePicture(user);
             defaultProfilePic.setVisibility(View.INVISIBLE);
         }
+        if (Milestone.canSeeGallery(conversation)) {
+            populateGallery(user);
+        }
     }
 
     private void setProfilePicture(ParseUser user) {
@@ -236,6 +252,20 @@ public class ProfileFragment extends Fragment {
                         profilePic.setImageDrawable(circularBitmapDrawable);
                     }
                 });
+    }
+
+    private void populateGallery(ParseUser user) {
+        if (user.getParseFile("coverPhoto1") != null) {
+            mGalleryImages.add(user.getParseFile("coverPhoto1").getUrl());
+        }
+        if (user.getParseFile("coverPhoto2") != null) {
+            mGalleryImages.add(user.getParseFile("coverPhoto2").getUrl());
+        }
+        if (user.getParseFile("coverPhoto3") != null) {
+            mGalleryImages.add(user.getParseFile("coverPhoto3").getUrl());
+        }
+        mPager.setAdapter(new GalleryAdapter(context, mGalleryImages));
+        indicator.setViewPager(mPager);
     }
 
     public void logout(ParseUser user){
