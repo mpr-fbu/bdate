@@ -21,29 +21,10 @@ public class SignUpActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        //BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         // set chats fragment as initial
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.flContainer, initialFragment).commit();
-
-//        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                switch(item.getItemId()) {
-//                    case R.id.action_chats:
-//                        switchFragment(fragmentManager.beginTransaction(), initialFragment);
-//                        return true;
-//                    case R.id.action_search:
-//                        switchFragment(fragmentManager.beginTransaction(), new SearchFragment());
-//                        return true;
-//                    case R.id.action_profile:
-//                        switchFragment(fragmentManager.beginTransaction(), new ProfileFragment());
-//                        return true;
-//                }
-//                return false;
-//            }
-//        });
+        fragmentTransaction.replace(R.id.flContainer, initialFragment)
+                .commit();
     }
 
     @Override
@@ -57,14 +38,39 @@ public class SignUpActivity extends AppCompatActivity
     }
 
     public static void switchFragment(FragmentTransaction fragmentTransaction, Fragment fragment) {
-        fragmentTransaction.replace(R.id.flContainer, fragment).commit();
+        fragmentTransaction.replace(R.id.flContainer, fragment).addToBackStack(null).commit();
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
+        onBackPressed();
+        goToBasicInfoFragment();
+        goToInterestsFragment();
+        goToPicturesFragment();
     }
-//
+
+    @Override
+    public void onBackPressed() {
+        int count = getFragmentManager().getBackStackEntryCount();
+        if (count == 0) {
+            super.onBackPressed();
+        } else {
+            getFragmentManager().popBackStack();
+        }
+    }
+
+    public void goToBasicInfoFragment() {
+        switchFragment(fragmentManager.beginTransaction(), new BasicInfoFragment());
+    }
+
+    public void goToInterestsFragment() {
+        switchFragment(fragmentManager.beginTransaction(), new InterestsFragment());
+    }
+
+    public void goToPicturesFragment() {
+        switchFragment(fragmentManager.beginTransaction(), new PicturesFragment());
+    }
+
 //    private static String ACTIVITY_TAG = "SIGN UP";
 //    private EditText etFirstNameSignUp;
 //    private EditText etFakeNameSignUp;

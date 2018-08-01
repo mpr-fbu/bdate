@@ -15,7 +15,7 @@ import io.github.rgdagir.mpr.R;
 
 public class PicturesFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
+    private PicturesFragment.OnFragmentInteractionListener mListener;
 
     private TextView title;
     private TextView explanation;
@@ -39,19 +39,17 @@ public class PicturesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pictures, container, false);
-        // Set class variables (views, user, swipe container etc.)
         setupFragmentVariables(view);
-        // set up and populate views
+        setupButtonListeners();
         return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof PicturesFragment.OnFragmentInteractionListener) {
+            mListener = (PicturesFragment.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -72,6 +70,7 @@ public class PicturesFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // Placeholder, to be inserted when clicking is introduced
         void onFragmentInteraction(Uri uri);
+        void onBackPressed();
     }
 
     private void setupFragmentVariables(View view) {
@@ -83,5 +82,20 @@ public class PicturesFragment extends Fragment {
         galleryPicThree = view.findViewById(R.id.galleryPicThree);
         back = view.findViewById(R.id.back);
         finish = view.findViewById(R.id.finish);
+    }
+
+    private void setupButtonListeners() {
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onBackPressed();
+            }
+        });
+
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
     }
 }
