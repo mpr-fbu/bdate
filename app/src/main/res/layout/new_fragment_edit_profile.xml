@@ -13,6 +13,35 @@
         android:layout_height="wrap_content"
         android:background="@color/mediumGrey"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageButton
+                android:id="@+id/goBackArrow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_margin="5dp"
+                app:srcCompat="@drawable/ic_back_arrow"
+                tools:ignore="VectorDrawableCompat"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_alignParentLeft="true"
+                />
+            <ImageButton
+                android:id="@+id/goBackArrow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_margin="5dp"
+                app:srcCompat="@drawable/ic_check"
+                tools:ignore="VectorDrawableCompat"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_alignParentRight="true"
+                />
+
+        </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
@@ -165,7 +194,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@color/mediumGrey"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editBirthDate" />
+                app:layout_constraintTop_toBottomOf="@+id/myGender" />
 
 
             <TextView
@@ -208,7 +237,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/editEducation" />
 
             <SeekBar
-                android:id="@+id/seekBar"
+                android:id="@+id/rangeSeekBar"
                 android:layout_width="299dp"
                 android:layout_height="17dp"
                 android:layout_marginEnd="8dp"
@@ -258,7 +287,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.68"
                 app:layout_constraintStart_toEndOf="@+id/age"
-                app:layout_constraintTop_toBottomOf="@+id/seekBar"
+                app:layout_constraintTop_toBottomOf="@+id/rangeSeekBar"
                 app:left_thumb_color="#775E4F"
                 app:left_thumb_color_pressed="#4C2D1A"
                 app:max_value="150"
@@ -278,7 +307,7 @@
                 android:background="@color/mediumGrey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rangeSeekbar2" />
+                app:layout_constraintTop_toBottomOf="@+id/interestedInGender" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -323,6 +352,30 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editEmail" />
+
+            <Spinner
+                android:id="@+id/myGender"
+                android:layout_width="368dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editBirthDate" />
+
+            <Spinner
+                android:id="@+id/interestedInGender"
+                android:layout_width="368dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/age" />
 
 
         </android.support.constraint.ConstraintLayout>
