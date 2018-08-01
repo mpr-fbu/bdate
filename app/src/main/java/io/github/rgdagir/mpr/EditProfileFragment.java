@@ -54,7 +54,6 @@ public class EditProfileFragment extends Fragment {
     private ImageView profilePic;
     private ParseUser currUser;
     private TextView displayProgress;
-    private Button submitEdits;
     private HashMap changes;
     private EditProfileFragment.OnFragmentInteractionListener mListener;
     public final static int PICK_PHOTO_CODE = 1046;
@@ -75,7 +74,7 @@ public class EditProfileFragment extends Fragment {
         context = getActivity();
         currUser = ParseUser.getCurrentUser();
         changes = new HashMap<String, String>();
-        View v = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        View v = inflater.inflate(R.layout.new_fragment_edit_profile, container, false);
         setupViews(v);
         fetchCurrentUserAndLoadPage();
         setupSpinners(v);
@@ -101,7 +100,6 @@ public class EditProfileFragment extends Fragment {
         interestedInSpinner = v.findViewById(R.id.interestedInGender);
         rangeSeekBar = v.findViewById(R.id.rangeSeekBar);
         displayProgress = v.findViewById(R.id.displayProgress);
-        submitEdits = v.findViewById(R.id.submitEdits);
 
         setupButtonListeners();
         setupTextContainerListeners();
@@ -112,13 +110,6 @@ public class EditProfileFragment extends Fragment {
         changeprofilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            }
-        });
-        submitEdits.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveUpdatedUser();
-                mListener.goBackToProfile();
             }
         });
         changeprofilePic.setOnClickListener(new View.OnClickListener() {
