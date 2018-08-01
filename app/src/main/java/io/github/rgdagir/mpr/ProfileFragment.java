@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -29,10 +30,12 @@ import com.parse.ParseUser;
 import java.util.List;
 
 import io.github.rgdagir.mpr.models.Conversation;
+import io.github.rgdagir.mpr.models.Milestone;
 
 public class ProfileFragment extends Fragment {
     private ProfileFragment.OnFragmentInteractionListener mListener;
     private ParseImageView profilePic;
+    private ImageView defaultProfilePic;
     private TextView profileName;
     private TextView profileAge;
     private TextView profileDistance;
@@ -46,6 +49,7 @@ public class ProfileFragment extends Fragment {
     private ParseUser otherUser;
     private boolean isMyProfile;
     private ParseUser currentUser;
+    private Conversation conversation;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -58,7 +62,7 @@ public class ProfileFragment extends Fragment {
         if (getArguments() == null) {
             isMyProfile = true;
         } else {
-            Conversation conversation = (Conversation) getArguments().getSerializable("conversation");
+            conversation = (Conversation) getArguments().getSerializable("conversation");
             isMyProfile = false;
             if (conversation.getUser1().getObjectId().equals(currentUser.getObjectId())) {
                 otherUser = conversation.getUser2();
@@ -76,6 +80,7 @@ public class ProfileFragment extends Fragment {
         context = getActivity();
 
         profilePic = view.findViewById(R.id.ivProfilePic);
+        defaultProfilePic = view.findViewById(R.id.defaultProfilePic);
         profileName = view.findViewById(R.id.tvProfileName);
         profileAge = view.findViewById(R.id.tvProfileAge);
         profileDistance = view.findViewById(R.id.tvDistance);
@@ -126,7 +131,11 @@ public class ProfileFragment extends Fragment {
                     Log.e("ProfileQuerySuccess", Integer.toString(userDataList.size()));
                     // the list should ideally have only one element, given users are unique
                     ParseUser userData = userDataList.get(0);
-                    setUserDetails(userData);
+                    if (isMyProfile) {
+                        setMyUserDetails(userData);
+                    } else {
+                        setOtherUserDetails(userData);
+                    }
                 } else {
                     Log.e("ProfileQuery", "Failed");
                     e.printStackTrace();
@@ -135,7 +144,8 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void setUserDetails(ParseUser user) {
+    private void setMyUserDetails(ParseUser user) {
+        // simply display your personal information
         String name = user.get("firstName").toString();
         String age = user.get("age").toString();
         String status = user.get("bio").toString();
@@ -144,6 +154,8 @@ public class ProfileFragment extends Fragment {
 
         profileName.setText(name);
         profileAge.setText("Age: " + age);
+        profileDistance.setText("0 miles away");
+        defaultProfilePic.setVisibility(View.INVISIBLE);
         setProfilePicture(user);
         profileStatus.setText(status);
         if (occupation == null) {
@@ -156,17 +168,57 @@ public class ProfileFragment extends Fragment {
         } else {
             profileEducation.setText(education.toString());
         }
-        if (isMyProfile) {
-            profileDistance.setText("0 miles away");
+    }
+
+    private void setOtherUserDetails(ParseUser user) {
+        // check if they are revealed before displaying
+        String status = user.get("bio").toString();
+        profileStatus.setText(status);
+        if (Milestone.canSeeName(conversation)) {
+            String name = user.get("firstName").toString();
+            profileName.setText(name);
         } else {
+            String fakeName = user.get("fakeName").toString();
+            profileName.setText(fakeName);
+        }
+        if (Milestone.canSeeAge(conversation)) {
+            String age = user.get("age").toString();
+            profileAge.setText("Age: " + age);
+        } else {
+            profileAge.setText("Age: --");
+        }
+        if (Milestone.canSeeDistanceAway(conversation)) {
             // get distance (in miles) between user who started the conversation and the one trying to match
             double distanceFromMatch = SearchFragment.calcDistance(currentUser.getParseGeoPoint("lastLocation").getLatitude(),
-                user.getParseGeoPoint("lastLocation").getLatitude(),
-                currentUser.getParseGeoPoint("lastLocation").getLongitude(),
-                user.getParseGeoPoint("lastLocation").getLongitude(), 0, 0);
+                    user.getParseGeoPoint("lastLocation").getLatitude(),
+                    currentUser.getParseGeoPoint("lastLocation").getLongitude(),
+                    user.getParseGeoPoint("lastLocation").getLongitude(), 0, 0);
             int roundedDistance10 = (int) (distanceFromMatch * 10);
             double distance = roundedDistance10 / 10.0;
             profileDistance.setText(Double.toString(distance) + " miles away");
+        } else {
+            profileDistance.setText("--- miles away");
+        }
+        if (Milestone.canSeeOccupation(conversation)) {
+            Object occupation = user.get("occupation");
+            Object education = user.get("education");
+            if (occupation == null) {
+                profileOccupation.setText("---");
+            } else {
+                profileOccupation.setText(occupation.toString());
+            }
+            if (education == null) {
+                profileEducation.setText("---");
+            } else {
+                profileEducation.setText(education.toString());
+            }
+        } else {
+            profileOccupation.setText("---");
+            profileEducation.setText("---");
+        }
+        if (Milestone.canSeeProfilePicture(conversation)) {
+            setProfilePicture(user);
+            defaultProfilePic.setVisibility(View.INVISIBLE);
         }
     }
 
