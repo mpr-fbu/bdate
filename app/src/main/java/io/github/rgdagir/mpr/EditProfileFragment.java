@@ -13,6 +13,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,12 +32,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,6 +64,7 @@ public class EditProfileFragment extends Fragment {
     private HashMap changes;
     private EditProfileFragment.OnFragmentInteractionListener mListener;
     public final static int PICK_PHOTO_CODE = 1046;
+    ArrayList<ParseFile> images;
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -77,6 +85,7 @@ public class EditProfileFragment extends Fragment {
         View v = inflater.inflate(R.layout.new_fragment_edit_profile, container, false);
         setupViews(v);
         fetchCurrentUserAndLoadPage();
+        setupGallery(v);
         setupSpinners(v);
         setupRangeBar();
         return v;
@@ -124,6 +133,22 @@ public class EditProfileFragment extends Fragment {
                 showDatePicker();
             }
         });
+    }
+
+    public void setupGallery(View v){
+        RecyclerView rvGalleryPicker = (RecyclerView) v.findViewById(R.id.rvGalleryPics);
+        images = fetchCoverImages(ParseUser.getCurrentUser());
+        PickGalleryAdapter adapter = new PickGalleryAdapter(images);
+        rvGalleryPicker.setAdapter(adapter);
+        rvGalleryPicker.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+    }
+
+    public ArrayList<ParseFile> fetchCoverImages(ParseUser user){
+        ArrayList<ParseFile> coverImages = new ArrayList<>();
+        coverImages.add(user.getParseFile("coverPhoto1"));
+        coverImages.add(user.getParseFile("coverPhoto2"));
+        coverImages.add(user.getParseFile("coverPhoto3"));
+        return coverImages;
     }
 
     private void showDatePicker() {
