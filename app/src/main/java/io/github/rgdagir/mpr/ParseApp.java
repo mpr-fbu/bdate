@@ -6,7 +6,9 @@ import com.parse.Parse;
 import com.parse.ParseObject;
 
 import io.github.rgdagir.mpr.models.Conversation;
+import io.github.rgdagir.mpr.models.Interest;
 import io.github.rgdagir.mpr.models.Message;
+import io.github.rgdagir.mpr.models.UserInterest;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -21,6 +23,8 @@ public class ParseApp extends Application {
 
         ParseObject.registerSubclass(Message.class);
         ParseObject.registerSubclass(Conversation.class);
+        ParseObject.registerSubclass(Interest.class);
+        ParseObject.registerSubclass(UserInterest.class);
 
         // Use for monitoring Parse OkHttp traffic
         // Can be Level.BASIC, Level.HEADERS, or Level.BODY
@@ -33,8 +37,6 @@ public class ParseApp extends Application {
         // set applicationId, and server server based on the values in the Heroku settings.
         // clientKey is not needed unless explicitly configured
         // any network interceptors must be added with the Configuration Builder given this syntax
-        ParseObject.registerSubclass(Conversation.class);
-        ParseObject.registerSubclass(Message.class);
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(this.getString(R.string.parseAppId)) // should correspond to APP_ID env variable
                 .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server

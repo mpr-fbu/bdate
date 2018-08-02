@@ -1,11 +1,10 @@
 package io.github.rgdagir.mpr.models;
 
-
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-@ParseClassName("UserInterest")
+@ParseClassName("Interest")
 public class Interest extends ParseObject{
     private static final String KEY_NAME = "name";
 

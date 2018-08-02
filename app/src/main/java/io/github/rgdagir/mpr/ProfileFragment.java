@@ -21,6 +21,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
@@ -32,7 +36,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rgdagir.mpr.models.Conversation;
+import io.github.rgdagir.mpr.models.Interest;
 import io.github.rgdagir.mpr.models.Milestone;
+import io.github.rgdagir.mpr.models.UserInterest;
 import me.relex.circleindicator.CircleIndicator;
 
 public class ProfileFragment extends Fragment {
@@ -47,12 +53,13 @@ public class ProfileFragment extends Fragment {
     private TextView profileEducation;
 
     private ViewPager mPager;
-    private static int currentPage = 0;
     private ArrayList<String> mGalleryImages;
     private CircleIndicator indicator;
-    private RecyclerView rvInterests;
     private ImageButton editProfileBtn;
     private Button logoutBtn;
+    private RecyclerView rvInterests;
+    private InterestAdapter interestAdapter;
+    ArrayList<Interest> mInterests;
 
     private Context context;
     private ParseUser otherUser;
@@ -102,8 +109,19 @@ public class ProfileFragment extends Fragment {
         mPager = view.findViewById(R.id.pager);
         indicator = view.findViewById(R.id.indicator);
 
+        rvInterests = view.findViewById(R.id.rvInterests);
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        layoutManager.setFlexWrap(FlexWrap.WRAP);
+        layoutManager.setJustifyContent(JustifyContent.FLEX_START);
+        mInterests = new ArrayList<>();
+        interestAdapter = new InterestAdapter(mInterests);
+        rvInterests.setLayoutManager(layoutManager);
+        rvInterests.setAdapter(interestAdapter);
+
         if (isMyProfile) {
             fetchProfileData(currentUser);
+            populateInterests(currentUser);
             editProfileBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -118,6 +136,7 @@ public class ProfileFragment extends Fragment {
             });
         } else {
             fetchProfileData(otherUser);
+            populateInterests(otherUser);
             editProfileBtn.setVisibility(View.INVISIBLE);
             logoutBtn.setVisibility(View.INVISIBLE);
         }
@@ -266,6 +285,26 @@ public class ProfileFragment extends Fragment {
         }
         mPager.setAdapter(new GalleryAdapter(context, mGalleryImages));
         indicator.setViewPager(mPager);
+    }
+
+    private void populateInterests(ParseUser user) {
+        final UserInterest.Query interestsQuery = new UserInterest.Query();
+        interestsQuery.whereEqualTo("user", user);
+        interestsQuery.withUserInterest();
+        interestsQuery.findInBackground(new FindCallback<UserInterest>() {
+            @Override
+            public void done(List<UserInterest> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); ++i) {
+                        Interest interest = objects.get(i).getInterest();
+                        mInterests.add(interest);
+                        interestAdapter.notifyItemInserted(mInterests.size() - 1);
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void logout(ParseUser user){
