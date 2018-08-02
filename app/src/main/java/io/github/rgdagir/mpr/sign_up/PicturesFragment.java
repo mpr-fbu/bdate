@@ -1,7 +1,6 @@
 package io.github.rgdagir.mpr.sign_up;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -69,8 +68,9 @@ public class PicturesFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         // Placeholder, to be inserted when clicking is introduced
-        void onFragmentInteraction(Uri uri);
+        //void onFragmentInteraction(Uri uri);
         void onBackPressed();
+        void createNewUser();
     }
 
     private void setupFragmentVariables(View view) {
@@ -95,6 +95,7 @@ public class PicturesFragment extends Fragment {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mListener.createNewUser();
             }
         });
     }

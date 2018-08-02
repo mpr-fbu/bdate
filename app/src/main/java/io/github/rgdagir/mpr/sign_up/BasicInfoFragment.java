@@ -73,7 +73,7 @@ public class BasicInfoFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onBackPressed();
-        void goToInterestsFragment();
+        void goToInterestsFragment(String gender, Integer age, String name, String alias);
     }
 
     private void setupFragmentVariables(View view) {
@@ -103,7 +103,8 @@ public class BasicInfoFragment extends Fragment {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.goToInterestsFragment();
+                mListener.goToInterestsFragment(placeholderGender.getText().toString(), 18,
+                        etName.getText().toString(), etAlias.getText().toString());
             }
         });
     }

@@ -25,7 +25,6 @@ public class LoginInfoFragment extends Fragment {
     private Button btnContinue;
     private Button back;
 
-
     public LoginInfoFragment() {
         // Required empty public constructor
     }
@@ -68,7 +67,7 @@ public class LoginInfoFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onBackPressed();
-        void goToBasicInfoFragment();
+        void goToBasicInfoFragment(String email, String password);
     }
 
     private void setupFragmentVariables(View view) {
@@ -93,7 +92,7 @@ public class LoginInfoFragment extends Fragment {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.goToBasicInfoFragment();
+                mListener.goToBasicInfoFragment(etEmail.getText().toString(), etPassword.getText().toString());
             }
         });
     }
