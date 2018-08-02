@@ -60,6 +60,7 @@ public class ProfileFragment extends Fragment {
     private RecyclerView rvInterests;
     private InterestAdapter interestAdapter;
     ArrayList<Interest> mInterests;
+    ArrayList<Boolean> mIsInCommon;
 
     private Context context;
     private ParseUser otherUser;
@@ -115,13 +116,14 @@ public class ProfileFragment extends Fragment {
         layoutManager.setFlexWrap(FlexWrap.WRAP);
         layoutManager.setJustifyContent(JustifyContent.FLEX_START);
         mInterests = new ArrayList<>();
-        interestAdapter = new InterestAdapter(mInterests);
+        mIsInCommon = new ArrayList<>();
+        interestAdapter = new InterestAdapter(mInterests, mIsInCommon);
         rvInterests.setLayoutManager(layoutManager);
         rvInterests.setAdapter(interestAdapter);
 
         if (isMyProfile) {
             fetchProfileData(currentUser);
-            populateInterests(currentUser);
+            populateMyInterests();
             editProfileBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -136,7 +138,7 @@ public class ProfileFragment extends Fragment {
             });
         } else {
             fetchProfileData(otherUser);
-            populateInterests(otherUser);
+            populateTheirInterests(otherUser);
             editProfileBtn.setVisibility(View.INVISIBLE);
             logoutBtn.setVisibility(View.INVISIBLE);
         }
@@ -287,9 +289,9 @@ public class ProfileFragment extends Fragment {
         indicator.setViewPager(mPager);
     }
 
-    private void populateInterests(ParseUser user) {
+    private void populateMyInterests() {
         final UserInterest.Query interestsQuery = new UserInterest.Query();
-        interestsQuery.whereEqualTo("user", user);
+        interestsQuery.whereEqualTo("user", currentUser);
         interestsQuery.withUserInterest();
         interestsQuery.findInBackground(new FindCallback<UserInterest>() {
             @Override
@@ -298,8 +300,51 @@ public class ProfileFragment extends Fragment {
                     for (int i = 0; i < objects.size(); ++i) {
                         Interest interest = objects.get(i).getInterest();
                         mInterests.add(interest);
+                        mIsInCommon.add(false);
                         interestAdapter.notifyItemInserted(mInterests.size() - 1);
                     }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void populateTheirInterests(final ParseUser user) {
+        final ArrayList<String> myInterests = new ArrayList<>();
+        final UserInterest.Query interestsQuery = new UserInterest.Query();
+        interestsQuery.whereEqualTo("user", currentUser);
+        interestsQuery.withUserInterest();
+        interestsQuery.findInBackground(new FindCallback<UserInterest>() {
+            @Override
+            public void done(List<UserInterest> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); ++i) {
+                        Interest interest = objects.get(i).getInterest();
+                        myInterests.add(interest.getObjectId());
+                    }
+                    final UserInterest.Query interestsQuery = new UserInterest.Query();
+                    interestsQuery.whereEqualTo("user", user);
+                    interestsQuery.withUserInterest();
+                    interestsQuery.findInBackground(new FindCallback<UserInterest>() {
+                        @Override
+                        public void done(List<UserInterest> objects, ParseException e) {
+                            if (e == null) {
+                                for (int i = 0; i < objects.size(); ++i) {
+                                    Interest interest = objects.get(i).getInterest();
+                                    mInterests.add(interest);
+                                    if (myInterests.contains(interest.getObjectId())) {
+                                        mIsInCommon.add(true);
+                                    } else {
+                                        mIsInCommon.add(false);
+                                    }
+                                    interestAdapter.notifyItemInserted(mInterests.size() - 1);
+                                }
+                            } else {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 } else {
                     e.printStackTrace();
                 }
