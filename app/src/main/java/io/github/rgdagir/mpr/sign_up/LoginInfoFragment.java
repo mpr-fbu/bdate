@@ -3,7 +3,6 @@ package io.github.rgdagir.mpr.sign_up;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,14 +87,12 @@ public class LoginInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mListener.onBackPressed();
-                mListener.onBackPressed();
             }
         });
 
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("BasicInfoFragment", "continue button clicked");
                 mListener.goToBasicInfoFragment();
             }
         });

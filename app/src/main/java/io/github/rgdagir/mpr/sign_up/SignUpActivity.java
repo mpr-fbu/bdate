@@ -14,6 +14,9 @@ public class SignUpActivity extends AppCompatActivity
         InterestsFragment.OnFragmentInteractionListener, PicturesFragment.OnFragmentInteractionListener {
 
     LoginInfoFragment initialFragment = new LoginInfoFragment();
+    BasicInfoFragment basicInfoFragment = new BasicInfoFragment();
+    InterestsFragment interestsFragment = new InterestsFragment();
+    PicturesFragment picturesFragment = new PicturesFragment();
     final FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
@@ -38,7 +41,9 @@ public class SignUpActivity extends AppCompatActivity
     }
 
     public static void switchFragment(FragmentTransaction fragmentTransaction, Fragment fragment) {
-        fragmentTransaction.replace(R.id.flContainer, fragment).addToBackStack(null).commit();
+        fragmentTransaction.replace(R.id.flContainer, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -60,15 +65,15 @@ public class SignUpActivity extends AppCompatActivity
     }
 
     public void goToBasicInfoFragment() {
-        switchFragment(fragmentManager.beginTransaction(), new BasicInfoFragment());
+        switchFragment(fragmentManager.beginTransaction(), basicInfoFragment);
     }
 
     public void goToInterestsFragment() {
-        switchFragment(fragmentManager.beginTransaction(), new InterestsFragment());
+        switchFragment(fragmentManager.beginTransaction(), interestsFragment);
     }
 
     public void goToPicturesFragment() {
-        switchFragment(fragmentManager.beginTransaction(), new PicturesFragment());
+        switchFragment(fragmentManager.beginTransaction(), picturesFragment);
     }
 
 //    private static String ACTIVITY_TAG = "SIGN UP";
