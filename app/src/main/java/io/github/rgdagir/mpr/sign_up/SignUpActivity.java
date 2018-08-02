@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.parse.LogInCallback;
 import com.parse.ParseACL;
@@ -35,8 +36,6 @@ public class SignUpActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
-        // set chats fragment as initial
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.flContainer, initialFragment)
                 .commit();
@@ -77,8 +76,9 @@ public class SignUpActivity extends AppCompatActivity
         switchFragment(fragmentManager.beginTransaction(), basicInfoFragment);
     }
 
-    public void goToInterestsFragment(String gender, Integer age, String name, String alias) {
+    public void goToInterestsFragment(String gender, String interestedIn, Integer age, String name, String alias) {
         newUser.put("gender", gender);
+        newUser.put("interestedIn", interestedIn);
         newUser.put("age", age);
         newUser.put("firstName", name);
         newUser.put("fakeName", alias);
@@ -127,6 +127,9 @@ public class SignUpActivity extends AppCompatActivity
         finish();
     }
 
+    public void onRadioButtonClicked(View view) {
+    }
+
 //    private static String ACTIVITY_TAG = "SIGN UP";
 //    private EditText etFirstNameSignUp;
 //    private EditText etFakeNameSignUp;
@@ -134,15 +137,12 @@ public class SignUpActivity extends AppCompatActivity
 //    private EditText etPasswordSignUp;
 //    private Button signupBtn;
 //    private Button refresh;
-//    private List<String> fakeNames = new ArrayList<>(Arrays.asList("Anonymous Anon", "Mysterious Stranger", "?????"));
 
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_sign_up);
 //        findViews();
-//        int random = rng(fakeNames.size());
-//        etFakeNameSignUp.setText(fakeNames.get(random));
 //        setOnClickListeners();
 //    }
 //
@@ -169,8 +169,6 @@ public class SignUpActivity extends AppCompatActivity
 //        refresh.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                int random = rng(fakeNames.size());
-//                etFakeNameSignUp.setText(fakeNames.get(random));
 //            }
 //        });
 //    }
@@ -205,9 +203,5 @@ public class SignUpActivity extends AppCompatActivity
 //        });
 //    }
 //
-//    private int rng(int size) {
-//        Random rand = new Random();
-//        return rand.nextInt(size);
-//    }
 //
 }

@@ -9,7 +9,7 @@
         android:layout_height="34dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="40dp"
         android:text="About you" />
 
     <TextView
@@ -25,35 +25,91 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/explanation"
-        android:layout_marginTop="133dp"
+        android:layout_alignLeft="@+id/explanation"
+        android:layout_marginTop="121dp"
         android:text="I identify as " />
 
-    <EditText
-        android:id="@+id/placeholderGender"
-        android:layout_width="270dp"
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/explanation"
+        android:layout_alignLeft="@+id/explanation"
         android:layout_below="@+id/gender"
-        android:ems="10"
-        android:hint="Male Female Other"
-        android:inputType="textPersonName" />
+        android:id="@+id/genderOptions"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/gender_male"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/gender_female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="Female" />
+
+        <RadioButton
+            android:id="@+id/gender_other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="Other" />
+    </RadioGroup>
+
+
+    <TextView
+        android:id="@+id/interestedIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/genderOptions"
+        android:layout_toLeftOf="@+id/title"
+        android:text="I'm interested in " />
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/preferenceOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/interestedIn"
+        android:layout_alignLeft="@+id/explanation"
+        android:orientation="horizontal">
+
+        <RadioButton android:id="@+id/prefer_men"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Men"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/prefer_women"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Women"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/no_preference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No preference"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
 
     <TextView
         android:id="@+id/birthday"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/explanation"
-        android:layout_marginTop="212dp"
+        android:layout_height="23dp"
+        android:layout_above="@+id/placeholderBirthday"
+        android:layout_alignLeft="@+id/explanation"
+        android:layout_below="@+id/preferenceOptions"
+        android:layout_marginBottom="16dp"
         android:text="Birthday" />
 
     <EditText
         android:id="@+id/placeholderBirthday"
         android:layout_width="271dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/explanation"
-        android:layout_below="@+id/birthday"
+        android:layout_above="@+id/name"
+
+        android:layout_centerHorizontal="true"
         android:ems="10"
         android:hint="MM / DD / YYYY"
         android:inputType="textPersonName" />
@@ -62,18 +118,16 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/explanation"
-        android:layout_marginBottom="256dp"
+        android:layout_above="@+id/etName"
+        android:layout_alignLeft="@+id/explanation"
         android:text="Name" />
 
     <EditText
         android:id="@+id/etName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/explanation"
-        android:layout_below="@+id/name"
-        android:layout_marginTop="-256dp"
+        android:layout_above="@+id/alias"
+        android:layout_alignLeft="@+id/explanation"
         android:ems="10"
         android:hint="Add your first name "
         android:inputType="textPersonName" />
@@ -82,18 +136,16 @@
         android:id="@+id/alias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/explanation"
-        android:layout_marginBottom="182dp"
+        android:layout_above="@+id/etAlias"
+        android:layout_alignLeft="@+id/explanation"
         android:text="Alias" />
 
     <EditText
         android:id="@+id/etAlias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/explanation"
-        android:layout_below="@+id/alias"
-        android:layout_marginTop="-182dp"
+        android:layout_above="@+id/aliasNote"
+        android:layout_alignLeft="@+id/explanation"
         android:ems="10"
         android:inputType="textPersonName" />
 
@@ -101,16 +153,15 @@
         android:id="@+id/aliasNote"
         android:layout_width="284dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/etAlias"
-        android:layout_marginEnd="31dp"
+        android:layout_above="@+id/btnContinue"
+        android:layout_alignLeft="@+id/explanation"
         android:text="*Your display name for other users. Please do not use your real name." />
 
     <Button
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="Back" />
 
@@ -120,7 +171,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="50dp"
         android:text="Continue" />
+
+    <Button
+        android:id="@+id/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/etAlias"
+        android:layout_toRightOf="@+id/etName"
+        android:text="Refresh" />
 
 </RelativeLayout>
