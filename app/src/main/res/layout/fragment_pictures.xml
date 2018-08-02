@@ -28,15 +28,14 @@
         android:layout_height="107dp"
         android:layout_above="@+id/galleryPicTwo"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="76dp"
+        android:layout_marginStart="81dp"
         app:srcCompat="@drawable/ic_add_photo_profile" />
 
     <ImageView
         android:id="@+id/galleryPicOne"
         android:layout_width="107dp"
         android:layout_height="105dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="155dp"
+        android:layout_alignTop="@+id/profilePic"
         android:layout_toEndOf="@+id/profilePic"
         app:srcCompat="@drawable/ic_add_photo_gallery" />
 
