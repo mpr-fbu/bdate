@@ -18,9 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.SaveCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,10 +40,7 @@ public class PicturesFragment extends Fragment {
     private Button back;
     private Button finish;
     public final static int PICK_PHOTO_CODE = 1046;
-    private List<ParseFile> images;
-    private ParseFile imageFile;
-    private Uri photoUri;
-
+    private List<byte[]> images;
 
 
     public PicturesFragment() {
@@ -95,7 +90,7 @@ public class PicturesFragment extends Fragment {
         //void onFragmentInteraction(Uri uri);
         void onBackPressed();
         void createNewUser();
-        void addPicturesToUser(List<ParseFile> files);
+        void addPicturesToUser(List<byte[]> files);
     }
 
     private void setupFragmentVariables(View view) {
@@ -161,34 +156,30 @@ public class PicturesFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(final int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
-            photoUri = data.getData();
+            Uri photoUri = data.getData();
             // Do something with the photo based on Uri
             Bitmap selectedImage = null;
             byte[] img = null;
+            ParseFile imageFile = null;
             try {
                 selectedImage = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photoUri);
                 img = Utils.getbytearray(selectedImage);
                 imageFile = new ParseFile(img);
-                imageFile.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (requestCode == PICK_PHOTO_CODE){ // top left corner - profile pic
-                            loadPhoto(context, photoUri, profilePic);
-                            images.add(imageFile);
-                        } else if (requestCode == PICK_PHOTO_CODE + 1) { // top right corner - first gallery pic
-                            loadPhoto(context, photoUri, galleryPicOne);
-                            images.add(imageFile);
-                        } else if (requestCode == PICK_PHOTO_CODE + 2) { // bottom right corner - second gallery pic
-                            loadPhoto(context, photoUri, galleryPicTwo);
-                            images.add(imageFile);
-                        } else if (requestCode == PICK_PHOTO_CODE + 3) { // bottom left corner - third gallery pic
-                            loadPhoto(context, photoUri, galleryPicThree);
-                            images.add(imageFile);
-                        }
-                    }
-                });
+                if (requestCode == PICK_PHOTO_CODE){ // top left corner - profile pic
+                    loadPhoto(context, photoUri, profilePic);
+                    images.add(img);
+                } else if (requestCode == PICK_PHOTO_CODE + 1) { // top right corner - first gallery pic
+                    loadPhoto(context, photoUri, galleryPicOne);
+                    images.add(img);
+                } else if (requestCode == PICK_PHOTO_CODE + 2) { // bottom right corner - second gallery pic
+                    loadPhoto(context, photoUri, galleryPicTwo);
+                    images.add(img);
+                } else if (requestCode == PICK_PHOTO_CODE + 3) { // bottom left corner - third gallery pic
+                    loadPhoto(context, photoUri, galleryPicThree);
+                    images.add(img);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
