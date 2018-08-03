@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,15 +60,17 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             setConversationDetails(conversation.getUser2(), holder.tvUsername, holder.ivProfilePic,
                     holder.ivDefaultPic, conversation);
             if (!conversation.getReadUser1()) {
-                holder.tvText.setTypeface(null, Typeface.BOLD);
-                holder.tvText.setTextColor(Color.WHITE);
+                Typeface boldTypeface = Typeface.defaultFromStyle(Typeface.BOLD);
+                holder.tvText.setTypeface(boldTypeface);
+                holder.tvText.setTextColor(Color.BLACK);
             }
         } else {
             setConversationDetails(conversation.getUser1(), holder.tvUsername, holder.ivProfilePic,
                     holder.ivDefaultPic, conversation);
             if (!conversation.getReadUser2()) {
-                holder.tvText.setTypeface(null, Typeface.BOLD);
-                holder.tvText.setTextColor(Color.WHITE);
+                Typeface boldTypeface = Typeface.defaultFromStyle(Typeface.BOLD);
+                holder.tvText.setTypeface(boldTypeface);
+                holder.tvText.setTextColor(Color.BLACK);
             }
         }
 
@@ -86,6 +89,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                         h.tvText.setText("You: " + lMsg.getText());
                     } else {
                         h.tvText.setText(lMsg.getText());
+                        Log.d("IMPORTANT ACTIVITY", "new message displayed - " + lMsg.getText());
                     }
                 }
             });
