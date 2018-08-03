@@ -2,10 +2,12 @@ package io.github.rgdagir.mpr.utils;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.DatePicker;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 
 import io.github.rgdagir.mpr.DatePickerFragment;
@@ -41,5 +43,12 @@ public final class Utils extends Fragment {
         assert getFragmentManager() != null;
         dateFragment.show(getFragmentManager(), "Date Picker");
         return dateFromPicker;
+    }
+
+    public static byte[] getbytearray(Bitmap bm){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 }
