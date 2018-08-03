@@ -44,6 +44,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import io.github.rgdagir.mpr.utils.Utils;
+
 public class EditProfileFragment extends Fragment {
     private Context context;
     private EditText editName;
@@ -130,11 +132,6 @@ public class EditProfileFragment extends Fragment {
                 Log.d("Arrow button", "pressed!");
 
                 mListener.goBackToProfile();
-            }
-        });
-        changeprofilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
             }
         });
         changeprofilePic.setOnClickListener(new View.OnClickListener() {
@@ -409,13 +406,30 @@ public class EditProfileFragment extends Fragment {
             Uri photoUri = data.getData();
             // Do something with the photo based on Uri
             Bitmap selectedImage = null;
+            byte[] img = null;
             try {
                 selectedImage = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photoUri);
+                img = Utils.getbytearray(selectedImage);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             // Load the selected image into a preview
-            profilePic.setImageBitmap(selectedImage);
+            Glide.with(context).load(photoUri)
+                    .asBitmap().centerCrop().dontAnimate()
+                    .placeholder(R.drawable.ic_action_name)
+                    .error(R.drawable.ic_action_name)
+                    .into(new BitmapImageViewTarget(profilePic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            profilePic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+            ParseFile imageFile = new ParseFile(currUser.getObjectId() + "profilepic.jpg", img);
+            currUser.put("profilePic", imageFile);
+            currUser.saveInBackground();
         }
     }
 
