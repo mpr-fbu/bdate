@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -65,6 +66,8 @@ public class EditProfileFragment extends Fragment {
     private EditProfileFragment.OnFragmentInteractionListener mListener;
     public final static int PICK_PHOTO_CODE = 1046;
     ArrayList<ParseFile> images;
+    private ImageView submitChanges;
+    private ImageView arrowBack;
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -109,6 +112,8 @@ public class EditProfileFragment extends Fragment {
         interestedInSpinner = v.findViewById(R.id.interestedInGender);
         rangeSeekBar = v.findViewById(R.id.rangeSeekBar);
         displayProgress = v.findViewById(R.id.displayProgress);
+        submitChanges = v.findViewById(R.id.done);
+        arrowBack = v.findViewById(R.id.goBackArrow);
 
         setupButtonListeners();
         setupTextContainerListeners();
@@ -131,6 +136,22 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDatePicker();
+            }
+        });
+        submitChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Done button", "pressed!");
+                saveUpdatedUser();
+                mListener.goBackToProfile();
+            }
+        });
+        arrowBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Arrow button", "pressed!");
+
+                mListener.goBackToProfile();
             }
         });
     }

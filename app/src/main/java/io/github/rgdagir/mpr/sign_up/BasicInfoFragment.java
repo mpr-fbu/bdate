@@ -132,6 +132,12 @@ public class BasicInfoFragment extends Fragment {
                         etName.getText().toString(), etAlias.getText().toString());
             }
         });
+        placeholderBirthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //showDatePicker();
+            }
+        });
     }
 
     private void setupRadioGroupListeners() {
