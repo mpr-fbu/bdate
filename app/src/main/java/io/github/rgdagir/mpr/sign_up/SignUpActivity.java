@@ -12,9 +12,12 @@ import android.view.View;
 import com.parse.LogInCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.List;
 
 import io.github.rgdagir.mpr.MainActivity;
 import io.github.rgdagir.mpr.R;
@@ -91,6 +94,13 @@ public class SignUpActivity extends AppCompatActivity
         switchFragment(fragmentManager.beginTransaction(), picturesFragment);
     }
 
+    public void addPicturesToUser(List<ParseFile> imagesList){
+        newUser.put("profilePic", imagesList.get(0));
+        newUser.put("coverPhoto1", imagesList.get(1));
+        newUser.put("coverPhoto2", imagesList.get(2));
+        newUser.put("coverPhoto3", imagesList.get(3));
+    }
+
     public void createNewUser() {
         newUser.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
@@ -106,6 +116,7 @@ public class SignUpActivity extends AppCompatActivity
                             });
                 } else {
                     Log.d("SignUpActivity", "Creating new user failed :(");
+                    e.printStackTrace();
                 }
             }
         });
