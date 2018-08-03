@@ -1,21 +1,31 @@
 package io.github.rgdagir.mpr.sign_up;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
+import io.github.rgdagir.mpr.DatePickerFragment;
 import io.github.rgdagir.mpr.R;
 
 public class BasicInfoFragment extends Fragment {
@@ -39,8 +49,10 @@ public class BasicInfoFragment extends Fragment {
     private Button back;
     private Button refresh;
     private Button btnContinue;
-    String gender;
-    String interestedIn;
+    private String gender;
+    private String interestedIn;
+    private long age;
+    private String dateFromPicker;
 
     public BasicInfoFragment() {
         // Required empty public constructor
@@ -87,7 +99,7 @@ public class BasicInfoFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onBackPressed();
-        void goToInterestsFragment(String gender, String interestedIn, Integer age, String name, String alias);
+        void goToInterestsFragment(String gender, String interestedIn, long age, String name, String alias);
     }
 
     private void setupFragmentVariables(View view) {
@@ -128,16 +140,48 @@ public class BasicInfoFragment extends Fragment {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.goToInterestsFragment(gender, interestedIn, 18,
+                mListener.goToInterestsFragment(gender, interestedIn, age,
                         etName.getText().toString(), etAlias.getText().toString());
             }
         });
         placeholderBirthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showDatePicker();
+                getDateFromPicker();
             }
         });
+    }
+
+    private void getDateFromPicker() {
+        DatePickerFragment dateFragment = new DatePickerFragment();
+        // Set up current date Into dialog
+        Calendar cal = Calendar.getInstance();
+        Bundle args = new Bundle();
+        args.putInt("year", cal.get(Calendar.YEAR));
+        args.putInt("month", cal.get(Calendar.MONTH));
+        args.putInt("day", cal.get(Calendar.DAY_OF_MONTH));
+        dateFragment.setArguments(args);
+        // Set up callback to retrieve date info
+        dateFragment.setCallBack(new DatePickerDialog.OnDateSetListener(){
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
+                dateFromPicker = String.valueOf(monthOfYear) + "/" + String.valueOf(dayOfMonth + 1) + "/" + String.valueOf(year);
+                placeholderBirthday.setText(dateFromPicker);
+                try {
+                    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                    Date birthday = formatter.parse(dateFromPicker);
+                    Date today = new Date();
+                    long diffInMillies = Math.abs(today.getTime() - birthday.getTime());
+                    long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+                    age = diff;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        if (getActivity().getSupportFragmentManager() == null){
+            Log.e("Wut", "it's null :(");
+        }
+        dateFragment.show(getActivity().getSupportFragmentManager(), "Date Picker");
     }
 
     private void setupRadioGroupListeners() {
