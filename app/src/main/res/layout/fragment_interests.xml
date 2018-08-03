@@ -14,12 +14,189 @@
 
     <TextView
         android:id="@+id/explanation"
-        android:layout_width="285dp"
+        android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="88dp"
+        android:gravity="center"
         android:text="Put a check next to all of your hobbies to help find your perfect match." />
+
+    <!--<ScrollView-->
+        <!--android:id="@+id/interests"-->
+        <!--android:layout_width="288dp"-->
+        <!--android:layout_height="375dp"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="128dp">-->
+
+        <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_art"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Art" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_science"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Science" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_music"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Music" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_video_games"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Video games" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_sports_playing"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Sports (playing)" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_sports_watching"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Sports (watching)" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_reading"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Reading" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_traveling"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Traveling" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_food"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Food" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_crafts"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Crafts" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_movies"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Movies" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_tv_shows"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="TV shows" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_animals"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Animals" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_memes"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Memes" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_outdoors"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Outdoors" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_fitness"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Fitness" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_photography"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Photography" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_cooking"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Cooking" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_puzzles"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Puzzles" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_partying"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Partying" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_technology"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Technology" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_instruments"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Musical instruments" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/interest_dance"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onCheckboxClicked"-->
+                <!--android:text="Daice" />-->
+        <!--</LinearLayout>-->
+    <!--</ScrollView>-->
 
     <Button
         android:id="@+id/skip"
@@ -30,19 +207,29 @@
         android:text="Skip" />
 
     <Button
-        android:id="@+id/btnContinue"
-        android:layout_width="255dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="56dp"
-        android:text="Continue" />
-
-    <Button
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="Back" />
+
+    <Button
+        android:id="@+id/btnContinue"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp"
+        android:text="Continue" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvInterests"
+        android:layout_width="276dp"
+        android:layout_height="275dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="162dp"
+        android:layout_marginStart="42dp" />
+
 </RelativeLayout>

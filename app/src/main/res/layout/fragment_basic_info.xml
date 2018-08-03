@@ -14,10 +14,11 @@
 
     <TextView
         android:id="@+id/explanation"
-        android:layout_width="269dp"
+        android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
         android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:text="Fill out the details below to personalize your account." />
 
     <TextView
@@ -97,7 +98,6 @@
         android:id="@+id/birthday"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
-        android:layout_above="@+id/placeholderBirthday"
         android:layout_alignLeft="@+id/explanation"
         android:layout_below="@+id/preferenceOptions"
         android:layout_marginBottom="16dp"
@@ -107,9 +107,9 @@
         android:id="@+id/placeholderBirthday"
         android:layout_width="271dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/name"
-
+        android:layout_below="@+id/birthday"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="-16dp"
         android:ems="10"
         android:hint="MM / DD / YYYY"
         android:inputType="textPersonName" />
@@ -118,16 +118,18 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/etName"
+        android:layout_below="@+id/placeholderBirthday"
         android:layout_alignLeft="@+id/explanation"
+        android:layout_marginBottom="249dp"
         android:text="Name" />
 
     <EditText
         android:id="@+id/etName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/alias"
         android:layout_alignLeft="@+id/explanation"
+        android:layout_below="@+id/name"
+        android:layout_marginTop="-249dp"
         android:ems="10"
         android:hint="Add your first name "
         android:inputType="textPersonName" />
@@ -136,7 +138,7 @@
         android:id="@+id/alias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/etAlias"
+        android:layout_below="@+id/etName"
         android:layout_alignLeft="@+id/explanation"
         android:text="Alias" />
 
@@ -144,8 +146,9 @@
         android:id="@+id/etAlias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/aliasNote"
         android:layout_alignLeft="@+id/explanation"
+        android:layout_below="@+id/alias"
+        android:layout_marginBottom="13dp"
         android:ems="10"
         android:inputType="textPersonName" />
 
@@ -153,8 +156,9 @@
         android:id="@+id/aliasNote"
         android:layout_width="284dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnContinue"
+        android:layout_below="@+id/etAlias"
         android:layout_alignLeft="@+id/explanation"
+        android:layout_marginBottom="97dp"
         android:text="*Your display name for other users. Please do not use your real name." />
 
     <Button
@@ -167,11 +171,11 @@
 
     <Button
         android:id="@+id/btnContinue"
-        android:layout_width="273dp"
+        android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="100dp"
         android:text="Continue" />
 
     <Button
