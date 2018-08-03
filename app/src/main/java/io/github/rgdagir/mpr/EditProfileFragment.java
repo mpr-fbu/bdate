@@ -31,6 +31,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
+import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -51,7 +54,7 @@ public class EditProfileFragment extends Fragment {
     private EditText editName;
     private EditText editEmail;
     private EditText editBio;
-    private TextView editBirthDate;
+//    private TextView editBirthDate;
     private FloatingActionButton changeprofilePic;
     private Spinner myGenderSpinner;
     private Spinner interestedInSpinner;
@@ -85,9 +88,6 @@ public class EditProfileFragment extends Fragment {
         View v = inflater.inflate(R.layout.new_fragment_edit_profile, container, false);
         setupViews(v);
         fetchCurrentUserAndLoadPage();
-        setupGallery(v);
-        setupSpinners(v);
-        setupRangeBar();
         return v;
     }
 
@@ -102,18 +102,22 @@ public class EditProfileFragment extends Fragment {
         editName = v.findViewById(R.id.editName);
         editEmail = v.findViewById(R.id.editEmail);
         editBio = v.findViewById(R.id.editBio);
-        editBirthDate = v.findViewById(R.id.editBirthDate);
+//        editBirthDate = v.findViewById(R.id.editBirthDate);
         changeprofilePic = v.findViewById(R.id.changeProfilePicBtn);
         profilePic = v.findViewById(R.id.profilePic);
         myGenderSpinner = v.findViewById(R.id.myGender);
         interestedInSpinner = v.findViewById(R.id.interestedInGender);
         rangeSeekBar = v.findViewById(R.id.rangeSeekBar);
-        displayProgress = v.findViewById(R.id.displayProgress);
+        displayProgress = v.findViewById(R.id.ageProgress);
         submitChanges = v.findViewById(R.id.done);
         arrowBack = v.findViewById(R.id.goBackArrow);
 
         setupButtonListeners();
         setupTextContainerListeners();
+        setupGallery(v);
+        setupSpinners(v);
+        setupRangeBar();
+        setupCrystalSeekBar(v);
     }
 
     private void setupButtonListeners() {
@@ -140,13 +144,6 @@ public class EditProfileFragment extends Fragment {
                 onPickPhoto(v);
             }
         });
-        editBirthDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePicker();
-            }
-        });
-
     }
 
     public void setupGallery(View v){
@@ -157,6 +154,32 @@ public class EditProfileFragment extends Fragment {
         rvGalleryPicker.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
     }
 
+    public void setupCrystalSeekBar(View view){
+        // get seekbar from view
+        final CrystalRangeSeekbar rangeSeekbar = (CrystalRangeSeekbar) view.findViewById(R.id.crystalRangeSeekBar);
+
+        // get min and max text view
+        final TextView tvMin = view.findViewById(R.id.rangeSeekBarMin);
+        final TextView tvMax = view.findViewById(R.id.rangeSeekBarMax);
+
+        // set listener
+        rangeSeekbar.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number minValue, Number maxValue) {
+                tvMin.setText(String.valueOf(minValue));
+                tvMax.setText(String.valueOf(maxValue));
+            }
+        });
+
+        // set final value listener
+        rangeSeekbar.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
+            @Override
+            public void finalValue(Number minValue, Number maxValue) {
+                Log.d("CRS=>", String.valueOf(minValue) + " : " + String.valueOf(maxValue));
+            }
+        });
+    }
+
     public ArrayList<ParseFile> fetchCoverImages(ParseUser user){
         ArrayList<ParseFile> coverImages = new ArrayList<>();
         coverImages.add(user.getParseFile("coverPhoto1"));
@@ -165,26 +188,26 @@ public class EditProfileFragment extends Fragment {
         return coverImages;
     }
 
-    private void showDatePicker() {
-        DatePickerFragment dateFragment = new DatePickerFragment();
-
-        // Set up current date Into dialog
-        Calendar cal = Calendar.getInstance();
-        Bundle args = new Bundle();
-        args.putInt("year", cal.get(Calendar.YEAR));
-        args.putInt("month", cal.get(Calendar.MONTH));
-        args.putInt("day", cal.get(Calendar.DAY_OF_MONTH));
-        dateFragment.setArguments(args);
-
-        // Set up callback to retrieve date info
-        dateFragment.setCallBack(new DatePickerDialog.OnDateSetListener(){
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
-                editBirthDate.setText(String.valueOf(dayOfMonth) + "/" + String.valueOf(monthOfYear+1) + "/"+String.valueOf(year));
-            }
-        });
-        dateFragment.show(getFragmentManager(), "Date Picker");
-
-    }
+//    private void showDatePicker() {
+//        DatePickerFragment dateFragment = new DatePickerFragment();
+//
+//        // Set up current date Into dialog
+//        Calendar cal = Calendar.getInstance();
+//        Bundle args = new Bundle();
+//        args.putInt("year", cal.get(Calendar.YEAR));
+//        args.putInt("month", cal.get(Calendar.MONTH));
+//        args.putInt("day", cal.get(Calendar.DAY_OF_MONTH));
+//        dateFragment.setArguments(args);
+//
+//        // Set up callback to retrieve date info
+//        dateFragment.setCallBack(new DatePickerDialog.OnDateSetListener(){
+//            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
+//                editBirthDate.setText(String.valueOf(dayOfMonth) + "/" + String.valueOf(monthOfYear+1) + "/"+String.valueOf(year));
+//            }
+//        });
+//        dateFragment.show(getFragmentManager(), "Date Picker");
+//
+//    }
 
     private void setupTextContainerListeners() {
         // adding listeners to text containers
@@ -226,22 +249,22 @@ public class EditProfileFragment extends Fragment {
                 changes.put("bio", s.toString());
             }
         });
-        editBirthDate.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                changes.put("dob", s.toString());
-            }
-        });
+//        editBirthDate.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                changes.put("dob", s.toString());
+//            }
+//        });
     }
 
     public void fetchCurrentUserAndLoadPage(){
@@ -258,7 +281,7 @@ public class EditProfileFragment extends Fragment {
             date = inputFormatter.parse(strDate);
             DateFormat outputFormatter = new SimpleDateFormat("MM/dd/yyyy");
             String output = outputFormatter.format(date);
-            editBirthDate.setText(output);
+//            editBirthDate.setText(output);
         } catch (ParseException e) {
             e.printStackTrace();
         }

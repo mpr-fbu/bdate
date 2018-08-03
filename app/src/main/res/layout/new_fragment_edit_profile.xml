@@ -87,7 +87,7 @@
 
             <EditText
                 android:id="@+id/editName"
-                android:layout_width="68dp"
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/profilePic"
                 android:layout_centerHorizontal="true"
@@ -229,33 +229,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/line2" />
 
-            <TextView
-                android:id="@+id/editBirthDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:text="TextView"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editEducation" />
-
             <SeekBar
                 android:id="@+id/rangeSeekBar"
-                android:layout_width="299dp"
+                android:layout_width="300dp"
                 android:layout_height="17dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.4"
                 app:layout_constraintStart_toEndOf="@+id/distance"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -263,9 +247,9 @@
                 android:id="@+id/distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
                 android:text="Distance:"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -274,13 +258,33 @@
                 android:id="@+id/age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="48dp"
                 android:text="Age:"
-                app:layout_constraintEnd_toStartOf="@id/rangeSeekbar2"
+                app:layout_constraintEnd_toStartOf="@+id/crystalRangeSeekBar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/distance" />
+
+            <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+                android:id="@+id/crystalRangeSeekBar"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="36dp"
+                app:bar_color="@color/mediumBlue"
+                app:bar_highlight_color="@color/mediumBlue"
+                app:corner_radius="10"
+                app:data_type="_integer"
+                app:gap="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ageProgress"
+                app:max_value="100"
+                app:min_value="18"
+                />
 
             <View
                 android:id="@+id/line3"
@@ -358,7 +362,7 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editBirthDate" />
+                app:layout_constraintTop_toBottomOf="@+id/editEducation" />
 
             <Spinner
                 android:id="@+id/interestedInGender"
@@ -368,26 +372,51 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="100dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/age" />
 
-            <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
-                android:id="@+id/rangeSeekbar2"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/rangeSeekBarMin"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                app:bar_color="#F7BB88"
-                app:bar_highlight_color="#E07416"
-                app:data_type="_integer"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toStartOf="@+id/rangeSeekBarMax"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/crystalRangeSeekBar" />
+
+            <TextView
+                android:id="@+id/rangeSeekBarMax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="12dp"
+                android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/age"
-                app:layout_constraintTop_toBottomOf="@+id/rangeSeekBar"
-                app:max_value="200"
-                app:min_value="100"
-                app:steps="5" />
+                app:layout_constraintTop_toBottomOf="@+id/crystalRangeSeekBar" />
+
+            <TextView
+                android:id="@+id/ageProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rangeSeekBar" />
 
 
         </android.support.constraint.ConstraintLayout>
