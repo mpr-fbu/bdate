@@ -80,6 +80,7 @@
             android:resource="@drawable/ic_stat_ic_notification" />
 
         <!-- <activity android:name=".CustomPhotoGallery" /> -->
+        <activity android:name=".TestSeekBar"></activity>
     </application>
 
 </manifest>

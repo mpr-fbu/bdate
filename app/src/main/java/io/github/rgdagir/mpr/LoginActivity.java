@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button toSignUpBtn;
     private Context context;
     private ProgressBar progressBar = null;
+    private Button easterEgg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         etLoginPassword = findViewById(R.id.loginPassword);
         loginBtn = findViewById(R.id.loginButton);
         toSignUpBtn = findViewById(R.id.toSignUpButton);
+        easterEgg = findViewById(R.id.easterEgg);
     }
 
     private void setOnClickListeners() {
@@ -79,6 +81,14 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+            }
+        });
+
+        easterEgg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent egg = new Intent(LoginActivity.this, TestSeekBar.class);
+                startActivity(egg);
             }
         });
     }

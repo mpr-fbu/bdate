@@ -279,22 +279,8 @@
                 android:layout_marginTop="8dp"
                 android:text="Age:"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/distance" />
-
-            <com.crystal.crystalrangeseekbar.widgets.BubbleThumbSeekbar
-                android:id="@+id/rangeSeekbar2"
-                android:layout_width="265dp"
-                android:layout_height="14dp"
-                app:bar_color="#C69E89"
-                app:bar_highlight_color="#A54B17"
-                app:corner_radius="10"
-                app:data_type="_integer"
-                app:left_thumb_color="#775E4F"
-                app:left_thumb_color_pressed="#4C2D1A"
-                app:max_value="150"
-                app:min_value="50"
-                tools:layout_editor_absoluteX="93dp"
-                tools:layout_editor_absoluteY="663dp" />
+                app:layout_constraintTop_toBottomOf="@+id/distance"
+                app:layout_constraintEnd_toStartOf="@id/rangeSeekbar2"/>
 
             <View
                 android:id="@+id/line3"
@@ -386,6 +372,22 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/age" />
+
+            <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
+                android:id="@+id/rangeSeekbar2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                app:bar_color="#F7BB88"
+                app:bar_highlight_color="#E07416"
+                app:data_type="_integer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/age"
+                app:layout_constraintTop_toBottomOf="@+id/rangeSeekBar"
+                app:max_value="200"
+                app:min_value="100"
+                app:steps="5" />
 
 
         </android.support.constraint.ConstraintLayout>
