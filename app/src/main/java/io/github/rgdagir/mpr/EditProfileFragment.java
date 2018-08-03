@@ -121,6 +121,22 @@ public class EditProfileFragment extends Fragment {
 
     private void setupButtonListeners() {
         // adding listeners to buttons
+        submitChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Done button", "pressed!");
+                saveUpdatedUser();
+                mListener.goBackToProfile();
+            }
+        });
+        arrowBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Arrow button", "pressed!");
+
+                mListener.goBackToProfile();
+            }
+        });
         changeprofilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,22 +154,7 @@ public class EditProfileFragment extends Fragment {
                 showDatePicker();
             }
         });
-        submitChanges.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Done button", "pressed!");
-                saveUpdatedUser();
-                mListener.goBackToProfile();
-            }
-        });
-        arrowBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Arrow button", "pressed!");
 
-                mListener.goBackToProfile();
-            }
-        });
     }
 
     public void setupGallery(View v){

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:rsb="http://schemas.android.com/apk/res-auto"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    tools:context=".MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -14,8 +15,8 @@
         android:background="@color/mediumGrey"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/goBackArrow"
                 android:layout_width="40dp"
@@ -25,10 +26,7 @@
                 app:srcCompat="@drawable/ic_back_arrow"
                 tools:ignore="VectorDrawableCompat"
                 android:clickable="true"
-                android:focusable="true"
-                android:layout_alignParentLeft="true"
-                android:background="@android:color/transparent"
-                />
+                android:focusable="true" />
             <ImageView
                 android:id="@+id/done"
                 android:layout_width="40dp"
@@ -48,10 +46,10 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar">
 
-        <android.support.constraint.ConstraintLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -67,7 +65,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="68dp"
+                android:layout_marginTop="16dp"
                 android:foreground="@drawable/profile_border"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -280,9 +278,9 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Age:"
+                app:layout_constraintEnd_toStartOf="@id/rangeSeekbar2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/distance"
-                app:layout_constraintEnd_toStartOf="@id/rangeSeekbar2"/>
+                app:layout_constraintTop_toBottomOf="@+id/distance" />
 
             <View
                 android:id="@+id/line3"
@@ -339,15 +337,15 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Change your password"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editEmail"
                 android:background="@drawable/rounded_button_style"
                 android:minHeight="0dp"
-                android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"/>
+                android:paddingTop="10dp"
+                android:text="Change your password"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editEmail" />
 
             <Spinner
                 android:id="@+id/myGender"
