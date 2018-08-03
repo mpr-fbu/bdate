@@ -29,32 +29,37 @@
         android:layout_above="@+id/galleryPicTwo"
         android:layout_alignParentStart="true"
         android:layout_marginStart="81dp"
-        app:srcCompat="@drawable/ic_add_photo_profile" />
+        app:srcCompat="@drawable/ic_add_photo_profile"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="81dp" />
 
     <ImageView
         android:id="@+id/galleryPicOne"
         android:layout_width="107dp"
-        android:layout_height="105dp"
+        android:layout_height="107dp"
         android:layout_alignTop="@+id/profilePic"
         android:layout_toEndOf="@+id/profilePic"
-        app:srcCompat="@drawable/ic_add_photo_gallery" />
+        app:srcCompat="@drawable/ic_add_photo_gallery"
+        android:layout_toRightOf="@+id/profilePic" />
 
     <ImageView
         android:id="@+id/galleryPicTwo"
-        android:layout_width="108dp"
+        android:layout_width="107dp"
         android:layout_height="107dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="201dp"
         android:layout_toStartOf="@+id/galleryPicOne"
-        app:srcCompat="@drawable/ic_add_photo_gallery" />
+        app:srcCompat="@drawable/ic_add_photo_gallery"
+        android:layout_toLeftOf="@+id/galleryPicOne" />
 
     <ImageView
         android:id="@+id/galleryPicThree"
-        android:layout_width="106dp"
+        android:layout_width="107dp"
         android:layout_height="107dp"
         android:layout_alignStart="@+id/galleryPicOne"
         android:layout_alignTop="@+id/galleryPicTwo"
-        app:srcCompat="@drawable/ic_add_photo_gallery" />
+        app:srcCompat="@drawable/ic_add_photo_gallery"
+        android:layout_alignLeft="@+id/galleryPicOne" />
 
     <Button
         android:id="@+id/back"
@@ -62,7 +67,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="Back" />
+        android:text="Back"
+        android:layout_alignParentLeft="true" />
 
     <Button
         android:id="@+id/finish"
