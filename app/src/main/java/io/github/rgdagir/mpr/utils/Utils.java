@@ -1,23 +1,30 @@
 package io.github.rgdagir.mpr.utils;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
-
+import android.support.v4.app.Fragment;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import io.github.rgdagir.mpr.DatePickerFragment;
 
-public class Utils {
+public final class Utils extends Fragment {
 
-    private Date dateFromPicker;
+    public Utils() {
+        // never called
+    }
 
+    private String dateFromPicker;
 
-    private void showDatePicker() {
+    /*
+    Function: getDateFromPicker
+    Functionality: this function displauys a DatePicker (old style, without the Calendar), gets the Date set by the user and returns it in a String object (MM/DD/YYYY format)
+    Warning: to use this function, define the DatePickerFragment, which will contain the picker.
+     */
+    public String getDateFromPicker(Context context) {
         DatePickerFragment dateFragment = new DatePickerFragment();
-
         // Set up current date Into dialog
         Calendar cal = Calendar.getInstance();
         Bundle args = new Bundle();
@@ -25,15 +32,14 @@ public class Utils {
         args.putInt("month", cal.get(Calendar.MONTH));
         args.putInt("day", cal.get(Calendar.DAY_OF_MONTH));
         dateFragment.setArguments(args);
-
-//        // Set up callback to retrieve date info
-//        dateFragment.setCallBack(new DatePickerDialog.OnDateSetListener(){
-//            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
-//                editBirthDate.setText(String.valueOf(dayOfMonth) + "/" + String.valueOf(monthOfYear+1) + "/"+String.valueOf(year));
-//            }
-//        });
-//        dateFragment.show(getFragmentManager(), "Date Picker");
-
+        // Set up callback to retrieve date info
+        dateFragment.setCallBack(new DatePickerDialog.OnDateSetListener(){
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
+                dateFromPicker = String.valueOf(monthOfYear) + "/" + String.valueOf(dayOfMonth) + "/" + String.valueOf(year);
+            }
+        });
+        assert getFragmentManager() != null;
+        dateFragment.show(getFragmentManager(), "Date Picker");
+        return dateFromPicker;
     }
-
 }
