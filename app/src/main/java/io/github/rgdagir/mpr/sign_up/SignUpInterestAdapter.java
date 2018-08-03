@@ -3,12 +3,12 @@ package io.github.rgdagir.mpr.sign_up;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.github.rgdagir.mpr.R;
@@ -18,7 +18,7 @@ public class SignUpInterestAdapter extends RecyclerView.Adapter<SignUpInterestAd
 
     List<Interest> mInterests;
     Context context;
-    private SparseBooleanArray itemStateArray= new SparseBooleanArray();
+    HashMap<Interest, Boolean> checked = new HashMap();
 
     public SignUpInterestAdapter(List<Interest> interests) {
         mInterests = interests;
@@ -36,11 +36,24 @@ public class SignUpInterestAdapter extends RecyclerView.Adapter<SignUpInterestAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SignUpInterestAdapter.ViewHolder holder, int position) {
-        holder.bind(position);
+    public void onBindViewHolder(@NonNull final SignUpInterestAdapter.ViewHolder holder, int position) {
         final Interest interest = mInterests.get(position);
         holder.interestCheckBox.setText(interest.getName());
-
+        holder.interestCheckBox.setChecked(mInterests.get(position).getSelected());
+        holder.interestCheckBox.setTag(position);
+        holder.interestCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Integer pos = (Integer) holder.interestCheckBox.getTag();
+                if (mInterests.get(pos).getSelected()) {
+                    mInterests.get(pos).setSelected(false);
+                    checked.put(interest, false);
+                } else {
+                    mInterests.get(pos).setSelected(true);
+                    checked.put(interest, true);
+                }
+            }
+        });
     }
 
     @Override
@@ -59,28 +72,6 @@ public class SignUpInterestAdapter extends RecyclerView.Adapter<SignUpInterestAd
 
         @Override
         public void onClick(View v) {
-            int pos = getAdapterPosition();
-            if (pos != RecyclerView.NO_POSITION) {
-                int adapterPosition = getAdapterPosition();
-                if (!itemStateArray.get(adapterPosition, false)) {
-                    interestCheckBox.setChecked(true);
-                    itemStateArray.put(adapterPosition, true);
-                }
-                else  {
-                    interestCheckBox.setChecked(false);
-                    itemStateArray.put(adapterPosition, false);
-                }
-                Interest interest = mInterests.get(pos);
-            }
-        }
-
-        void bind(int position) {
-            // use the sparse boolean array to check
-            if (!itemStateArray.get(position, false)) {
-                interestCheckBox.setChecked(false);}
-            else {
-                interestCheckBox.setChecked(true);
-            }
         }
     }
 }
