@@ -15,12 +15,16 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.github.rgdagir.mpr.MainActivity;
 import io.github.rgdagir.mpr.R;
+import io.github.rgdagir.mpr.models.Interest;
+import io.github.rgdagir.mpr.models.UserInterest;
 
 public class SignUpActivity extends AppCompatActivity
         implements LoginInfoFragment.OnFragmentInteractionListener, BasicInfoFragment.OnFragmentInteractionListener,
@@ -33,6 +37,7 @@ public class SignUpActivity extends AppCompatActivity
     BasicInfoFragment basicInfoFragment = new BasicInfoFragment();
     InterestsFragment interestsFragment = new InterestsFragment();
     PicturesFragment picturesFragment = new PicturesFragment();
+    HashMap<Interest, Boolean> checkedInterests = new HashMap();
     final FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
@@ -90,7 +95,8 @@ public class SignUpActivity extends AppCompatActivity
         switchFragment(fragmentManager.beginTransaction(), interestsFragment);
     }
 
-    public void goToPicturesFragment() {
+    public void goToPicturesFragment(HashMap<Interest, Boolean> checked) {
+        checkedInterests = checked;
         switchFragment(fragmentManager.beginTransaction(), picturesFragment);
     }
 
@@ -105,6 +111,7 @@ public class SignUpActivity extends AppCompatActivity
         newUser.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
+                    createUserInterests(checkedInterests, newUser);
                     // Hooray! Let them use the app now.
                     Log.d("SignUpActivity", "New user created successfully!");
                     ParseUser.logInInBackground(newUserUsername, newUserPassword, new LogInCallback() {
@@ -120,6 +127,26 @@ public class SignUpActivity extends AppCompatActivity
                 }
             }
         });
+    }
+
+    private void createUserInterests(HashMap<Interest, Boolean> checkedInterests, ParseUser user) {
+        for (Interest i : checkedInterests.keySet()) {
+            if (checkedInterests.get(i)) {
+                UserInterest userInterest = new UserInterest();
+                userInterest.put("user", user);
+                userInterest.put("interest", i);
+                userInterest.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Log.e("ChatActivity", "Creating user interest success! :)");
+                        } else {
+                            Log.e("ChatActivity", "Creating user interest failed :(");
+                        }
+                    }
+                });
+            }
+        }
     }
 
     private void launchMainActivity() {

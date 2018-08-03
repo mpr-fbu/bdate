@@ -18,6 +18,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.github.rgdagir.mpr.R;
@@ -40,6 +41,7 @@ public class InterestsFragment extends Fragment {
     ArrayList<Interest> mInterests;
     Context context;
     ArrayList<Interest> mCheckedInterests;
+    HashMap<Interest, Boolean> checked = new HashMap();
 
     CheckBox art, music, science, sports_playing, video_games, reading, crafts, traveling, food, movies, tv_shows, animals, memes,
             outdoors, fitness, photography, cooking, puzzles, partying, sports_watching, technology, musical_instruments, dance;
@@ -91,7 +93,7 @@ public class InterestsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // Placeholder, to be inserted when clicking is introduced
         void onBackPressed();
-        void goToPicturesFragment();
+        void goToPicturesFragment(HashMap<Interest, Boolean> checked);
     }
 
     private void setupFragmentVariables(View view) {
@@ -122,7 +124,8 @@ public class InterestsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //getAllCheckedInterests(interestView);
-                mListener.goToPicturesFragment();
+                checked = signUpInterestAdapter.checked;
+                mListener.goToPicturesFragment(checked);
             }
         });
 
@@ -130,7 +133,8 @@ public class InterestsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 skipped = true;
-                mListener.goToPicturesFragment();
+                checked = signUpInterestAdapter.checked;
+                mListener.goToPicturesFragment(checked);
             }
         });
     }
