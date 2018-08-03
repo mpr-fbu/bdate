@@ -51,6 +51,7 @@ public class ProfileFragment extends Fragment {
     private TextView profileStatus;
     private TextView profileOccupation;
     private TextView profileEducation;
+    private TextView interestsHiddenText;
 
     private ViewPager mPager;
     private ArrayList<String> mGalleryImages;
@@ -109,6 +110,7 @@ public class ProfileFragment extends Fragment {
         logoutBtn = view.findViewById(R.id.logoutBtn);
         mPager = view.findViewById(R.id.pager);
         indicator = view.findViewById(R.id.indicator);
+        interestsHiddenText = view.findViewById(R.id.tvInterestsHidden);
 
         rvInterests = view.findViewById(R.id.rvInterests);
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
@@ -122,6 +124,7 @@ public class ProfileFragment extends Fragment {
         rvInterests.setAdapter(interestAdapter);
 
         if (isMyProfile) {
+            interestsHiddenText.setVisibility(View.INVISIBLE);
             fetchProfileData(currentUser);
             populateMyInterests();
             editProfileBtn.setOnClickListener(new View.OnClickListener() {
@@ -311,45 +314,51 @@ public class ProfileFragment extends Fragment {
     }
 
     private void populateTheirInterests(final ParseUser user) {
-        final ArrayList<String> myInterests = new ArrayList<>();
-        final UserInterest.Query interestsQuery = new UserInterest.Query();
-        interestsQuery.whereEqualTo("user", currentUser);
-        interestsQuery.withUserInterest();
-        interestsQuery.findInBackground(new FindCallback<UserInterest>() {
-            @Override
-            public void done(List<UserInterest> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); ++i) {
-                        Interest interest = objects.get(i).getInterest();
-                        myInterests.add(interest.getObjectId());
-                    }
-                    final UserInterest.Query interestsQuery = new UserInterest.Query();
-                    interestsQuery.whereEqualTo("user", user);
-                    interestsQuery.withUserInterest();
-                    interestsQuery.findInBackground(new FindCallback<UserInterest>() {
-                        @Override
-                        public void done(List<UserInterest> objects, ParseException e) {
-                            if (e == null) {
-                                for (int i = 0; i < objects.size(); ++i) {
-                                    Interest interest = objects.get(i).getInterest();
-                                    mInterests.add(interest);
-                                    if (myInterests.contains(interest.getObjectId())) {
-                                        mIsInCommon.add(true);
-                                    } else {
-                                        mIsInCommon.add(false);
-                                    }
-                                    interestAdapter.notifyItemInserted(mInterests.size() - 1);
-                                }
-                            } else {
-                                e.printStackTrace();
-                            }
+        if (Milestone.canSeeInterests(conversation)) {
+            interestsHiddenText.setVisibility(View.INVISIBLE);
+            final ArrayList<String> myInterests = new ArrayList<>();
+            final UserInterest.Query interestsQuery = new UserInterest.Query();
+            interestsQuery.whereEqualTo("user", currentUser);
+            interestsQuery.withUserInterest();
+            interestsQuery.findInBackground(new FindCallback<UserInterest>() {
+                @Override
+                public void done(List<UserInterest> objects, ParseException e) {
+                    if (e == null) {
+                        for (int i = 0; i < objects.size(); ++i) {
+                            Interest interest = objects.get(i).getInterest();
+                            myInterests.add(interest.getObjectId());
                         }
-                    });
-                } else {
-                    e.printStackTrace();
+                        final UserInterest.Query interestsQuery = new UserInterest.Query();
+                        interestsQuery.whereEqualTo("user", user);
+                        interestsQuery.withUserInterest();
+                        interestsQuery.findInBackground(new FindCallback<UserInterest>() {
+                            @Override
+                            public void done(List<UserInterest> objects, ParseException e) {
+                                if (e == null) {
+                                    for (int i = 0; i < objects.size(); ++i) {
+                                        Interest interest = objects.get(i).getInterest();
+                                        mInterests.add(interest);
+                                        if (myInterests.contains(interest.getObjectId())) {
+                                            mIsInCommon.add(true);
+                                        } else {
+                                            mIsInCommon.add(false);
+                                        }
+                                        interestAdapter.notifyItemInserted(mInterests.size() - 1);
+                                    }
+                                } else {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    } else {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            rvInterests.setVisibility(View.INVISIBLE);
+            interestsHiddenText.setVisibility(View.VISIBLE);
+        }
     }
 
     public void logout(ParseUser user){

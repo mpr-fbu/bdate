@@ -74,4 +74,13 @@
         android:visibility="gone"
         style="@android:style/Widget.ProgressBar.Large"/>
 
+    <Button
+        android:id="@+id/easterEgg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="67dp"
+        android:text="Button" />
+
 </RelativeLayout>

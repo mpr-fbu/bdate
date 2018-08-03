@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:rsb="http://schemas.android.com/apk/res-auto"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    tools:context=".MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -14,9 +15,9 @@
         android:background="@color/mediumGrey"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
                 android:id="@+id/goBackArrow"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -25,10 +26,8 @@
                 app:srcCompat="@drawable/ic_back_arrow"
                 tools:ignore="VectorDrawableCompat"
                 android:clickable="true"
-                android:focusable="true"
-                android:layout_alignParentLeft="true"
-                />
-            <ImageButton
+                android:focusable="true" />
+            <ImageView
                 android:id="@+id/done"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -39,6 +38,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
                 />
 
         </RelativeLayout>
@@ -46,10 +46,10 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar">
 
-        <android.support.constraint.ConstraintLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -65,7 +65,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="68dp"
+                android:layout_marginTop="16dp"
                 android:foreground="@drawable/profile_border"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -87,7 +87,7 @@
 
             <EditText
                 android:id="@+id/editName"
-                android:layout_width="68dp"
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/profilePic"
                 android:layout_centerHorizontal="true"
@@ -229,33 +229,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/line2" />
 
-            <TextView
-                android:id="@+id/editBirthDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:text="TextView"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editEducation" />
-
             <SeekBar
                 android:id="@+id/rangeSeekBar"
-                android:layout_width="299dp"
+                android:layout_width="300dp"
                 android:layout_height="17dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.4"
                 app:layout_constraintStart_toEndOf="@+id/distance"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -263,9 +247,9 @@
                 android:id="@+id/distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
                 android:text="Distance:"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -274,27 +258,33 @@
                 android:id="@+id/age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="48dp"
                 android:text="Age:"
+                app:layout_constraintEnd_toStartOf="@+id/crystalRangeSeekBar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/distance" />
 
-            <com.crystal.crystalrangeseekbar.widgets.BubbleThumbSeekbar
-                android:id="@+id/rangeSeekbar2"
-                android:layout_width="265dp"
-                android:layout_height="14dp"
-                app:bar_color="#C69E89"
-                app:bar_highlight_color="#A54B17"
+            <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+                android:id="@+id/crystalRangeSeekBar"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="36dp"
+                app:bar_color="@color/mediumBlue"
+                app:bar_highlight_color="@color/mediumBlue"
                 app:corner_radius="10"
                 app:data_type="_integer"
-                app:left_thumb_color="#775E4F"
-                app:left_thumb_color_pressed="#4C2D1A"
-                app:max_value="150"
-                app:min_value="50"
-                tools:layout_editor_absoluteX="93dp"
-                tools:layout_editor_absoluteY="663dp" />
+                app:gap="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ageProgress"
+                app:max_value="100"
+                app:min_value="18"
+                />
 
             <View
                 android:id="@+id/line3"
@@ -351,15 +341,15 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Change your password"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editEmail"
                 android:background="@drawable/rounded_button_style"
                 android:minHeight="0dp"
-                android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"/>
+                android:paddingTop="10dp"
+                android:text="Change your password"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editEmail" />
 
             <Spinner
                 android:id="@+id/myGender"
@@ -372,7 +362,7 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editBirthDate" />
+                app:layout_constraintTop_toBottomOf="@+id/editEducation" />
 
             <Spinner
                 android:id="@+id/interestedInGender"
@@ -382,10 +372,51 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="100dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/age" />
+
+            <TextView
+                android:id="@+id/rangeSeekBarMin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toStartOf="@+id/rangeSeekBarMax"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/crystalRangeSeekBar" />
+
+            <TextView
+                android:id="@+id/rangeSeekBarMax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="12dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/crystalRangeSeekBar" />
+
+            <TextView
+                android:id="@+id/ageProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rangeSeekBar" />
 
 
         </android.support.constraint.ConstraintLayout>

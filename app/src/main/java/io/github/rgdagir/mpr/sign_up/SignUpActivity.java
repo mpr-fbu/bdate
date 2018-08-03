@@ -76,7 +76,7 @@ public class SignUpActivity extends AppCompatActivity
         switchFragment(fragmentManager.beginTransaction(), basicInfoFragment);
     }
 
-    public void goToInterestsFragment(String gender, String interestedIn, Integer age, String name, String alias) {
+    public void goToInterestsFragment(String gender, String interestedIn, long age, String name, String alias) {
         newUser.put("gender", gender);
         newUser.put("interestedIn", interestedIn);
         newUser.put("age", age);

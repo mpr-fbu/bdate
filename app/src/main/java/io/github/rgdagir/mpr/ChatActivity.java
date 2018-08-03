@@ -372,7 +372,7 @@ public class ChatActivity extends AppCompatActivity {
         } else if (Milestone.canSeeAge(conversation)) {
             milestone.showNotification(conversation);
             // show age in both user profiles
-        } else if (Milestone.canSeeName(conversation) && Milestone.canSeeGender(conversation)) {
+        } else if (Milestone.canSeeName(conversation)) {
             milestone.showNotification(conversation);
             // also need to update chatList adapter to show name properly
             runOnUiThread(new Runnable() {
@@ -381,6 +381,9 @@ public class ChatActivity extends AppCompatActivity {
                     tvUsername.setText(otherUser.getString("firstName"));
                 }
             });
+        } else if (Milestone.canSeeInterests(conversation)) {
+            milestone.showNotification(conversation);
+            // show interest in both user profiles
         }
     }
 
@@ -414,8 +417,11 @@ public class ChatActivity extends AppCompatActivity {
 
     public void showTextViewNotification(String milestone) {
         switch (milestone) {
-            case "name and gender":
-                animateTextView(R.string.notification_name_and_gender);
+            case "interests":
+                animateTextView(R.string.notification_interests);
+                return;
+            case "name":
+                animateTextView(R.string.notification_name);
                 return;
             case "age":
                 animateTextView(R.string.notification_age);
