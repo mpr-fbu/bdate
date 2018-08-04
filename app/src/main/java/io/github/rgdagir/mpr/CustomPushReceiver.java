@@ -52,7 +52,7 @@ public class CustomPushReceiver extends BroadcastReceiver {
                     if (key.equals("mydata") && !chatActive) {
                         // create a local notification
                         Log.d(TAG, "mydata was sent");
-                        createNotification(context, R.drawable.ic_stat_ic_notification, "fbu-bdate", body);
+                        createNotification(context, R.drawable.ic_notification, "", body);
                     }
                 }
             } catch (JSONException ex) {
