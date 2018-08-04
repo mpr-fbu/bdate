@@ -110,7 +110,7 @@
         android:layout_below="@+id/aliasNote"
         android:layout_marginTop="25dp"
         android:layout_centerHorizontal="true"
-        android:background="@color/oceanBlue"
+        android:background="@drawable/sign_up_button_style"
         android:textColor="@color/white"
         android:text="Continue" />
 
