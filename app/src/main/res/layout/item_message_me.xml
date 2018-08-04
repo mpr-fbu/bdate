@@ -3,14 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="10dp"
-    android:layout_marginEnd="10dp">
+    android:layout_marginEnd="10dp" >
 
     <LinearLayout
         android:id="@+id/contentMe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp" >
 
         <TextView
             android:id="@+id/tvInfoMe"
@@ -20,13 +22,14 @@
             android:text="June 29 at 4:35 pm"
             android:layout_margin="5dp"
             android:textColor="@android:color/darker_gray"
+            android:animateLayoutChanges="true"
             android:textSize="12sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="right">
+            android:layout_gravity="right" >
 
             <LinearLayout
                 android:id="@+id/contentWithBackgroundMe"
@@ -34,22 +37,24 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:background="@drawable/message_bubble_me"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
                     android:id="@+id/tvMessageMe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="5dp"
                     android:maxWidth="240dp"
-                    android:layout_margin="5dp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/babyWhite"
+                    android:textSize="18sp"
+                    android:clickable="true"
+                    android:focusable="true" />
             </LinearLayout>
-
-                <com.parse.ParseImageView
-                    android:id="@+id/ivProfilePic"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="5dp" />
 
         </LinearLayout>
 

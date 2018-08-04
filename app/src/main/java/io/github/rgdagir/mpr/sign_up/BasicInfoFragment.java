@@ -46,7 +46,6 @@ public class BasicInfoFragment extends Fragment {
     private EditText etAlias;
     private RadioGroup genderOptions;
     private RadioGroup preferenceOptions;
-    private Button back;
     private Button refresh;
     private Button btnContinue;
     private String gender;
@@ -116,19 +115,11 @@ public class BasicInfoFragment extends Fragment {
         etAlias = view.findViewById(R.id.etAlias);
         genderOptions = view.findViewById(R.id.genderOptions);
         preferenceOptions = view.findViewById(R.id.preferenceOptions);
-        back = view.findViewById(R.id.back);
         refresh = view.findViewById(R.id.refresh);
         btnContinue = view.findViewById(R.id.btnContinue);
     }
 
     private void setupButtonListeners() {
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onBackPressed();
-            }
-        });
-
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,10 +198,10 @@ public class BasicInfoFragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch(checkedId) {
                     case R.id.prefer_men:
-                        interestedIn = "Men";
+                        interestedIn = "Male";
                         break;
                     case R.id.prefer_women:
-                        interestedIn = "Women";
+                        interestedIn = "Female";
                         break;
                     case R.id.no_preference:
                         interestedIn = "No preference";

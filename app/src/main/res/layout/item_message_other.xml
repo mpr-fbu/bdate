@@ -12,6 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:orientation="vertical">
 
         <TextView
@@ -22,6 +24,7 @@
             android:text="June 29 at 4:35 pm"
             android:layout_margin="5dp"
             android:textColor="@android:color/darker_gray"
+            android:animateLayoutChanges="true"
             android:textSize="12sp" />
 
         <LinearLayout
@@ -35,17 +38,21 @@
 
                 <ImageView
                     android:id="@+id/defaultImageView"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="5dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     app:srcCompat="@mipmap/ic_launcher_foreground"
                     tools:ignore="VectorDrawableCompat" />
 
                 <com.parse.ParseImageView
                     android:id="@+id/ivProfilePic"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="5dp" />
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp" />
 
             </RelativeLayout>
 
@@ -55,15 +62,23 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:background="@drawable/message_bubble_other"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true" >
 
                 <TextView
                     android:id="@+id/tvMessageOther"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:maxWidth="240dp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/offBlack"
+                    android:textSize="18sp" />
             </LinearLayout>
 
         </LinearLayout>

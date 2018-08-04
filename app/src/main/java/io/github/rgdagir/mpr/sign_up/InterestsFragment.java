@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -33,7 +32,6 @@ public class InterestsFragment extends Fragment {
     private TextView title;
     private TextView explanation;
     private Button skip;
-    private Button back;
     private Button btnContinue;
     private Boolean skipped;
     private SignUpInterestAdapter signUpInterestAdapter;
@@ -43,11 +41,6 @@ public class InterestsFragment extends Fragment {
     ArrayList<Interest> mCheckedInterests;
     HashMap<Interest, Boolean> checked = new HashMap();
 
-    CheckBox art, music, science, sports_playing, video_games, reading, crafts, traveling, food, movies, tv_shows, animals, memes,
-            outdoors, fitness, photography, cooking, puzzles, partying, sports_watching, technology, musical_instruments, dance;
-    List<CheckBox> checkBoxes = new ArrayList<>();
-
-
     public InterestsFragment() {
         // Required empty public constructor
     }
@@ -55,6 +48,7 @@ public class InterestsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupFragmentVariables();
         skipped = false;
     }
 
@@ -62,7 +56,7 @@ public class InterestsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_interests, container, false);
-        setupFragmentVariables(view);
+        setupViews(view);
         setupButtonListeners();
         populateInterests();
         return view;
@@ -93,39 +87,33 @@ public class InterestsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // Placeholder, to be inserted when clicking is introduced
         void onBackPressed();
-        void goToPicturesFragment(HashMap<Interest, Boolean> checked);
+        void goToPicturesFragment(HashMap<Interest, Boolean> checked, Boolean skipped);
     }
 
-    private void setupFragmentVariables(View view) {
-        context = getContext();
-        //interestView = view.findViewById(R.id.interests);
-        title = view.findViewById(R.id.title);
-        explanation = view.findViewById(R.id.explanation);
-        skip = view.findViewById(R.id.skip);
-        back = view.findViewById(R.id.back);
-        btnContinue = view.findViewById(R.id.btnContinue);
-        rvInterests = view.findViewById(R.id.rvInterests);
+    private void setupFragmentVariables() {
         mInterests = new ArrayList<>();
         mCheckedInterests = new ArrayList<>();
         signUpInterestAdapter = new SignUpInterestAdapter(mInterests);
+    }
+
+    private void setupViews(View view) {
+        skipped = false;
+        context = getContext();
+        title = view.findViewById(R.id.title);
+        explanation = view.findViewById(R.id.explanation);
+        skip = view.findViewById(R.id.skip);
+        btnContinue = view.findViewById(R.id.btnContinue);
+        rvInterests = view.findViewById(R.id.rvInterests);
         rvInterests.setLayoutManager(new LinearLayoutManager(context));
         rvInterests.setAdapter(signUpInterestAdapter);
     }
 
     private void setupButtonListeners() {
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onBackPressed();
-            }
-        });
-
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //getAllCheckedInterests(interestView);
                 checked = signUpInterestAdapter.checked;
-                mListener.goToPicturesFragment(checked);
+                mListener.goToPicturesFragment(checked, skipped);
             }
         });
 
@@ -134,7 +122,7 @@ public class InterestsFragment extends Fragment {
             public void onClick(View v) {
                 skipped = true;
                 checked = signUpInterestAdapter.checked;
-                mListener.goToPicturesFragment(checked);
+                mListener.goToPicturesFragment(checked, skipped);
             }
         });
     }
