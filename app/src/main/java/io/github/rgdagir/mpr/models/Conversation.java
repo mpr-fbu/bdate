@@ -17,6 +17,7 @@ public class Conversation extends ParseObject implements Serializable {
     private static final String KEY_USER1 = "user1";
     private static final String KEY_USER2 = "user2";
     private static final String KEY_LAST_MSG = "lastMessage";
+    private static final String KEY_LAST_TIME = "lastMessageTime";
     private static final String KEY_EXCHANGES = "exchanges";
     private static final String KEY_READ1 = "readUser1";
     private static final String KEY_READ2 = "readUser2";
@@ -61,6 +62,14 @@ public class Conversation extends ParseObject implements Serializable {
 
     public void setLastMessage(Message msg) {
         put(KEY_LAST_MSG, msg);
+    }
+
+    public Date getLastMessageTime() {
+        return getDate(KEY_LAST_TIME);
+    }
+
+    public void setLastMessageTime(Date date) {
+        put(KEY_LAST_TIME, date);
     }
 
     public void setExchanges(Integer exchanges) {

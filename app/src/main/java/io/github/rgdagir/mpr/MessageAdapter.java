@@ -68,12 +68,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         switch (holder.getItemViewType()) {
             case 0:
                 final ViewHolderMe viewHolderMe = (ViewHolderMe) holder;
-                viewHolderMe.mInfoMe.setText(message.getTimestamp());
+                viewHolderMe.mInfoMe.setText(message.getExactTimestamp());
                 viewHolderMe.mMessageMe.setText(message.getText());
                 break;
             case 1:
                 final ViewHolderOther viewHolderOther = (ViewHolderOther) holder;
-                viewHolderOther.mInfoOther.setText(message.getTimestamp());
+                viewHolderOther.mInfoOther.setText(message.getExactTimestamp());
                 viewHolderOther.mMessageOther.setText(message.getText());
                 if (Milestone.canSeeProfilePicture(mConversation)) {
                     displayActualProfilePicture(viewHolderOther.mProfilePic);

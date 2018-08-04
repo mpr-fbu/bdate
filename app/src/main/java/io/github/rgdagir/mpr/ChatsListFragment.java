@@ -184,7 +184,7 @@ public class ChatsListFragment extends Fragment {
         queries.add(conversationsQuery2);
 
         final ParseQuery<Conversation> conversationsQuery = ParseQuery.or(queries).whereExists("user2").whereExists("user1");
-        conversationsQuery.include("user1").include("user2").include("lastMessage").addDescendingOrder("updatedAt");
+        conversationsQuery.include("user1").include("user2").include("lastMessage").addDescendingOrder("lastMessageTime");
         return conversationsQuery;
     }
 

@@ -40,11 +40,35 @@ public class Message extends ParseObject {
         put(KEY_TEXT, text);
     }
 
-    public String getTimestamp() {
+    public String getApproxTimestamp() {
         Date date = getCreatedAt();
-        DateFormat df = new SimpleDateFormat("MMM d", Locale.getDefault());
-        DateFormat df2 = new SimpleDateFormat("hh:mm aaa", Locale.getDefault());
-        return df.format(date) + " at " + df2.format(date);
+        Date now = new Date();
+        DateFormat dayFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        long daysDiff = Math.round((now.getTime() - date.getTime()) / (double) 86400000);
+        if (dayFormat.format(date).equals(dayFormat.format(now))) {
+            DateFormat df = new SimpleDateFormat("h:mm aaa", Locale.getDefault());
+            return df.format(date);
+        } else if (daysDiff < 7) {
+            DateFormat df = new SimpleDateFormat("EEE", Locale.getDefault());
+            return df.format(date);
+        } else {
+            DateFormat df = new SimpleDateFormat("MMM d", Locale.getDefault());
+            return df.format(date);
+        }
+    }
+
+    public String getExactTimestamp() {
+        Date date = getCreatedAt();
+        Date now = new Date();
+        DateFormat dayFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        if (dayFormat.format(date).equals(dayFormat.format(now))) {
+            DateFormat df = new SimpleDateFormat("h:mm aaa", Locale.getDefault());
+            return "Today at " + df.format(date);
+        } else {
+            DateFormat df = new SimpleDateFormat("MMM d", Locale.getDefault());
+            DateFormat df2 = new SimpleDateFormat("h:mm aaa", Locale.getDefault());
+            return df.format(date) + " at " + df2.format(date);
+        }
     }
 
     public static class Query extends ParseQuery<Message> {

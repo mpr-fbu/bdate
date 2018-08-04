@@ -40,6 +40,7 @@ import org.parceler.Parcels;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -484,6 +485,7 @@ public class ChatActivity extends AppCompatActivity {
         newMessage.setConversation(conversation);
         newMessage.setText(messageText);
         conversation.setLastMessage(newMessage);
+        conversation.setLastMessageTime(new Date());
         if (conversation.getUser1().getObjectId().equals(currUser.getObjectId())) {
             conversation.setReadUser1(true);
             conversation.setReadUser2(false);

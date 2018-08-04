@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -19,7 +20,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.FindCallback;
@@ -45,7 +59,9 @@ public class SearchFragment extends Fragment {
     private static final int LOCATION_PERMISSION_REQUEST = 1;
     private Context context;
     private ParseGeoPoint myLoc;
-    ParseUser currentUser;
+    private ParseUser currentUser;
+    private MapView mMapView;
+    private GoogleMap mGoogleMap;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -61,11 +77,12 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         context = getActivity();
+        setupMap(rootView, savedInstanceState);
         getLocationPermissions();
         getLastLoc();
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        return rootView;
     }
 
     @Override
@@ -96,6 +113,30 @@ public class SearchFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
     }
 
     public interface OnFragmentInteractionListener {
@@ -215,7 +256,7 @@ public class SearchFragment extends Fragment {
                 newConvo.setUser1(currentUser);
                 newConvo.setExchanges(0);
                 newConvo.setUser1Gender(currentUser.getString("gender"));
-                if (myLoc != null){
+                if (myLoc != null) {
                     newConvo.setMatchLocation(myLoc);
                 }
                 newConvo.setMatchRange(currentUser.getInt("matchRange"));
@@ -278,7 +319,7 @@ public class SearchFragment extends Fragment {
         ParseCloud.callFunctionInBackground("pushNotificationGeneral", payload);
     }
 
-    public boolean checkIfInRange(Conversation conversation, ParseUser user){
+    public boolean checkIfInRange(Conversation conversation, ParseUser user) {
         // get distance (in miles) between user who started the conversation and the one trying to match
         double distanceFromMatch = calcDistance(conversation.getMatchLocation().getLatitude(), user.getParseGeoPoint("lastLocation").getLatitude(),
                 conversation.getMatchLocation().getLongitude(),
@@ -307,7 +348,7 @@ public class SearchFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void getLocationPermissions(){
+    public void getLocationPermissions() {
         // 1) Use the support library version ContextCompat.checkSelfPermission(...) to avoid
         // checking the build version since Context.checkSelfPermission(...) is only available
         // in Marshmallow
@@ -365,7 +406,39 @@ public class SearchFragment extends Fragment {
 
         distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
-        return (Math.sqrt(distance))/1609.34;
+        return (Math.sqrt(distance)) / 1609.34;
+    }
+
+    protected void setupMap(View v, Bundle savedInstanceState) {
+        mMapView = v.findViewById(R.id.mapView);
+        mMapView.onCreate(savedInstanceState);
+
+        mMapView.onResume(); // needed to get the map to display immediately
+
+        try {
+            MapsInitializer.initialize((context.getApplicationContext()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mGoogleMap = googleMap;
+
+                // For showing a move to my location button
+                mGoogleMap.setMyLocationEnabled(true);
+
+                // For dropping a marker at a point on the Map
+                LatLng sydney = new LatLng(-34, 151);
+                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
+
+                // For zooming automatically to the location of the marker
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+        });
     }
 
 // TODO - set up handlers for location request denials below

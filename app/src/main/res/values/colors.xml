@@ -13,6 +13,7 @@
     <color name="faintGrey">#ebebeb</color>
     <color name="mediumBlue">#3BCBEE</color>
     <color name="darkerBlue">#14BFE9</color>
+    <color name="shadowBlue">#109DC0</color>
     <color name="aqua">#14FFDB</color>
     <color name="oceanBlue">#6095FF</color>
 </resources>

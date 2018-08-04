@@ -93,7 +93,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                     }
                 }
             });
-            holder.tvTimestamp.setText(conversation.getTimestamp());
+            holder.tvTimestamp.setText(conversation.getLastMessage().getApproxTimestamp());
         }
     }
 
