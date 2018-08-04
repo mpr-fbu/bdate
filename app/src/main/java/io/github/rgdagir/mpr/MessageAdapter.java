@@ -1,5 +1,7 @@
 package io.github.rgdagir.mpr;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -11,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -67,7 +70,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 final ViewHolderMe viewHolderMe = (ViewHolderMe) holder;
                 viewHolderMe.mInfoMe.setText(message.getTimestamp());
                 viewHolderMe.mMessageMe.setText(message.getText());
-                displayMyProfilePicture(viewHolderMe.mProfilePic);
                 break;
             case 1:
                 final ViewHolderOther viewHolderOther = (ViewHolderOther) holder;
@@ -87,22 +89,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void setConversation(Conversation conversation) {
         mConversation = conversation;
-    }
-
-    private void displayMyProfilePicture(final ParseImageView myProfilePic) {
-        Glide.with(getApplicationContext()).load(currUser.getParseFile("profilePic").getUrl())
-                .asBitmap().centerCrop().dontAnimate()
-                .placeholder(R.drawable.ic_action_name)
-                .error(R.drawable.ic_action_name)
-                .into(new BitmapImageViewTarget(myProfilePic) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
-                        circularBitmapDrawable.setCircular(true);
-                        myProfilePic.setImageDrawable(circularBitmapDrawable);
-                    }
-                });
     }
 
     private void displayActualProfilePicture(final ParseImageView otherProfilePic) {
@@ -151,13 +137,49 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class ViewHolderMe extends RecyclerView.ViewHolder {
         TextView mMessageMe;
         TextView mInfoMe;
-        ParseImageView mProfilePic;
 
         public ViewHolderMe(View itemView) {
             super(itemView);
             mMessageMe = itemView.findViewById(R.id.tvMessageMe);
             mInfoMe = itemView.findViewById(R.id.tvInfoMe);
-            mProfilePic = itemView.findViewById(R.id.ivProfilePic);
+            mInfoMe.setVisibility(View.GONE);
+
+            mInfoMe.animate().alpha(0.0f)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            mInfoMe.clearAnimation();
+                        }
+                    });
+
+            mMessageMe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mInfoMe.isShown()) {
+                        mInfoMe.animate().alpha(0.0f).setDuration(300)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        mInfoMe.clearAnimation();
+                                        mInfoMe.setVisibility(View.GONE);
+                                    }
+                                });
+                    }
+                    else {
+                        mInfoMe.setVisibility(View.VISIBLE);
+                        mInfoMe.animate().alpha(1.0f).setDuration(400)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        mInfoMe.clearAnimation();
+                                    }
+                                });
+                    }
+                }
+            });
         }
     }
 
@@ -166,6 +188,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView mInfoOther;
         ParseImageView mProfilePic;
         ImageView mDefaultProPic;
+        LinearLayout chatBubble;
 
         public ViewHolderOther(View itemView) {
             super(itemView);
@@ -173,6 +196,45 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             mInfoOther = itemView.findViewById(R.id.tvInfoOther);
             mProfilePic = itemView.findViewById(R.id.ivProfilePic);
             mDefaultProPic = itemView.findViewById(R.id.defaultImageView);
+            chatBubble = itemView.findViewById(R.id.contentWithBackgroundOther);
+            mInfoOther.setVisibility(View.GONE);
+
+            mInfoOther.animate().alpha(0.0f)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            mInfoOther.clearAnimation();
+                        }
+                    });
+
+            mMessageOther.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mInfoOther.isShown()) {
+                        mInfoOther.animate().alpha(0.0f).setDuration(300)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        mInfoOther.clearAnimation();
+                                        mInfoOther.setVisibility(View.GONE);
+                                    }
+                                });
+                    }
+                    else {
+                        mInfoOther.setVisibility(View.VISIBLE);
+                        mInfoOther.animate().alpha(1.0f).setDuration(400)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        mInfoOther.clearAnimation();
+                                    }
+                                });
+                    }
+                }
+            });
         }
     }
 }

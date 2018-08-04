@@ -12,12 +12,14 @@ import android.view.View;
 import com.parse.LogInCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.util.HashMap;
+import java.util.List;
 
 import io.github.rgdagir.mpr.MainActivity;
 import io.github.rgdagir.mpr.R;
@@ -100,6 +102,49 @@ public class SignUpActivity extends AppCompatActivity
         switchFragment(fragmentManager.beginTransaction(), new PicturesFragment());
     }
 
+    public void addPicturesToUser(List<byte[]> imagesList){
+        if(imagesList.get(0) != null) {
+            // create parse file
+            final ParseFile profilePic = new ParseFile(newUser.getObjectId() + "-profilepic.jpg", imagesList.get(0));
+            profilePic.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    newUser.put("profilePic", profilePic);
+                }
+            });
+        }
+        if(imagesList.get(1) != null) {
+            // create parse file
+            final ParseFile cover1 = new ParseFile(newUser.getObjectId() + "-cover1.jpg", imagesList.get(1));
+            cover1.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    newUser.put("coverPhoto1", cover1);
+                }
+            });
+        }
+        if(imagesList.get(2) != null) {
+            // create parse file
+            final ParseFile cover2 = new ParseFile(newUser.getObjectId() + "-cover2.jpg", imagesList.get(2));
+            cover2.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    newUser.put("coverPhoto2", cover2);
+                }
+            });
+        }
+        if(imagesList.get(3) != null) {
+            // create parse file
+            final ParseFile cover3 = new ParseFile(newUser.getObjectId() + "-cover3.jpg", imagesList.get(3));
+            cover3.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    newUser.put("coverPhoto3", cover3);
+                }
+            });
+        }
+    }
+
     public void createNewUser() {
         newUser.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
@@ -118,6 +163,7 @@ public class SignUpActivity extends AppCompatActivity
                             });
                 } else {
                     Log.d("SignUpActivity", "Creating new user failed :(");
+                    e.printStackTrace();
                 }
             }
         });

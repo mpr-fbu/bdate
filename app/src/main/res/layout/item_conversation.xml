@@ -49,7 +49,11 @@
         android:layout_alignLeft="@+id/tvUsername"
         android:layout_below="@+id/tvUsername"
         android:layout_marginTop="5dp"
-        android:text="Hi! How are you..." />
+        android:layout_marginRight="10dp"
+        android:text="Hi! How are you..."
+        android:scrollHorizontally="true"
+        android:ellipsize="end"
+        android:maxLines="1" />
 
     <TextView
         android:id="@+id/tvTimestamp"

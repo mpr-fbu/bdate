@@ -20,6 +20,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.github.rgdagir.mpr.R;
 import io.github.rgdagir.mpr.utils.Utils;
@@ -36,6 +38,7 @@ public class PicturesFragment extends Fragment {
     private ImageView galleryPicThree;
     private Button finish;
     public final static int PICK_PHOTO_CODE = 1046;
+    private List<byte[]> images;
 
 
     public PicturesFragment() {
@@ -50,6 +53,7 @@ public class PicturesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pictures, container, false);
+        images = new ArrayList<>();
         context = getActivity();
         setupFragmentVariables(view);
         setupButtonListeners();
@@ -83,6 +87,7 @@ public class PicturesFragment extends Fragment {
         //void onFragmentInteraction(Uri uri);
         void onBackPressed();
         void createNewUser();
+        void addPicturesToUser(List<byte[]> files);
     }
 
     private void setupFragmentVariables(View view) {
@@ -99,6 +104,7 @@ public class PicturesFragment extends Fragment {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mListener.addPicturesToUser(images);
                 mListener.createNewUser();
             }
         });
@@ -145,26 +151,27 @@ public class PicturesFragment extends Fragment {
             // Do something with the photo based on Uri
             Bitmap selectedImage = null;
             byte[] img = null;
+            ParseFile imageFile = null;
             try {
                 selectedImage = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photoUri);
                 img = Utils.getbytearray(selectedImage);
+                imageFile = new ParseFile(img);
+                if (requestCode == PICK_PHOTO_CODE){ // top left corner - profile pic
+                    loadPhoto(context, photoUri, profilePic);
+                    images.add(img);
+                } else if (requestCode == PICK_PHOTO_CODE + 1) { // top right corner - first gallery pic
+                    loadPhoto(context, photoUri, galleryPicOne);
+                    images.add(img);
+                } else if (requestCode == PICK_PHOTO_CODE + 2) { // bottom right corner - second gallery pic
+                    loadPhoto(context, photoUri, galleryPicTwo);
+                    images.add(img);
+                } else if (requestCode == PICK_PHOTO_CODE + 3) { // bottom left corner - third gallery pic
+                    loadPhoto(context, photoUri, galleryPicThree);
+                    images.add(img);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (requestCode == PICK_PHOTO_CODE){ // top left corner - profile pic
-                loadPhoto(context, photoUri, profilePic);
-            } else if (requestCode == PICK_PHOTO_CODE + 1) { // top right corner - first gallery pic
-                loadPhoto(context, photoUri, galleryPicOne);
-            } else if (requestCode == PICK_PHOTO_CODE + 2) { // bottom right corner - second gallery pic
-                loadPhoto(context, photoUri, galleryPicTwo);
-            } else if (requestCode == PICK_PHOTO_CODE + 3) { // bottom left corner - third gallery pic
-                loadPhoto(context, photoUri, galleryPicThree);
-            }
-
-            // TODO - decide how we'll setup users in this new design and save the info below
-//            ParseFile imageFile = new ParseFile(currUser.getObjectId() + "profilepic.jpg", img);
-//            currUser.put("profilePic", imageFile);
-//            currUser.saveInBackground();
         }
     }
 

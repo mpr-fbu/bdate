@@ -62,15 +62,6 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <View
-        android:id="@+id/dropshadow"
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:background="@drawable/dropshadow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMessages"
         android:layout_width="match_parent"
@@ -83,11 +74,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dropshadow" />
 
+    <View
+        android:id="@+id/dropshadow"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/dropshadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/composeBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@drawable/compose_background">
 
