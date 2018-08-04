@@ -34,9 +34,6 @@ public class SignUpActivity extends AppCompatActivity
     String newUserPassword;
     ParseUser newUser = new ParseUser();
     LoginInfoFragment initialFragment = new LoginInfoFragment();
-    BasicInfoFragment basicInfoFragment = new BasicInfoFragment();
-    InterestsFragment interestsFragment = new InterestsFragment();
-    PicturesFragment picturesFragment = new PicturesFragment();
     HashMap<Interest, Boolean> checkedInterests = new HashMap();
     Boolean interestsSkipped = false;
     final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -62,7 +59,6 @@ public class SignUpActivity extends AppCompatActivity
 
     public static void switchFragment(FragmentTransaction fragmentTransaction, Fragment fragment) {
         fragmentTransaction.replace(R.id.flContainer, fragment)
-                //.addToBackStack(null)
                 .commit();
     }
 

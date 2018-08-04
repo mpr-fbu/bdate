@@ -6,10 +6,11 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
-        android:layout_height="34dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
+        android:textSize="20sp"
+        android:layout_marginTop="70dp"
         android:text="Let's start building relationships" />
 
     <TextView
@@ -19,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:text="Please add an email and password that will be associated with your account." />
 
     <TextView

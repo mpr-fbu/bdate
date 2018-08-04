@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.parse.ParseFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
