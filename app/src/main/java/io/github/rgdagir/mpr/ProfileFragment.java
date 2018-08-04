@@ -193,7 +193,11 @@ public class ProfileFragment extends Fragment {
         profileDistance.setText("0 miles away");
         defaultProfilePic.setVisibility(View.INVISIBLE);
         setProfilePicture(user);
-        profileStatus.setText(status);
+        if (status != null) {
+            profileStatus.setText(status);
+        } else {
+            profileStatus.setVisibility(View.GONE);
+        }
         if (occupation == null) {
             profileOccupation.setText("---");
         } else {
@@ -210,7 +214,11 @@ public class ProfileFragment extends Fragment {
     private void setOtherUserDetails(ParseUser user) {
         // check if they are revealed before displaying
         String status = user.get("bio").toString();
-        profileStatus.setText(status);
+        if (status != null) {
+            profileStatus.setText(status);
+        } else {
+            profileStatus.setVisibility(View.GONE);
+        }
         if (Milestone.canSeeName(conversation)) {
             String name = user.get("firstName").toString();
             profileName.setText(name);
@@ -220,9 +228,9 @@ public class ProfileFragment extends Fragment {
         }
         if (Milestone.canSeeAge(conversation)) {
             String age = user.get("age").toString();
-            profileAge.setText("Age: " + age);
+            profileAge.setText(age + " years old");
         } else {
-            profileAge.setText("Age: --");
+            profileAge.setText("-- years old");
         }
         if (Milestone.canSeeDistanceAway(conversation)) {
             // get distance (in miles) between user who started the conversation and the one trying to match

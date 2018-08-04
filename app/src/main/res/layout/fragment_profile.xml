@@ -59,12 +59,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ivProfilePic"
-            android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
-            android:text="Name"
+            android:layout_marginTop="10dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold"
-            android:textColor="@color/offBlack" />
+            android:textColor="@color/offBlack"
+            android:textStyle="bold" />
 
         <RelativeLayout
             android:id="@+id/rlBasicInfo"
@@ -80,8 +79,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:text="Age: --" />
+                android:text="-- years old"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
             <ImageView
                 android:id="@+id/ivDividerDot"
@@ -117,11 +116,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginLeft="20dp"
-                android:text="Something on my mind..."
-                android:textColor="@color/offBlack"
                 android:layout_marginBottom="5dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+                android:layout_marginLeft="20dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColor="@color/offBlack" />
 
             <ImageView
                 android:id="@+id/ivOccupation"
@@ -138,13 +136,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvStatus"
-                android:layout_toEndOf="@+id/ivOccupation"
-                android:layout_marginTop="12dp"
-                android:text="Job at Company"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="20dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:layout_toRightOf="@+id/ivOccupation" />
+                android:layout_marginTop="12dp"
+                android:layout_toEndOf="@+id/ivOccupation"
+                android:layout_toRightOf="@+id/ivOccupation"
+                android:text="---"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
             <ImageView
                 android:id="@+id/ivEducation"
@@ -162,14 +160,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ivOccupation"
-                android:layout_toEndOf="@+id/ivOccupation"
-                android:text="University of School"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="5dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:layout_toRightOf="@+id/ivOccupation" />
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/ivOccupation"
+                android:layout_toRightOf="@+id/ivOccupation"
+                android:text="---"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
         </RelativeLayout>
 
@@ -243,8 +241,11 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             app:srcCompat="@drawable/ic_edit"
-            android:layout_margin="5dp"
-            android:layout_alignParentRight="true" />
+            android:background="@drawable/circle_button_style"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"
+            android:elevation="10dp" />
 
     </RelativeLayout>
 </ScrollView>

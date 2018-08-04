@@ -19,9 +19,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/res/drawable-xxxhdpi/baseline_done_black_48.png" />
-                                      <entry key="outputName" value="ic_check" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/instagram_android_assets/drawable/ufi_more.png" />
+                                      <entry key="outputName" value="ic_menu_dots" />
                                       <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="ffffff" />
                                     </map>
                                   </option>
                                 </PersistentState>
