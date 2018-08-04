@@ -8,66 +8,82 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
-        android:layout_height="34dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
+        android:textSize="20sp"
+        android:textColor="@color/oceanBlue"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="70dp"
         android:text="Snapshots of you" />
 
     <TextView
         android:id="@+id/explanation"
-        android:layout_width="269dp"
+        android:gravity="center"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
         android:layout_below="@+id/title"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:text="Add a profile photo and gallery photos to show off your interests and individuality." />
 
     <ImageView
         android:id="@+id/profilePic"
-        android:layout_width="107dp"
-        android:layout_height="107dp"
-        android:layout_above="@+id/galleryPicTwo"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="81dp"
-        app:srcCompat="@drawable/ic_add_photo_profile"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="81dp" />
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignRight="@+id/centerReference"
+        android:layout_below="@+id/explanation"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@drawable/ic_add_photo_profile" />
 
     <ImageView
         android:id="@+id/galleryPicOne"
-        android:layout_width="107dp"
-        android:layout_height="107dp"
-        android:layout_alignTop="@+id/profilePic"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/explanation"
         android:layout_toEndOf="@+id/profilePic"
-        app:srcCompat="@drawable/ic_add_photo_gallery"
-        android:layout_toRightOf="@+id/profilePic" />
+        app:srcCompat="@drawable/ic_add_photo_gallery" />
 
     <ImageView
         android:id="@+id/galleryPicTwo"
-        android:layout_width="107dp"
-        android:layout_height="107dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="201dp"
-        android:layout_toStartOf="@+id/galleryPicOne"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@+id/profilePic"
         app:srcCompat="@drawable/ic_add_photo_gallery"
         android:layout_toLeftOf="@+id/galleryPicOne" />
 
     <ImageView
         android:id="@+id/galleryPicThree"
-        android:layout_width="107dp"
-        android:layout_height="107dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_alignStart="@+id/galleryPicOne"
-        android:layout_alignTop="@+id/galleryPicTwo"
+        android:layout_below="@+id/galleryPicOne"
         app:srcCompat="@drawable/ic_add_photo_gallery"
         android:layout_alignLeft="@+id/galleryPicOne" />
 
     <Button
         android:id="@+id/finish"
-        android:layout_width="273dp"
+        android:layout_alignLeft="@+id/explanation"
+        android:layout_alignRight="@+id/explanation"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/galleryPicThree"
+        android:layout_marginTop="25dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="113dp"
+        android:background="@color/oceanBlue"
+        android:textColor="@color/white"
         android:text="Finish" />
+
+    <TextView
+        android:id="@+id/centerReference"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:layout_below="@+id/explanation"
+        android:layout_centerHorizontal="true"
+        android:text="" />
 
 </RelativeLayout>

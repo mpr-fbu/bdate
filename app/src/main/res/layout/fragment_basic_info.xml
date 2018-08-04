@@ -6,28 +6,35 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
-        android:layout_height="34dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
+        android:textSize="20sp"
+        android:textColor="@color/oceanBlue"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="70dp"
         android:text="About you" />
 
     <TextView
         android:id="@+id/explanation"
-        android:layout_width="275dp"
+        android:gravity="center"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
         android:layout_below="@+id/title"
         android:layout_centerHorizontal="true"
-        android:gravity="center"
+        android:layout_marginTop="10dp"
         android:text="Fill out the details below to personalize your account." />
 
     <TextView
         android:id="@+id/gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/explanation"
+        android:layout_marginTop="30dp"
         android:layout_alignLeft="@+id/explanation"
-        android:layout_marginTop="121dp"
         android:text="I identify as " />
 
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
@@ -65,8 +72,10 @@
         android:id="@+id/interestedIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/explanation"
+        android:layout_centerVertical="true"
         android:layout_below="@+id/genderOptions"
-        android:layout_toLeftOf="@+id/title"
+        android:layout_marginTop="20dp"
         android:text="I'm interested in " />
 
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
@@ -97,19 +106,21 @@
     <TextView
         android:id="@+id/birthday"
         android:layout_width="wrap_content"
-        android:layout_height="23dp"
+        android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/explanation"
+        android:layout_centerVertical="true"
         android:layout_below="@+id/preferenceOptions"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="20dp"
         android:text="Birthday" />
 
     <EditText
         android:id="@+id/placeholderBirthday"
-        android:layout_width="271dp"
+        android:layout_alignLeft="@+id/explanation"
+        android:layout_alignRight="@+id/explanation"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/birthday"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-16dp"
         android:ems="10"
         android:hint="MM / DD / YYYY"
         android:inputType="textPersonName" />
@@ -120,62 +131,32 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/placeholderBirthday"
         android:layout_alignLeft="@+id/explanation"
-        android:layout_marginBottom="249dp"
+        android:layout_marginTop="20dp"
         android:text="Name" />
 
     <EditText
         android:id="@+id/etName"
+        android:layout_alignLeft="@+id/explanation"
+        android:layout_alignRight="@+id/explanation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/explanation"
         android:layout_below="@+id/name"
-        android:layout_marginTop="-249dp"
+        android:layout_centerHorizontal="true"
         android:ems="10"
         android:hint="Add your first name "
         android:inputType="textPersonName" />
 
-    <TextView
-        android:id="@+id/alias"
+    <Button
+        android:id="@+id/btnContinue"
+        android:layout_alignLeft="@+id/explanation"
+        android:layout_alignRight="@+id/explanation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etName"
-        android:layout_alignLeft="@+id/explanation"
-        android:text="Alias" />
-
-    <EditText
-        android:id="@+id/etAlias"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/explanation"
-        android:layout_below="@+id/alias"
-        android:layout_marginBottom="13dp"
-        android:ems="10"
-        android:inputType="textPersonName" />
-
-    <TextView
-        android:id="@+id/aliasNote"
-        android:layout_width="284dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etAlias"
-        android:layout_alignLeft="@+id/explanation"
-        android:layout_marginBottom="97dp"
-        android:text="*Your display name for other users. Please do not use your real name." />
-
-    <Button
-        android:id="@+id/btnContinue"
-        android:layout_width="275dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="25dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp"
+        android:background="@color/oceanBlue"
+        android:textColor="@color/white"
         android:text="Continue" />
-
-    <Button
-        android:id="@+id/refresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/etAlias"
-        android:layout_toRightOf="@+id/etName"
-        android:text="Refresh" />
 
 </RelativeLayout>
