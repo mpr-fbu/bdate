@@ -19,7 +19,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.FindCallback;
@@ -45,7 +56,9 @@ public class SearchFragment extends Fragment {
     private static final int LOCATION_PERMISSION_REQUEST = 1;
     private Context context;
     private ParseGeoPoint myLoc;
-    ParseUser currentUser;
+    private ParseUser currentUser;
+    private MapView mapView;
+    private GoogleMap mGoogleMap;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -61,11 +74,12 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         context = getActivity();
+        setupMap(rootView, savedInstanceState);
         getLocationPermissions();
         getLastLoc();
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        return rootView;
     }
 
     @Override
@@ -366,6 +380,28 @@ public class SearchFragment extends Fragment {
         distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
         return (Math.sqrt(distance))/1609.34;
+    }
+
+    protected void setupMap(View v, Bundle savedInstanceState) {
+        MapsInitializer.initialize(context);
+        Toast.makeText(getActivity(), "SUCCESS", Toast.LENGTH_SHORT).show();
+        mapView = (MapView) v.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        // Gets to GoogleMap from the MapView and does initialization stuff
+        if(mapView!=null)
+        {
+            mapView.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    mGoogleMap = googleMap;
+                    Log.d("Map", "loaded!");
+                }
+            });
+//            mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
+//            mGoogleMap.setMyLocationEnabled(true);
+//            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(43.1, -87.9), 10);
+//            mGoogleMap.animateCamera(cameraUpdate);
+        }
     }
 
 // TODO - set up handlers for location request denials below

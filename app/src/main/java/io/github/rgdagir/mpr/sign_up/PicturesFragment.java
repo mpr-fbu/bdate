@@ -160,13 +160,11 @@ public class PicturesFragment extends Fragment {
         if (data != null) {
             Uri photoUri = data.getData();
             // Do something with the photo based on Uri
-            Bitmap selectedImage = null;
-            byte[] img = null;
-            ParseFile imageFile = null;
+            Bitmap selectedImage;
+            byte[] img;
             try {
                 selectedImage = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photoUri);
                 img = Utils.getbytearray(selectedImage);
-                imageFile = new ParseFile(img);
                 if (requestCode == PICK_PHOTO_CODE){ // top left corner - profile pic
                     loadPhoto(context, photoUri, profilePic);
                     images.add(img);
@@ -191,7 +189,7 @@ public class PicturesFragment extends Fragment {
         Glide.with(context).load(fileUri)
                 .asBitmap().centerCrop().dontAnimate()
                 .placeholder(R.drawable.ic_action_name)
-                .error(R.drawable.ic_action_name)
+                .error(R.drawable.ic_launcher_background)
                 .into(new BitmapImageViewTarget(profilePic) {
                     @Override
                     protected void setResource(Bitmap resource) {
