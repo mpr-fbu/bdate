@@ -50,7 +50,7 @@ public class SignUpInterestAdapter extends RecyclerView.Adapter<SignUpInterestAd
                     checked.put(interest, false);
                 } else {
                     mInterests.get(pos).setSelected(true);
-                    checked.put(interest, true);
+                        checked.put(interest, true);
                 }
             }
         });

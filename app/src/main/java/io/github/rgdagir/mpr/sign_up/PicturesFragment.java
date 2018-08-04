@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.parse.ParseFile;
 
 import java.io.IOException;
 
@@ -35,13 +34,11 @@ public class PicturesFragment extends Fragment {
     private ImageView galleryPicOne;
     private ImageView galleryPicTwo;
     private ImageView galleryPicThree;
-    private Button back;
     private Button finish;
     public final static int PICK_PHOTO_CODE = 1046;
 
 
     public PicturesFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -95,18 +92,10 @@ public class PicturesFragment extends Fragment {
         galleryPicOne = view.findViewById(R.id.galleryPicOne);
         galleryPicTwo = view.findViewById(R.id.galleryPicTwo);
         galleryPicThree = view.findViewById(R.id.galleryPicThree);
-        back = view.findViewById(R.id.back);
         finish = view.findViewById(R.id.finish);
     }
 
     private void setupButtonListeners() {
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onBackPressed();
-            }
-        });
-
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

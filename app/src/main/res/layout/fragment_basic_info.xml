@@ -162,14 +162,6 @@
         android:text="*Your display name for other users. Please do not use your real name." />
 
     <Button
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Back" />
-
-    <Button
         android:id="@+id/btnContinue"
         android:layout_width="275dp"
         android:layout_height="wrap_content"

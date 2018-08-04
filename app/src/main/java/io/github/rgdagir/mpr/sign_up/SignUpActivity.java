@@ -36,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity
     InterestsFragment interestsFragment = new InterestsFragment();
     PicturesFragment picturesFragment = new PicturesFragment();
     HashMap<Interest, Boolean> checkedInterests = new HashMap();
+    Boolean interestsSkipped = false;
     final FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
@@ -59,7 +60,7 @@ public class SignUpActivity extends AppCompatActivity
 
     public static void switchFragment(FragmentTransaction fragmentTransaction, Fragment fragment) {
         fragmentTransaction.replace(R.id.flContainer, fragment)
-                .addToBackStack(null)
+                //.addToBackStack(null)
                 .commit();
     }
 
@@ -79,7 +80,7 @@ public class SignUpActivity extends AppCompatActivity
         newUser.setPassword(password);
         newUserUsername = email;
         newUserPassword = password;
-        switchFragment(fragmentManager.beginTransaction(), basicInfoFragment);
+        switchFragment(fragmentManager.beginTransaction(), new BasicInfoFragment());
     }
 
     public void goToInterestsFragment(String gender, String interestedIn, long age, String name, String alias) {
@@ -90,19 +91,22 @@ public class SignUpActivity extends AppCompatActivity
         newUser.put("fakeName", alias);
         newUser.put("minAge", 18);
         newUser.put("maxAge", 30);
-        switchFragment(fragmentManager.beginTransaction(), interestsFragment);
+        switchFragment(fragmentManager.beginTransaction(), new InterestsFragment());
     }
 
-    public void goToPicturesFragment(HashMap<Interest, Boolean> checked) {
+    public void goToPicturesFragment(HashMap<Interest, Boolean> checked, Boolean skipped) {
+        interestsSkipped = skipped;
         checkedInterests = checked;
-        switchFragment(fragmentManager.beginTransaction(), picturesFragment);
+        switchFragment(fragmentManager.beginTransaction(), new PicturesFragment());
     }
 
     public void createNewUser() {
         newUser.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
-                    createUserInterests(checkedInterests, newUser);
+                    if (!interestsSkipped) {
+                        createUserInterests(checkedInterests, newUser);
+                    }
                     // Hooray! Let them use the app now.
                     Log.d("SignUpActivity", "New user created successfully!");
                     ParseUser.logInInBackground(newUserUsername, newUserPassword, new LogInCallback() {
