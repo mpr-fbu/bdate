@@ -72,21 +72,21 @@ public class SignUpActivity extends AppCompatActivity
         }
     }
 
-    public void goToBasicInfoFragment(String email, String password) {
+    public void goToBasicInfoFragment(String email, String password, String alias) {
         newUser.setEmail(email);
         newUser.setUsername(email);
         newUser.setPassword(password);
         newUserUsername = email;
         newUserPassword = password;
+        newUser.put("fakeName", alias);
         switchFragment(fragmentManager.beginTransaction(), new BasicInfoFragment());
     }
 
-    public void goToInterestsFragment(String gender, String interestedIn, long age, String name, String alias) {
+    public void goToInterestsFragment(String gender, String interestedIn, long age, String name) {
         newUser.put("gender", gender);
         newUser.put("interestedIn", interestedIn);
         newUser.put("age", age);
         newUser.put("firstName", name);
-        newUser.put("fakeName", alias);
         newUser.put("minAge", 18);
         newUser.put("maxAge", 30);
         switchFragment(fragmentManager.beginTransaction(), new InterestsFragment());

@@ -17,12 +17,8 @@ import android.widget.TextView;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import io.github.rgdagir.blind8.DatePickerFragment;
@@ -31,7 +27,6 @@ import io.github.rgdagir.blind8.R;
 public class BasicInfoFragment extends Fragment {
 
     private BasicInfoFragment.OnFragmentInteractionListener mListener;
-    private List<String> fakeNames = new ArrayList<>(Arrays.asList("Anonymous Anon", "Mysterious Stranger", "?????"));
 
     private TextView title;
     private TextView explanation;
@@ -39,14 +34,10 @@ public class BasicInfoFragment extends Fragment {
     private TextView tvInterestedIn;
     private TextView birthday;
     private TextView name;
-    private TextView alias;
-    private TextView aliasNote;
     private EditText placeholderBirthday;
     private EditText etName;
-    private EditText etAlias;
     private RadioGroup genderOptions;
     private RadioGroup preferenceOptions;
-    private Button refresh;
     private Button btnContinue;
     private String gender;
     private String interestedIn;
@@ -69,8 +60,6 @@ public class BasicInfoFragment extends Fragment {
         setupFragmentVariables(view);
         setupButtonListeners();
         setupRadioGroupListeners();
-        int random = rng(fakeNames.size());
-        etAlias.setText(fakeNames.get(random));
         return view;
     }
 
@@ -98,7 +87,7 @@ public class BasicInfoFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onBackPressed();
-        void goToInterestsFragment(String gender, String interestedIn, long age, String name, String alias);
+        void goToInterestsFragment(String gender, String interestedIn, long age, String name);
     }
 
     private void setupFragmentVariables(View view) {
@@ -108,31 +97,19 @@ public class BasicInfoFragment extends Fragment {
         tvInterestedIn = view.findViewById(R.id.interestedIn);
         birthday = view.findViewById(R.id.birthday);
         name = view.findViewById(R.id.name);
-        alias = view.findViewById(R.id.alias);
-        aliasNote = view.findViewById(R.id.aliasNote);
         placeholderBirthday = view.findViewById(R.id.placeholderBirthday);
         etName = view.findViewById(R.id.etName);
-        etAlias = view.findViewById(R.id.etAlias);
         genderOptions = view.findViewById(R.id.genderOptions);
         preferenceOptions = view.findViewById(R.id.preferenceOptions);
-        refresh = view.findViewById(R.id.refresh);
         btnContinue = view.findViewById(R.id.btnContinue);
     }
 
     private void setupButtonListeners() {
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int random = rng(fakeNames.size());
-                etAlias.setText(fakeNames.get(random));
-            }
-        });
-
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.goToInterestsFragment(gender, interestedIn, age,
-                        etName.getText().toString(), etAlias.getText().toString());
+                        etName.getText().toString());
             }
         });
         placeholderBirthday.setOnClickListener(new View.OnClickListener() {
@@ -209,10 +186,5 @@ public class BasicInfoFragment extends Fragment {
                 }
             }
         });
-    }
-
-    private int rng(int size) {
-        Random rand = new Random();
-        return rand.nextInt(size);
     }
 }
