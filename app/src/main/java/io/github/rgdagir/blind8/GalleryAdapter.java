@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;

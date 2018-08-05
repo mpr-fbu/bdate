@@ -1,6 +1,6 @@
-package io.github.rgdagir.mpr.models;
+package io.github.rgdagir.blind8.models;
 
-import io.github.rgdagir.mpr.ChatActivity;
+import io.github.rgdagir.blind8.ChatActivity;
 
 public class Milestone {
 

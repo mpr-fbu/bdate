@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,10 +35,10 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.rgdagir.mpr.models.Conversation;
-import io.github.rgdagir.mpr.models.Interest;
-import io.github.rgdagir.mpr.models.Milestone;
-import io.github.rgdagir.mpr.models.UserInterest;
+import io.github.rgdagir.blind8.models.Conversation;
+import io.github.rgdagir.blind8.models.Interest;
+import io.github.rgdagir.blind8.models.Milestone;
+import io.github.rgdagir.blind8.models.UserInterest;
 import me.relex.circleindicator.CircleIndicator;
 
 public class ProfileFragment extends Fragment {

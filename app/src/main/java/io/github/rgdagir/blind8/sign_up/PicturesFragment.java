@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr.sign_up;
+package io.github.rgdagir.blind8.sign_up;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.rgdagir.mpr.R;
-import io.github.rgdagir.mpr.utils.Utils;
+import io.github.rgdagir.blind8.R;
+import io.github.rgdagir.blind8.utils.Utils;
 
 public class PicturesFragment extends Fragment {
 

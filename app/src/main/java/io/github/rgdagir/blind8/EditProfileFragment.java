@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -47,7 +47,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import io.github.rgdagir.mpr.utils.Utils;
+import io.github.rgdagir.blind8.utils.Utils;
 
 public class EditProfileFragment extends Fragment {
     private Context context;

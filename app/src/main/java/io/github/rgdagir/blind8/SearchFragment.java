@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -49,7 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.github.rgdagir.mpr.models.Conversation;
+import io.github.rgdagir.blind8.models.Conversation;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 

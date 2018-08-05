@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr.sign_up;
+package io.github.rgdagir.blind8.sign_up;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.github.rgdagir.mpr.R;
-import io.github.rgdagir.mpr.models.Interest;
+import io.github.rgdagir.blind8.R;
+import io.github.rgdagir.blind8.models.Interest;
 
 public class InterestsFragment extends Fragment {
 

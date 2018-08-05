@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,9 +44,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import io.github.rgdagir.mpr.models.Conversation;
-import io.github.rgdagir.mpr.models.Message;
-import io.github.rgdagir.mpr.models.Milestone;
+import io.github.rgdagir.blind8.models.Conversation;
+import io.github.rgdagir.blind8.models.Message;
+import io.github.rgdagir.blind8.models.Milestone;
 
 public class ChatActivity extends AppCompatActivity {
 

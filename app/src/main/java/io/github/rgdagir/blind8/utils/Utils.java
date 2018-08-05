@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr.utils;
+package io.github.rgdagir.blind8.utils;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.widget.DatePicker;
 import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 
-import io.github.rgdagir.mpr.DatePickerFragment;
+import io.github.rgdagir.blind8.DatePickerFragment;
 
 public final class Utils extends Fragment {
 

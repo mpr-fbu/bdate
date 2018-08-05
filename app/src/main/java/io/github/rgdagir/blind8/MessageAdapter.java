@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -24,9 +24,9 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
-import io.github.rgdagir.mpr.models.Conversation;
-import io.github.rgdagir.mpr.models.Message;
-import io.github.rgdagir.mpr.models.Milestone;
+import io.github.rgdagir.blind8.models.Conversation;
+import io.github.rgdagir.blind8.models.Message;
+import io.github.rgdagir.blind8.models.Milestone;
 
 import static com.parse.Parse.getApplicationContext;
 

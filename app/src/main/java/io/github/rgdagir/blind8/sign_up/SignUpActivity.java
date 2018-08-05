@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr.sign_up;
+package io.github.rgdagir.blind8.sign_up;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,10 +21,10 @@ import com.parse.SignUpCallback;
 import java.util.HashMap;
 import java.util.List;
 
-import io.github.rgdagir.mpr.MainActivity;
-import io.github.rgdagir.mpr.R;
-import io.github.rgdagir.mpr.models.Interest;
-import io.github.rgdagir.mpr.models.UserInterest;
+import io.github.rgdagir.blind8.MainActivity;
+import io.github.rgdagir.blind8.R;
+import io.github.rgdagir.blind8.models.Interest;
+import io.github.rgdagir.blind8.models.UserInterest;
 
 public class SignUpActivity extends AppCompatActivity
         implements LoginInfoFragment.OnFragmentInteractionListener, BasicInfoFragment.OnFragmentInteractionListener,

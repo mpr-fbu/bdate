@@ -1,14 +1,14 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
 
-import io.github.rgdagir.mpr.models.Conversation;
-import io.github.rgdagir.mpr.models.Interest;
-import io.github.rgdagir.mpr.models.Message;
-import io.github.rgdagir.mpr.models.UserInterest;
+import io.github.rgdagir.blind8.models.Conversation;
+import io.github.rgdagir.blind8.models.Interest;
+import io.github.rgdagir.blind8.models.Message;
+import io.github.rgdagir.blind8.models.UserInterest;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 

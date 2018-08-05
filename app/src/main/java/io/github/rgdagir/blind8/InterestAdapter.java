@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import io.github.rgdagir.mpr.models.Interest;
+import io.github.rgdagir.blind8.models.Interest;
 
 public class InterestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     final int VIEW_TYPE_GENERAL = 0;

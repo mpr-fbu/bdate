@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

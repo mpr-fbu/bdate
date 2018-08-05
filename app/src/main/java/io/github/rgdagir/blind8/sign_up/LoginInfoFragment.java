@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr.sign_up;
+package io.github.rgdagir.blind8.sign_up;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import io.github.rgdagir.mpr.R;
+import io.github.rgdagir.blind8.R;
 
 public class LoginInfoFragment extends Fragment {
 

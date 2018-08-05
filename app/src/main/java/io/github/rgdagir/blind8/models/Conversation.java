@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr.models;
+package io.github.rgdagir.blind8.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseGeoPoint;

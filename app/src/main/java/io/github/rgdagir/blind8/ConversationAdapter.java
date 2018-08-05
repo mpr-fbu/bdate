@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,9 +27,9 @@ import org.parceler.Parcels;
 
 import java.util.List;
 
-import io.github.rgdagir.mpr.models.Conversation;
-import io.github.rgdagir.mpr.models.Message;
-import io.github.rgdagir.mpr.models.Milestone;
+import io.github.rgdagir.blind8.models.Conversation;
+import io.github.rgdagir.blind8.models.Message;
+import io.github.rgdagir.blind8.models.Milestone;
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder> {
     List<Conversation> mConversations;

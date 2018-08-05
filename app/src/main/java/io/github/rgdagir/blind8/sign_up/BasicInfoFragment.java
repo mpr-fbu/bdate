@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr.sign_up;
+package io.github.rgdagir.blind8.sign_up;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import io.github.rgdagir.mpr.DatePickerFragment;
-import io.github.rgdagir.mpr.R;
+import io.github.rgdagir.blind8.DatePickerFragment;
+import io.github.rgdagir.blind8.R;
 
 public class BasicInfoFragment extends Fragment {
 

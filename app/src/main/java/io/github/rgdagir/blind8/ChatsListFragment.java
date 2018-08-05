@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -30,7 +30,7 @@ import com.parse.SubscriptionHandling;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.rgdagir.mpr.models.Conversation;
+import io.github.rgdagir.blind8.models.Conversation;
 
 
 public class ChatsListFragment extends Fragment {

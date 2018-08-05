@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +17,7 @@ import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 
-import io.github.rgdagir.mpr.sign_up.SignUpActivity;
+import io.github.rgdagir.blind8.sign_up.SignUpActivity;
 
 public class LoginActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package io.github.rgdagir.mpr;
+package io.github.rgdagir.blind8;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
