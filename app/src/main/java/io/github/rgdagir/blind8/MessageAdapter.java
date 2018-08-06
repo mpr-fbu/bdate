@@ -31,8 +31,12 @@ import io.github.rgdagir.blind8.models.Milestone;
 import static com.parse.Parse.getApplicationContext;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    final int VIEW_TYPE_ME = 0;
+    final int VIEW_TYPE_OTHER = 1;
+    final int VIEW_TYPE_TOP = 2;
 
     private List<Message> mMessages;
+    private ParseUser mOtherUser;
     private Conversation mConversation;
     private ParseUser currUser;
     private ParseUser otherUser;
@@ -41,6 +45,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mMessages = messages;
         mConversation = conversation;
         currUser = ParseUser.getCurrentUser();
+        if (currUser.getObjectId().equals(mConversation.getUser1().getObjectId())) {
+            mOtherUser = mConversation.getUser2();
+        } else {
+            mOtherUser = mConversation.getUser1();
+        }
     }
 
     @NonNull
@@ -50,12 +59,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         LayoutInflater inflater = LayoutInflater.from(context);
 
         switch (viewType) {
-            case 0:
+            case VIEW_TYPE_ME:
                 View messageViewMe = inflater.inflate(R.layout.item_message_me, parent, false);
                 return new ViewHolderMe(messageViewMe);
-            case 1:
+            case VIEW_TYPE_OTHER:
                 View messageViewOther = inflater.inflate(R.layout.item_message_other, parent, false);
                 return new ViewHolderOther(messageViewOther);
+            case VIEW_TYPE_TOP:
+                View messageViewTop = inflater.inflate(R.layout.item_message_top, parent, false);
+                return new ViewHolderTop(messageViewTop);
         }
         View messageViewMe = inflater.inflate(R.layout.item_message_me, parent, false);
         return new ViewHolderMe(messageViewMe);
@@ -63,15 +75,18 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        Message message = mMessages.get(position);
+        Message message = new Message();
+        if (position < mMessages.size()) {
+            message = mMessages.get(position);
+        }
 
         switch (holder.getItemViewType()) {
-            case 0:
+            case VIEW_TYPE_ME:
                 final ViewHolderMe viewHolderMe = (ViewHolderMe) holder;
                 viewHolderMe.mInfoMe.setText(message.getExactTimestamp());
                 viewHolderMe.mMessageMe.setText(message.getText());
                 break;
-            case 1:
+            case VIEW_TYPE_OTHER:
                 final ViewHolderOther viewHolderOther = (ViewHolderOther) holder;
                 viewHolderOther.mInfoOther.setText(message.getExactTimestamp());
                 viewHolderOther.mMessageOther.setText(message.getText());
@@ -84,6 +99,22 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     viewHolderOther.mProfilePic.setVisibility(View.INVISIBLE);
                 }
                 break;
+            case VIEW_TYPE_TOP:
+                final ViewHolderTop viewHolderTop = (ViewHolderTop) holder;
+                viewHolderTop.mStatus.setText(mOtherUser.getString("bio"));
+                if (Milestone.canSeeName(mConversation)) {
+                    viewHolderTop.mName.setText(mOtherUser.getString("firstName"));
+                } else {
+                    viewHolderTop.mName.setText(mOtherUser.getString("fakeName"));
+                }
+                if (Milestone.canSeeProfilePicture(mConversation)) {
+                    displayActualProfilePicture(viewHolderTop.mProfilePic);
+                    viewHolderTop.mDefaultImage.setVisibility(View.INVISIBLE);
+                    viewHolderTop.mProfilePic.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolderTop.mDefaultImage.setVisibility(View.VISIBLE);
+                    viewHolderTop.mProfilePic.setVisibility(View.INVISIBLE);
+                }
         }
     }
 
@@ -119,18 +150,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mMessages.size();
+        return mMessages.size() + 1;
     }
 
     @Override
     public int getItemViewType(int position) {
+        if (position == mMessages.size()) {
+            return VIEW_TYPE_TOP;
+        }
         Message message = mMessages.get(position);
         ParseUser sender = message.getSender();
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (sender.getObjectId().equals(currentUser.getObjectId())) {
-            return 0;
+            return VIEW_TYPE_ME;
         } else {
-            return 1;
+            return VIEW_TYPE_OTHER;
         }
     }
 
@@ -235,6 +269,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
             });
+        }
+    }
+
+    public class ViewHolderTop extends RecyclerView.ViewHolder {
+        TextView mName;
+        TextView mStatus;
+        ImageView mDefaultImage;
+        ParseImageView mProfilePic;
+
+        public ViewHolderTop(View itemView) {
+            super(itemView);
+            mName = itemView.findViewById(R.id.tvName);
+            mStatus = itemView.findViewById(R.id.tvStatus);
+            mDefaultImage = itemView.findViewById(R.id.ivDefaultImage);
+            mProfilePic = itemView.findViewById(R.id.ivProfilePic);
         }
     }
 }

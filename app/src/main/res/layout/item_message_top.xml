@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.parse.ParseImageView
+        android:id="@+id/ivProfilePic"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_margin="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <ImageView
+        android:id="@+id/ivDefaultImage"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_margin="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@mipmap/ic_picture"
+        android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/ivDefaultImage"
+        android:layout_toRightOf="@+id/ivDefaultImage"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/offBlack" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvName"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ivDefaultImage"
+        android:layout_toRightOf="@+id/ivDefaultImage"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:scrollHorizontally="true" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/ivProfilePic"
+        android:background="@color/mediumGrey"
+        android:layout_margin="2dp" />
+
+</RelativeLayout>
