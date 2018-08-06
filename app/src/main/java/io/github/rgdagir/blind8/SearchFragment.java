@@ -10,27 +10,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.PermissionRequest;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -62,6 +58,8 @@ public class SearchFragment extends Fragment {
     private ParseUser currentUser;
     private MapView mMapView;
     private GoogleMap mGoogleMap;
+    private SeekBar rangeMatchBar;
+    private int range;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -79,9 +77,9 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         context = getActivity();
-        setupMap(rootView, savedInstanceState);
+        rangeMatchBar = rootView.findViewById(R.id.matchRangeBar);
         getLocationPermissions();
-        getLastLoc();
+        setupMap(rootView, savedInstanceState);
         return rootView;
     }
 
@@ -89,7 +87,22 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
         searchButton = view.findViewById(R.id.btnSearch);
+        rangeMatchBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                range = progress;
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -375,7 +388,10 @@ public class SearchFragment extends Fragment {
             if (grantResults.length == 1
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(context, "Location permission granted", Toast.LENGTH_SHORT).show();
+                getLastLoc();
+                displayMap(1); // display map with current location
             } else {
+                displayMap(0); // display map with default location and ask user for permission again
                 boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION);
                 if (showRationale) {
                     // TODO - handle this situation when the user has denied permission
@@ -420,7 +436,9 @@ public class SearchFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    public void displayMap(final int type) {
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @SuppressLint("MissingPermission")
             @Override
@@ -431,17 +449,25 @@ public class SearchFragment extends Fragment {
                 mGoogleMap.setMyLocationEnabled(true);
 
                 // For dropping a marker at a point on the Map
-                LatLng here = new LatLng(myLoc.getLatitude(), myLoc.getLongitude());
-                googleMap.addMarker(new MarkerOptions().position(here).title("You're here"));
+                LatLng pin;
+                if (type == 1) {
+                    pin = new LatLng(myLoc.getLatitude(), myLoc.getLongitude());
+                }
+                else {
+                    pin = new LatLng(myLoc.getLatitude(), myLoc.getLongitude());
+                }
+                googleMap.addMarker(new MarkerOptions().position(pin).title("You're here"));
 
                 // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(here).zoom(12).build();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(pin).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         });
     }
 
-// TODO - set up handlers for location request denials below
+
+
+//    TODO - set up handlers for location request denials below
 //    // Annotate a method which explains why the permission/s is/are needed.
 //    // It passes in a `PermissionRequest` object which can continue or abort the current permission
 //    @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
