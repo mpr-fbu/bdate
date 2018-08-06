@@ -47,6 +47,7 @@ import java.util.List;
 import io.github.rgdagir.blind8.models.Conversation;
 import io.github.rgdagir.blind8.models.Message;
 import io.github.rgdagir.blind8.models.Milestone;
+import io.github.rgdagir.mpr.R;
 
 public class ChatActivity extends AppCompatActivity {
 

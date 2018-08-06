@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.github.rgdagir.blind8.DatePickerFragment;
 import io.github.rgdagir.blind8.R;
+import io.github.rgdagir.mpr.R;
 
 public class BasicInfoFragment extends Fragment {
 

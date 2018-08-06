@@ -26,6 +26,7 @@ import java.util.List;
 
 import io.github.rgdagir.blind8.R;
 import io.github.rgdagir.blind8.utils.Utils;
+import io.github.rgdagir.mpr.R;
 
 public class PicturesFragment extends Fragment {
 

@@ -13,6 +13,7 @@ import java.util.List;
 
 import io.github.rgdagir.blind8.R;
 import io.github.rgdagir.blind8.models.Interest;
+import io.github.rgdagir.mpr.R;
 
 public class SignUpInterestAdapter extends RecyclerView.Adapter<SignUpInterestAdapter.ViewHolder> {
 
