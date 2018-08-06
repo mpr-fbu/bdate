@@ -28,6 +28,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -60,6 +62,7 @@ public class SearchFragment extends Fragment {
     private GoogleMap mGoogleMap;
     private SeekBar rangeMatchBar;
     private int range;
+    private Circle circle;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -76,21 +79,27 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
+        mMapView = rootView.findViewById(R.id.mapView);
+        searchButton = rootView.findViewById(R.id.btnSearch);
         context = getActivity();
         rangeMatchBar = rootView.findViewById(R.id.matchRangeBar);
-        getLocationPermissions();
-        setupMap(rootView, savedInstanceState);
+        setupMap(savedInstanceState);
+        getLocationPermissionsIfNeeded(rootView, savedInstanceState);
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        setupListeners();
+    }
+
+    public void setupListeners(){
         // Setup any handles to view objects here
-        searchButton = view.findViewById(R.id.btnSearch);
         rangeMatchBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 range = progress;
+                circle.setRadius(range * 1609.4);
             }
 
             @Override
@@ -349,6 +358,7 @@ public class SearchFragment extends Fragment {
                 // GPS location can be null if GPS is switched off
                 if (location != null) {
                     myLoc = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
+                    displayMap(myLoc);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -361,7 +371,7 @@ public class SearchFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void getLocationPermissions() {
+    public void getLocationPermissionsIfNeeded(View rootView, Bundle savedInstance) {
         // 1) Use the support library version ContextCompat.checkSelfPermission(...) to avoid
         // checking the build version since Context.checkSelfPermission(...) is only available
         // in Marshmallow
@@ -377,6 +387,8 @@ public class SearchFragment extends Fragment {
             }
             // Request permission
             requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST);
+        } else {
+            getLastLoc();
         }
     }
 
@@ -389,9 +401,7 @@ public class SearchFragment extends Fragment {
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(context, "Location permission granted", Toast.LENGTH_SHORT).show();
                 getLastLoc();
-                displayMap(1); // display map with current location
             } else {
-                displayMap(0); // display map with default location and ask user for permission again
                 boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION);
                 if (showRationale) {
                     // TODO - handle this situation when the user has denied permission
@@ -425,12 +435,9 @@ public class SearchFragment extends Fragment {
         return (Math.sqrt(distance)) / 1609.34;
     }
 
-    protected void setupMap(View v, Bundle savedInstanceState) {
-        mMapView = v.findViewById(R.id.mapView);
+    protected void setupMap(Bundle savedInstanceState){
         mMapView.onCreate(savedInstanceState);
-
         mMapView.onResume(); // needed to get the map to display immediately
-
         try {
             MapsInitializer.initialize((context.getApplicationContext()));
         } catch (Exception e) {
@@ -438,7 +445,8 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    public void displayMap(final int type) {
+    // will be called inside the callback in getLastLoc
+    public void displayMap(final ParseGeoPoint location) {
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @SuppressLint("MissingPermission")
             @Override
@@ -450,22 +458,26 @@ public class SearchFragment extends Fragment {
 
                 // For dropping a marker at a point on the Map
                 LatLng pin;
-                if (type == 1) {
-                    pin = new LatLng(myLoc.getLatitude(), myLoc.getLongitude());
-                }
-                else {
-                    pin = new LatLng(myLoc.getLatitude(), myLoc.getLongitude());
-                }
-                googleMap.addMarker(new MarkerOptions().position(pin).title("You're here"));
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(pin).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                pin = new LatLng(location.getLatitude(), location.getLongitude());
+                mGoogleMap.addMarker(new MarkerOptions().position(pin).title("You're here"));
+                drawRangeAndSetZoom(mGoogleMap, pin);
             }
         });
     }
 
+    public void drawRangeAndSetZoom(GoogleMap gMap, LatLng pin) {
+        range = Integer.parseInt(currentUser.get("matchRange").toString()); // in miles
+        // Instantiates a new CircleOptions object and defines the center and radius
+        CircleOptions circleOptions = new CircleOptions()
+                .center(pin)
+                .radius(range * 1609.34); // In meters
 
+        // Get back the mutable Circle
+        circle = gMap.addCircle(circleOptions);
+        // For zooming automatically to the location of the marker
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(pin).zoom(12).build();
+        gMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
 
 //    TODO - set up handlers for location request denials below
 //    // Annotate a method which explains why the permission/s is/are needed.

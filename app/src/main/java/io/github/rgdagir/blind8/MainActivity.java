@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         adapter.addFragment(searchFragment);
         adapter.addFragment(profileFragment);
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(1);
     }
 
     private void resizeMenuIcons(BottomNavigationView bottomNavigationView) {
