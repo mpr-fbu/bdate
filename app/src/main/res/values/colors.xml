@@ -11,6 +11,7 @@
     <color name="mediumGrey">#8F8E8F</color>
     <color name="lightGrey">#d3d3d3</color>
     <color name="faintGrey">#ebebeb</color>
+    <color name="navBarGrey">#F5F5F5</color>
     <color name="mediumBlue">#3BCBEE</color>
     <color name="darkerBlue">#14BFE9</color>
     <color name="shadowBlue">#109DC0</color>

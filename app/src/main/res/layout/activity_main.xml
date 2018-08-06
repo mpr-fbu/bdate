@@ -10,18 +10,27 @@
     <FrameLayout
         android:id="@+id/flContainer"
         android:layout_width="match_parent"
-        android:layout_height="520dp"
+        android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="-6dp" />
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_navigation"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="-6dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
+        android:layout_height="65dp"
         android:layout_alignParentBottom="true"
-        app:itemBackground="@color/babyWhite"
+        app:itemBackground="@color/navBarGrey"
         android:background="@drawable/shadow"
         android:paddingTop="8dp"
         app:menu="@menu/menu_bottom_navigation" />

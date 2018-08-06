@@ -13,21 +13,25 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity
         implements ChatsListFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener,
         SearchFragment.OnFragmentInteractionListener, EditProfileFragment.OnFragmentInteractionListener {
 
-    ChatsListFragment initialFragment = new ChatsListFragment();
+    BottomNavigationView bottomNavigationView;
+    ViewPager viewPager;
+    MenuItem prevMenuItem;
+    FrameLayout flContainer;
     final FragmentManager fragmentManager = getSupportFragmentManager();
-
 
     // set up broadcast receiver for push notifications
     private BroadcastReceiver mBroadcastReceiver = new CustomPushReceiver();
@@ -38,32 +42,68 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        flContainer = findViewById(R.id.flContainer);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        viewPager = findViewById(R.id.viewPager);
         resizeMenuIcons(bottomNavigationView);
-        // set chats fragment as initial
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.flContainer, initialFragment).commit();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,
+                new IntentFilter(CustomPushReceiver.intentAction));
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                switch(item.getItemId()) {
+                viewPager.setVisibility(View.VISIBLE);
+                flContainer.setVisibility(View.INVISIBLE);
+                switch (item.getItemId()) {
                     case R.id.action_chats:
-                        switchFragment(fragmentManager.beginTransaction(), initialFragment);
+                        viewPager.setCurrentItem(0);
                         return true;
                     case R.id.action_search:
-                        switchFragment(fragmentManager.beginTransaction(), new SearchFragment());
+                        viewPager.setCurrentItem(1);
                         return true;
                     case R.id.action_profile:
-                        switchFragment(fragmentManager.beginTransaction(), new ProfileFragment());
+                        viewPager.setCurrentItem(2);
                         return true;
                 }
                 return false;
             }
         });
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,
-                new IntentFilter(CustomPushReceiver.intentAction));
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (prevMenuItem != null) {
+                    prevMenuItem.setChecked(false);
+                } else {
+                    bottomNavigationView.getMenu().getItem(0).setChecked(false);
+                }
+                bottomNavigationView.getMenu().getItem(position).setChecked(true);
+                prevMenuItem = bottomNavigationView.getMenu().getItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+        setupViewPager(viewPager);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        ChatsListFragment chatsListFragment = new ChatsListFragment();
+        SearchFragment searchFragment = new SearchFragment();
+        ProfileFragment profileFragment = new ProfileFragment();
+        adapter.addFragment(chatsListFragment);
+        adapter.addFragment(searchFragment);
+        adapter.addFragment(profileFragment);
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(1);
     }
 
     private void resizeMenuIcons(BottomNavigationView bottomNavigationView) {
@@ -72,8 +112,8 @@ public class MainActivity extends AppCompatActivity
             final View iconView = menuView.getChildAt(i).findViewById(android.support.design.R.id.icon);
             final ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
             final DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-            layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, displayMetrics);
-            layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, displayMetrics);
+            layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, displayMetrics);
+            layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, displayMetrics);
             iconView.setLayoutParams(layoutParams);
         }
     }
@@ -91,21 +131,25 @@ public class MainActivity extends AppCompatActivity
                 new IntentFilter(CustomPushReceiver.intentAction));
     }
 
-    public static void switchFragment(FragmentTransaction fragmentTransaction, Fragment fragment) {
-        fragmentTransaction.replace(R.id.flContainer, fragment).commit();
-    }
-
     @Override
     public void onFragmentInteraction(Uri uri) {
         goToEditProfile();
         goBackToProfile();
     }
 
+    public static void switchFragment(FragmentTransaction fragmentTransaction, Fragment fragment) {
+        fragmentTransaction.replace(R.id.flContainer, fragment).commit();
+    }
+
     public void goToEditProfile() {
+        viewPager.setVisibility(View.INVISIBLE);
+        flContainer.setVisibility(View.VISIBLE);
         switchFragment(fragmentManager.beginTransaction(), new EditProfileFragment());
     }
 
     public void goBackToProfile() {
-        switchFragment(fragmentManager.beginTransaction(), new ProfileFragment());
+        viewPager.setVisibility(View.VISIBLE);
+        flContainer.setVisibility(View.INVISIBLE);
+        viewPager.setCurrentItem(2);
     }
 }
