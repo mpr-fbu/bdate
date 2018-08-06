@@ -100,13 +100,13 @@ public class MainActivity extends AppCompatActivity
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         ChatsListFragment chatsListFragment = new ChatsListFragment();
-        // SearchFragment searchFragment = new SearchFragment();
+        SearchFragment searchFragment = new SearchFragment();
         ProfileFragment profileFragment = new ProfileFragment();
         adapter.addFragment(chatsListFragment);
-        // adapter.addFragment(searchFragment);
+        adapter.addFragment(searchFragment);
         adapter.addFragment(profileFragment);
         viewPager.setAdapter(adapter);
-        // viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(0);
     }
 
     private void resizeMenuIcons(BottomNavigationView bottomNavigationView) {
