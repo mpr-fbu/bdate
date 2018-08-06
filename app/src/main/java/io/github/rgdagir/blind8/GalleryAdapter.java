@@ -11,6 +11,8 @@ import com.parse.ParseImageView;
 
 import java.util.ArrayList;
 
+import io.github.rgdagir.mpr.R;
+
 public class GalleryAdapter extends PagerAdapter {
 
     private ArrayList<String> images;
@@ -35,7 +37,8 @@ public class GalleryAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup view, int position) {
-        View myImageLayout = inflater.inflate(R.layout.slide, view, false);
+        View myImageLayout = inflater.inflate(
+                R.layout.slide, view, false);
         ParseImageView myImage = myImageLayout.findViewById(R.id.image);
         Glide.with(context).load(images.get(position))
                 .centerCrop()

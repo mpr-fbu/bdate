@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import io.github.rgdagir.blind8.models.Interest;
+import io.github.rgdagir.mpr.R;
 
 public class InterestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     final int VIEW_TYPE_GENERAL = 0;

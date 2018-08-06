@@ -16,6 +16,8 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 
+import io.github.rgdagir.mpr.R;
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class CustomPushReceiver extends BroadcastReceiver {

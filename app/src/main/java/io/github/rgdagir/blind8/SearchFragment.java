@@ -50,6 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.github.rgdagir.blind8.models.Conversation;
+import io.github.rgdagir.mpr.R;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
@@ -77,7 +78,7 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_search, container, false);
+        View rootView = inflater.inflate(io.github.rgdagir.mpr.R.layout.fragment_search, container, false);
         context = getActivity();
         setupMap(rootView, savedInstanceState);
         getLocationPermissions();
@@ -88,7 +89,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
-        searchButton = view.findViewById(R.id.btnSearch);
+        searchButton = view.findViewById(io.github.rgdagir.mpr.R.id.btnSearch);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override

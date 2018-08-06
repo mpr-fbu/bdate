@@ -18,6 +18,7 @@ import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 
 import io.github.rgdagir.blind8.sign_up.SignUpActivity;
+import io.github.rgdagir.mpr.R;
 
 public class LoginActivity extends AppCompatActivity {
 
