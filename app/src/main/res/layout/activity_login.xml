@@ -61,7 +61,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        app:srcCompat="@color/pastelBlue" />
+        app:srcCompat="@drawable/app_title" />
 
     <ProgressBar
         android:id="@+id/loginProgressBar"
