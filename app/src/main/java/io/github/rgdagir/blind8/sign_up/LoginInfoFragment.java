@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Random;
 
 import io.github.rgdagir.blind8.R;
-import io.github.rgdagir.mpr.R;
 
 public class LoginInfoFragment extends Fragment {
 

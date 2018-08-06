@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import io.github.rgdagir.blind8.models.Conversation;
-import io.github.rgdagir.mpr.R;
 
 public class HolderActivity extends AppCompatActivity
         implements ProfileFragment.OnFragmentInteractionListener {

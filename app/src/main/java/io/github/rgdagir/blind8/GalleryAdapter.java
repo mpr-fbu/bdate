@@ -11,8 +11,6 @@ import com.parse.ParseImageView;
 
 import java.util.ArrayList;
 
-import io.github.rgdagir.mpr.R;
-
 public class GalleryAdapter extends PagerAdapter {
 
     private ArrayList<String> images;

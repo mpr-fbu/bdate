@@ -9,7 +9,6 @@ import io.github.rgdagir.blind8.models.Conversation;
 import io.github.rgdagir.blind8.models.Interest;
 import io.github.rgdagir.blind8.models.Message;
 import io.github.rgdagir.blind8.models.UserInterest;
-import io.github.rgdagir.mpr.R;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 

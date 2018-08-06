@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rgdagir.blind8.models.Conversation;
-import io.github.rgdagir.mpr.R;
 
 
 public class ChatsListFragment extends Fragment {

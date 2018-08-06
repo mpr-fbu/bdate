@@ -15,8 +15,6 @@ import com.parse.ParseFile;
 
 import java.util.List;
 
-import io.github.rgdagir.mpr.R;
-
 public class PickGalleryAdapter extends RecyclerView.Adapter<PickGalleryAdapter.ViewHolder>{
 
     Context context;

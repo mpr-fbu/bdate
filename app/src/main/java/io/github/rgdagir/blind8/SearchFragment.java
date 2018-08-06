@@ -50,7 +50,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.github.rgdagir.blind8.models.Conversation;
-import io.github.rgdagir.mpr.R;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
@@ -78,7 +77,7 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(io.github.rgdagir.mpr.R.layout.fragment_search, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         context = getActivity();
         setupMap(rootView, savedInstanceState);
         getLocationPermissions();
@@ -89,7 +88,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
-        searchButton = view.findViewById(io.github.rgdagir.mpr.R.id.btnSearch);
+        searchButton = view.findViewById(R.id.btnSearch);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -432,11 +431,11 @@ public class SearchFragment extends Fragment {
                 mGoogleMap.setMyLocationEnabled(true);
 
                 // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
+                LatLng here = new LatLng(myLoc.getLatitude(), myLoc.getLongitude());
+                googleMap.addMarker(new MarkerOptions().position(here).title("You're here"));
 
                 // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(here).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         });

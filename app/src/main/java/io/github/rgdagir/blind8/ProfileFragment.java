@@ -39,7 +39,6 @@ import io.github.rgdagir.blind8.models.Conversation;
 import io.github.rgdagir.blind8.models.Interest;
 import io.github.rgdagir.blind8.models.Milestone;
 import io.github.rgdagir.blind8.models.UserInterest;
-import io.github.rgdagir.mpr.R;
 import me.relex.circleindicator.CircleIndicator;
 
 public class ProfileFragment extends Fragment {

@@ -25,7 +25,6 @@ import io.github.rgdagir.blind8.MainActivity;
 import io.github.rgdagir.blind8.R;
 import io.github.rgdagir.blind8.models.Interest;
 import io.github.rgdagir.blind8.models.UserInterest;
-import io.github.rgdagir.mpr.R;
 
 public class SignUpActivity extends AppCompatActivity
         implements LoginInfoFragment.OnFragmentInteractionListener, BasicInfoFragment.OnFragmentInteractionListener,
