@@ -57,6 +57,7 @@
             android:id="@+id/gender_female"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:onClick="onRadioButtonClicked"
             android:text="Female" />
 
@@ -64,6 +65,7 @@
             android:id="@+id/gender_other"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:onClick="onRadioButtonClicked"
             android:text="Other" />
     </RadioGroup>
@@ -92,16 +94,22 @@
             android:layout_height="wrap_content"
             android:text="Men"
             android:onClick="onRadioButtonClicked"/>
-        <RadioButton android:id="@+id/prefer_women"
+
+        <RadioButton
+            android:id="@+id/prefer_women"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Women"
-            android:onClick="onRadioButtonClicked"/>
-        <RadioButton android:id="@+id/no_preference"
+            android:layout_marginLeft="20dp"
+            android:onClick="onRadioButtonClicked"
+            android:text="Women" />
+
+        <RadioButton
+            android:id="@+id/no_preference"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No preference"
-            android:onClick="onRadioButtonClicked"/>
+            android:layout_marginLeft="20dp"
+            android:onClick="onRadioButtonClicked"
+            android:text="No preference" />
     </RadioGroup>
 
     <TextView

@@ -137,7 +137,7 @@ public class BasicInfoFragment extends Fragment {
         // Set up callback to retrieve date info
         dateFragment.setCallBack(new DatePickerDialog.OnDateSetListener(){
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
-                dateFromPicker = String.valueOf(monthOfYear) + "/" + String.valueOf(dayOfMonth + 1) + "/" + String.valueOf(year);
+                dateFromPicker = String.valueOf(monthOfYear + 1) + " / " + String.valueOf(dayOfMonth) + " / " + String.valueOf(year);
                 placeholderBirthday.setText(dateFromPicker);
                 try {
                     DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
