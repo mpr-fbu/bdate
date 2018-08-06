@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +62,9 @@ public class BasicInfoFragment extends Fragment {
         setupFragmentVariables(view);
         setupButtonListeners();
         setupRadioGroupListeners();
+        setupTextChangeListeners();
+        btnContinue.setEnabled(false);
+        btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_gray));
         return view;
     }
 
@@ -184,6 +189,29 @@ public class BasicInfoFragment extends Fragment {
                         interestedIn = "No preference";
                         break;
                 }
+            }
+        });
+    }
+
+    private void setupTextChangeListeners() {
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (s.length() < 1) {
+                    btnContinue.setEnabled(false);
+                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_gray));
+                } else {
+                    btnContinue.setEnabled(true);
+                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_style));
+                }
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
     }
