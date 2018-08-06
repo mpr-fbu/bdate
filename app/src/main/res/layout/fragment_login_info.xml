@@ -116,8 +116,8 @@
 
     <ImageView
         android:id="@+id/refresh"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignBottom="@+id/etAlias"
         android:layout_alignRight="@+id/etPassword"
         android:tint="@color/lightGrey"

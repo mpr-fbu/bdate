@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -41,6 +42,8 @@ public class ChatsListFragment extends Fragment {
     private ParseImageView ivProfilePic;
     private TextView tvUsername;
     private TextView tvNumConversations;
+    private TextView placeholderText;
+    private ImageView placeholder;
     private ConversationAdapter conversationAdapter;
     RecyclerView rvConversations;
     ArrayList<Conversation> mConversations;
@@ -143,6 +146,10 @@ public class ChatsListFragment extends Fragment {
                         conversationAdapter.notifyItemInserted(mConversations.size() - 1);
                         Log.d("Conversations", "a conversation has been loaded!" + conversation.getUser1().getUsername());
                     }
+                    if (objects.size() == 0) {
+                        placeholder.setVisibility(View.VISIBLE);
+                        placeholderText.setVisibility(View.VISIBLE);
+                    }
                     tvNumConversations.setText(Integer.toString(mConversations.size()));
                 } else {
                     e.printStackTrace();
@@ -191,6 +198,8 @@ public class ChatsListFragment extends Fragment {
     private void setupFragmentVariables(View view) {
         context = getActivity();
         currUser = ParseUser.getCurrentUser();
+        placeholderText = view.findViewById(R.id.placeholderText);
+        placeholder = view.findViewById(R.id.placeholder);
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         tvUsername = view.findViewById(R.id.tvUsername);
         tvNumConversations = view.findViewById(R.id.tvNumMessages);
@@ -233,5 +242,7 @@ public class ChatsListFragment extends Fragment {
         conversationAdapter = new ConversationAdapter(mConversations);
         rvConversations.setLayoutManager(new LinearLayoutManager(context));
         rvConversations.setAdapter(conversationAdapter);
+        placeholder.setVisibility(View.INVISIBLE);
+        placeholderText.setVisibility(View.INVISIBLE);
     }
 }
