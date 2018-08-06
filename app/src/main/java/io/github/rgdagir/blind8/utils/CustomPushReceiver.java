@@ -1,4 +1,4 @@
-package io.github.rgdagir.blind8;
+package io.github.rgdagir.blind8.utils;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,6 +16,9 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 
+
+import io.github.rgdagir.blind8.MainActivity;
+import io.github.rgdagir.blind8.R;
 
 import static android.content.Context.MODE_PRIVATE;
 

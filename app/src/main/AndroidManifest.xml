@@ -63,7 +63,7 @@
         </service>
 
         <receiver
-            android:name=".CustomPushReceiver"
+            android:name=".utils.CustomPushReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />

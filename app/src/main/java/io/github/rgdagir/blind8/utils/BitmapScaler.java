@@ -1,4 +1,4 @@
-package io.github.rgdagir.blind8;
+package io.github.rgdagir.blind8.utils;
 
 import android.graphics.Bitmap;
 

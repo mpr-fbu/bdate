@@ -1,6 +1,5 @@
 package io.github.rgdagir.blind8;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,12 +22,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
@@ -37,15 +36,16 @@ import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 
 import io.github.rgdagir.blind8.utils.Utils;
 
@@ -54,8 +54,8 @@ public class EditProfileFragment extends Fragment {
     private EditText editName;
     private EditText editEmail;
     private EditText editBio;
-//    private TextView editBirthDate;
-    private FloatingActionButton changeprofilePic;
+    // private TextView editBirthDate;
+    private FloatingActionButton changeProfilePic;
     private Spinner myGenderSpinner;
     private Spinner interestedInSpinner;
     private SeekBar rangeSeekBar;
@@ -102,8 +102,8 @@ public class EditProfileFragment extends Fragment {
         editName = v.findViewById(R.id.editName);
         editEmail = v.findViewById(R.id.editEmail);
         editBio = v.findViewById(R.id.editBio);
-//        editBirthDate = v.findViewById(R.id.editBirthDate);
-        changeprofilePic = v.findViewById(R.id.changeProfilePicBtn);
+        // editBirthDate = v.findViewById(R.id.editBirthDate);
+        changeProfilePic = v.findViewById(R.id.changeProfilePicBtn);
         profilePic = v.findViewById(R.id.profilePic);
         myGenderSpinner = v.findViewById(R.id.myGender);
         interestedInSpinner = v.findViewById(R.id.interestedInGender);
@@ -138,7 +138,7 @@ public class EditProfileFragment extends Fragment {
                 mListener.goBackToProfile();
             }
         });
-        changeprofilePic.setOnClickListener(new View.OnClickListener() {
+        changeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onPickPhoto(v);
@@ -147,7 +147,7 @@ public class EditProfileFragment extends Fragment {
     }
 
     public void setupGallery(View v){
-        RecyclerView rvGalleryPicker = (RecyclerView) v.findViewById(R.id.rvGalleryPics);
+        RecyclerView rvGalleryPicker = v.findViewById(R.id.rvGalleryPics);
         images = fetchCoverImages(ParseUser.getCurrentUser());
         PickGalleryAdapter adapter = new PickGalleryAdapter(images);
         rvGalleryPicker.setAdapter(adapter);
@@ -156,7 +156,7 @@ public class EditProfileFragment extends Fragment {
 
     public void setupCrystalSeekBar(View view){
         // get seekbar from view
-        final CrystalRangeSeekbar rangeSeekbar = (CrystalRangeSeekbar) view.findViewById(R.id.crystalRangeSeekBar);
+        final CrystalRangeSeekbar rangeSeekbar = view.findViewById(R.id.crystalRangeSeekBar);
 
         // get min and max text view
         final TextView tvMin = view.findViewById(R.id.rangeSeekBarMin);
@@ -182,9 +182,18 @@ public class EditProfileFragment extends Fragment {
 
     public ArrayList<ParseFile> fetchCoverImages(ParseUser user){
         ArrayList<ParseFile> coverImages = new ArrayList<>();
-        coverImages.add(user.getParseFile("coverPhoto1"));
-        coverImages.add(user.getParseFile("coverPhoto2"));
-        coverImages.add(user.getParseFile("coverPhoto3"));
+        ParseFile photo1 = user.getParseFile("coverPhoto1");
+        ParseFile photo2 = user.getParseFile("coverPhoto2");
+        ParseFile photo3 = user.getParseFile("coverPhoto3");
+        if (photo1 != null) {
+            coverImages.add(photo1);
+        }
+        if (photo2 != null) {
+            coverImages.add(photo2);
+        }
+        if (photo3 != null) {
+            coverImages.add(photo3);
+        }
         return coverImages;
     }
 
@@ -270,25 +279,25 @@ public class EditProfileFragment extends Fragment {
     public void fetchCurrentUserAndLoadPage(){
         // populate screen
         editName.setText(currUser.getString("firstName"));
-        editEmail.setText(currUser.getString("email").toString());
-        editBio.setText(currUser.getString("bio").toString());
+        editEmail.setText(currUser.getString("email"));
+        editBio.setText(currUser.getString("bio"));
         Date inputDate = currUser.getDate("dob");
-        DateFormat dataFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+        DateFormat dataFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS", Locale.getDefault());
         String strDate = dataFormat.format(inputDate);
-        DateFormat inputFormatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+        DateFormat inputFormatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS", Locale.getDefault());
         Date date = null;
         try {
             date = inputFormatter.parse(strDate);
-            DateFormat outputFormatter = new SimpleDateFormat("MM/dd/yyyy");
+            DateFormat outputFormatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
             String output = outputFormatter.format(date);
-//            editBirthDate.setText(output);
+            // editBirthDate.setText(output);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         Glide.with(context).load(currUser.getParseFile("profilePic").getUrl())
                 .asBitmap().centerCrop().dontAnimate()
-                .placeholder(R.drawable.ic_action_name)
-                .error(R.drawable.ic_action_name)
+                .placeholder(R.mipmap.ic_picture)
+                .error(R.mipmap.ic_picture)
                 .into(new BitmapImageViewTarget(profilePic) {
                     @Override
                     protected void setResource(Bitmap resource) {
@@ -362,18 +371,18 @@ public class EditProfileFragment extends Fragment {
     public void saveUpdatedUser(){
         Iterator it = changes.entrySet().iterator();
         while (it.hasNext()) {
-            HashMap.Entry entry = (HashMap.Entry)it.next();
-            if (entry.getKey().toString() == "dob") { // handle birth dates
+            HashMap.Entry entry = (HashMap.Entry) it.next();
+            if (entry.getKey().toString().equals("dob")) { // handle birth dates
                 String sDate = entry.getValue().toString();
                 try {
-                    Date date = new SimpleDateFormat("dd/MM/yyyy").parse(sDate);
+                    Date date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(sDate);
                     currUser.put("dob", date);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 continue;
             }
-            if (entry.getKey().toString() == "matchRange"){
+            if (entry.getKey().toString().equals("matchRange")) {
                 int range = Integer.parseInt(entry.getValue().toString());
                 currUser.put("matchRange", range);
                 continue;
@@ -450,7 +459,7 @@ public class EditProfileFragment extends Fragment {
                             profilePic.setImageDrawable(circularBitmapDrawable);
                         }
                     });
-            ParseFile imageFile = new ParseFile(currUser.getObjectId() + "profilepic.jpg", img);
+            ParseFile imageFile = new ParseFile(currUser.getObjectId() + "profilePic.jpg", img);
             currUser.put("profilePic", imageFile);
             currUser.saveInBackground();
         }
