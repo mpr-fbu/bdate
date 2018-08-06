@@ -108,7 +108,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/aliasNote"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/sign_up_button_style"
         android:textColor="@color/white"
@@ -120,5 +120,55 @@
         android:layout_height="45dp"
         android:layout_alignBottom="@+id/etAlias"
         android:layout_alignRight="@+id/etPassword"
+        android:tint="@color/lightGrey"
         app:srcCompat="@drawable/ic_refresh" />
+
+    <ImageView
+        android:id="@+id/dot1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/dot2"
+        android:layout_toStartOf="@+id/dot2"
+        android:paddingLeft="0dp"
+        android:paddingRight="5dp"
+        android:tint="@color/oceanBlue"
+        app:srcCompat="@drawable/divider_dot" />
+
+    <ImageView
+        android:id="@+id/dot2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:paddingRight="2.5dp"
+        app:srcCompat="@drawable/divider_dot" />
+
+    <ImageView
+        android:id="@+id/dot3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/dot2"
+        android:layout_toEndOf="@+id/dot2"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="2.5dp"
+        app:srcCompat="@drawable/divider_dot" />
+
+    <ImageView
+        android:id="@+id/dot4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/dot2"
+        android:layout_toEndOf="@+id/dot3"
+        android:paddingLeft="5dp"
+        app:srcCompat="@drawable/divider_dot" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:ems="10"
+        android:inputType="textEmailAddress" />
 </RelativeLayout>
