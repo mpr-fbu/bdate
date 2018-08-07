@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -22,13 +24,16 @@ import io.github.rgdagir.blind8.sign_up.SignUpActivity;
 public class LoginActivity extends AppCompatActivity {
 
     private static String ACTIVITY_TAG = "LOGIN";
+    private ImageView appName;
+    private ImageView logo;
+    private TextView termsAndPrivacy;
+    private TextView slogan;
     private EditText etLoginEmail;
     private EditText etLoginPassword;
     private Button loginBtn;
     private Button toSignUpBtn;
     private Context context;
     private ProgressBar progressBar = null;
-    private Button easterEgg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +53,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private void findViews() {
         progressBar = (ProgressBar) findViewById(R.id.loginProgressBar);
+        termsAndPrivacy = findViewById(R.id.termsAndPrivacy);
+        slogan = findViewById(R.id.slogan);
+        appName = findViewById(R.id.appName);
+        logo = findViewById(R.id.logo);
         etLoginEmail = findViewById(R.id.loginEmail);
         etLoginPassword = findViewById(R.id.loginPassword);
         loginBtn = findViewById(R.id.loginButton);
         toSignUpBtn = findViewById(R.id.toSignUpButton);
-        easterEgg = findViewById(R.id.easterEgg);
     }
 
     private void setOnClickListeners() {
@@ -81,14 +89,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-            }
-        });
-
-        easterEgg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent egg = new Intent(LoginActivity.this, TestSeekBar.class);
-                startActivity(egg);
             }
         });
     }

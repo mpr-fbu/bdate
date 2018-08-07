@@ -6,61 +6,74 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
-    <EditText
-        android:id="@+id/loginEmail"
-        android:layout_width="388dp"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/email_text_input_layout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="96dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="86dp"
-        android:layout_alignParentLeft="true" />
+        android:layout_below="@id/appName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp">
 
-    <EditText
-        android:id="@+id/loginPassword"
-        android:layout_width="386dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="151dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="165dp"
-        android:layout_alignParentLeft="true" />
+        <EditText
+            android:id="@+id/loginEmail"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:hint="email "
+            android:inputType="textEmailAddress" />
 
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/password_text_input_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/email_text_input_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/loginPassword"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/email_text_input_layout"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:hint="password "
+            android:inputType="textPassword" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/toSignUpButton"
-        android:layout_alignParentStart="true"
-        android:text="Log In! "
-        tools:layout_editor_absoluteX="121dp"
-        tools:layout_editor_absoluteY="239dp"
-        android:layout_alignParentLeft="true" />
+        android:layout_below="@+id/password_text_input_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/sign_up_button_style"
+        android:textColor="@color/white"
+        android:text="Log in" />
 
     <Button
         android:id="@+id/toSignUpButton"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="152dp"
-        android:text="Don't have an account? Sign Up!"
-        android:layout_alignParentLeft="true" />
+        android:layout_below="@+id/loginButton"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/sign_up_button_style"
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"
+        android:text="Sign up" />
 
     <ImageView
-        android:id="@+id/logo"
-        android:layout_width="281dp"
-        android:layout_height="56dp"
+        android:id="@+id/appName"
+        android:layout_width="200dp"
+        android:layout_height="90dp"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginTop="107dp"
         app:srcCompat="@drawable/app_title" />
 
     <ProgressBar
@@ -74,13 +87,34 @@
         android:visibility="gone"
         style="@android:style/Widget.ProgressBar.Large"/>
 
-    <Button
-        android:id="@+id/easterEgg"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="65dp"
+        app:srcCompat="@mipmap/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/termsAndPrivacy"
+        android:layout_width="225dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="67dp"
-        android:text="Button" />
+        android:layout_marginBottom="25dp"
+        android:gravity="center"
+        android:text="@string/terms_and_privacy" />
+
+    <TextView
+        android:id="@+id/slogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/appName"
+        android:layout_marginEnd="63dp"
+        android:text="Build meaningful relationships"
+        android:textSize="12sp" />
 
 </RelativeLayout>

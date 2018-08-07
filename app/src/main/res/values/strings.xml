@@ -16,6 +16,7 @@
     <string name="notification_gallery">Gallery pictures unlocked!</string>
     <string name="new_message_notification">You received a new message!</string>
     <string name="new_conversation_notification">You have been matched to a new conversation!</string>
+    <string name="terms_and_privacy">By using Blind8, you agree to our <u>Terms</u> and <u>Privacy Policy</u></string>
     <string-array name="genders">
         <item>Choose one...</item>
         <item>Male</item>

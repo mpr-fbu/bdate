@@ -16,28 +16,13 @@
                             <entry key="actionbar">
                               <value>
                                 <PersistentState>
-                                  <option name="children">
-                                    <map>
-                                      <entry key="image">
-                                        <value>
-                                          <PersistentState>
-                                            <option name="values">
-                                              <map>
-                                                <entry key="paddingPercent" value="-10" />
-                                              </map>
-                                            </option>
-                                          </PersistentState>
-                                        </value>
-                                      </entry>
-                                    </map>
-                                  </option>
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$USER_HOME$/Documents/app title.png" />
-                                      <entry key="outputName" value="ic_app_title" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/icons8-add-new-100.png" />
+                                      <entry key="outputName" value="ic_square_picture" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="292829" />
+                                      <entry key="themeColor" value="3bcbee" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -66,7 +51,7 @@
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="ffffff" />
                                       <entry key="backgroundLayerName" value="ic_white" />
-                                      <entry key="foregroundImage" value="$USER_HOME$/Documents/app title.png" />
+                                      <entry key="foregroundImage" value="$USER_HOME$/Downloads/99ef2b546c845048f6098ec9dbbe0611.png" />
                                       <entry key="foregroundLayerName" value="ic_title_text" />
                                       <entry key="outputName" value="ic_app_title" />
                                     </map>
@@ -115,6 +100,11 @@
                                 </PersistentState>
                               </value>
                             </entry>
+                          </map>
+                        </option>
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>
