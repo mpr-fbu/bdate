@@ -1,55 +1,74 @@
 package io.github.rgdagir.blind8;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.parse.ParseFile;
+import com.parse.ParseImageView;
 
 import java.util.List;
 
 public class PickGalleryAdapter extends RecyclerView.Adapter<PickGalleryAdapter.ViewHolder>{
 
-    Context context;
-
+    private Context context;
+    private EditProfileFragment mFragment;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView imgContainer;
-        public FloatingActionButton deleteBtn;
-
-
+        public ParseImageView imgContainer;
+        public FloatingActionButton changeImageBtn;
 
         public ViewHolder(View itemView){
             super(itemView);
             imgContainer = itemView.findViewById(R.id.imgGallery);
-            deleteBtn = itemView.findViewById(R.id.deleteBtn);
+            changeImageBtn = itemView.findViewById(R.id.changeImageBtn);
         }
     }
 
-    private List<ParseFile> mCoverImages;
+    public final static int PICK_PHOTO_CODE = 1046;
+    private List<String> mCoverImageUrls;
 
-    public PickGalleryAdapter(List<ParseFile> images){
-        mCoverImages = images;
+    public PickGalleryAdapter(List<String> imageUrls, EditProfileFragment fragment){
+        mCoverImageUrls = imageUrls;
+        mFragment = fragment;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PickGalleryAdapter.ViewHolder holder, int position) {
-        ParseFile file = mCoverImages.get(position);
+    public void onBindViewHolder(@NonNull PickGalleryAdapter.ViewHolder holder, final int position) {
+        String fileUrl = mCoverImageUrls.get(position);
 
         // Set item views based on our views and data model
-        ImageView imgView = holder.imgContainer;
-        Glide.with(context).load(file.getUrl())
+        final ParseImageView imgView = holder.imgContainer;
+        Glide.with(context).load(fileUrl)
                 .asBitmap().centerCrop().dontAnimate()
-                .placeholder(R.drawable.ic_action_name)
-                .error(R.drawable.ic_action_name)
-                .into(new BitmapImageViewTarget(imgView));
+                .placeholder(R.color.babyWhite)
+                .error(R.color.babyWhite)
+                .into(new BitmapImageViewTarget(imgView) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable roundedBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                        roundedBitmapDrawable.setCornerRadius(30);
+                        imgView.setImageDrawable(roundedBitmapDrawable);
+                    }
+                });
+
+        holder.changeImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPickPhoto(position);
+            }
+        });
     }
 
     @NonNull
@@ -68,6 +87,15 @@ public class PickGalleryAdapter extends RecyclerView.Adapter<PickGalleryAdapter.
 
     @Override
     public int getItemCount() {
-        return mCoverImages.size();
+        return mCoverImageUrls.size();
+    }
+
+    public void onPickPhoto(int position) {
+        // Create intent for picking a photo from the gallery
+        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (i.resolveActivity(context.getPackageManager()) != null) {
+            // Bring up gallery to select a photo
+            mFragment.startActivityForResult(i, PICK_PHOTO_CODE + position + 1);
+        }
     }
 }
