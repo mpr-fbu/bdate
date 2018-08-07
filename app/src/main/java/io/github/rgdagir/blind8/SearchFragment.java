@@ -479,7 +479,7 @@ public class SearchFragment extends Fragment {
                 // For dropping a marker at a point on the Map
                 LatLng pin;
                 pin = new LatLng(location.getLatitude(), location.getLongitude());
-                addCustomMarkerFromDatabase(pin);
+//                addCustomMarkerFromDatabase(pin);
                 mGoogleMap.setMyLocationEnabled(false);
                 drawRangeAndSetZoom(mGoogleMap, pin);
             }
@@ -527,39 +527,38 @@ public class SearchFragment extends Fragment {
 //        Toast.makeText(this, R.string.permission_call_neverask, Toast.LENGTH_SHORT).show();
 //    }
 
-    private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
-
-        mMarkerImageView.setImageBitmap(bitmap);
-        Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
-                Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(returnedBitmap);
-        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
-        Drawable drawable = view.getBackground();
-        if (drawable != null)
-            drawable.draw(canvas);
-        view.draw(canvas);
-        return returnedBitmap;
-    }
-
-    private void addCustomMarkerFromDatabase(final LatLng latLng) {
-
-        if (mGoogleMap == null) {
-            return;
-        }
-        Uri uri = null;
-        // adding a marker with image from URL using glide image loading library
-        Glide.with(context)
-                .load(uri).asBitmap().fitCenter()
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-
-                        mGoogleMap.addMarker(new MarkerOptions().position(latLng)
-                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, bitmap))));
-
-                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-
-                    }
-                });
-    }
+//    private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
+//
+//        mMarkerImageView.setImageBitmap(bitmap);
+//        Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+//                Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(returnedBitmap);
+//        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+//        Drawable drawable = view.getBackground();
+//        if (drawable != null)
+//            drawable.draw(canvas);
+//        view.draw(canvas);
+//        return returnedBitmap;
+//    }
+//
+//    private void addCustomMarkerFromDatabase(final LatLng latLng) {
+//
+//        if (mGoogleMap == null) {
+//            return;
+//        }
+//        // adding a marker with image from URL using glide image loading library
+//        Glide.with(context)
+//                .load(currentUser.getParseFile("profilePic").getUrl()).asBitmap().fitCenter()
+//                .into(new SimpleTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+//                        mMarkerImageView.setImageBitmap(bitmap);
+//                        mGoogleMap.addMarker(new MarkerOptions().position(latLng)
+//                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, bitmap))));
+//
+//                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+//
+//                    }
+//                });
+//    }
 }
