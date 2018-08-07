@@ -479,10 +479,7 @@ public class SearchFragment extends Fragment {
                 // For dropping a marker at a point on the Map
                 LatLng pin;
                 pin = new LatLng(location.getLatitude(), location.getLongitude());
-
-                MarkerOptions markerOptions = new MarkerOptions().position(pin).title("You're here");
-
-                addCustomMarkerFromDatabase(pin, markerOptions);
+                addCustomMarkerFromDatabase(pin);
                 mGoogleMap.setMyLocationEnabled(false);
                 drawRangeAndSetZoom(mGoogleMap, pin);
             }
@@ -533,9 +530,6 @@ public class SearchFragment extends Fragment {
     private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
 
         mMarkerImageView.setImageBitmap(bitmap);
-        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-        view.buildDrawingCache();
         Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
                 Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnedBitmap);
@@ -547,14 +541,15 @@ public class SearchFragment extends Fragment {
         return returnedBitmap;
     }
 
-    private void addCustomMarkerFromDatabase(final LatLng latLng, MarkerOptions markerOptions) {
+    private void addCustomMarkerFromDatabase(final LatLng latLng) {
 
         if (mGoogleMap == null) {
             return;
         }
+        Uri uri = null;
         // adding a marker with image from URL using glide image loading library
         Glide.with(context)
-                .load(currentUser.getParseFile("profilePic").getUrl()).asBitmap().fitCenter()
+                .load(uri).asBitmap().fitCenter()
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
