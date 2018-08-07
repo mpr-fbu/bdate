@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
@@ -95,6 +96,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             });
             holder.tvTimestamp.setText(conversation.getLastMessage().getApproxTimestamp());
         }
+        updateLevel(conversation, holder);
     }
 
     @Override
@@ -112,12 +114,54 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         notifyDataSetChanged();
     }
 
+    private void updateLevel(Conversation conversation, ConversationAdapter.ViewHolder holder) {
+        holder.heart.setVisibility(View.INVISIBLE);
+        holder.level.setTextColor(R.color.offBlack);
+        if (Milestone.canGoOnDate(conversation)) {
+            holder.level.setText("");
+            holder.heart.setVisibility(View.VISIBLE);
+            holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
+                    R.color.heartRed));
+        } else if (Milestone.canSeeGallery(conversation)) {
+            holder.level.setText("7");
+            holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
+                    R.color.pastelRed));
+        } else if (Milestone.canSeeProfilePicture(conversation)) {
+            holder.level.setText("6");
+            holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
+                    R.color.pastelOrange));
+        } else if (Milestone.canSeeOccupation(conversation)) {
+            holder.level.setText("5");
+            holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
+                    R.color.pastelYellow));
+        } else if (Milestone.canSeeDistanceAway(conversation)) {
+            holder.level.setText("4");
+            holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
+                    R.color.pastelGreen));
+        } else if (Milestone.canSeeAge(conversation)) {
+            holder.level.setText("3");
+            holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
+                    R.color.pastelBlue2));
+        } else if (Milestone.canSeeName(conversation)) {
+            holder.level.setText("2");
+            holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
+                    R.color.pastelPurple2));
+        } else if (Milestone.canSeeInterests(conversation)) {
+            holder.level.setText("1");
+            holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
+                    R.color.pastelPink2));
+        }
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ParseImageView ivProfilePic;
         public ImageView ivDefaultPic;
+        public ImageView levelCircle;
+        public ImageView heart;
         public TextView tvUsername;
         public TextView tvTimestamp;
         public TextView tvText;
+        public TextView level;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -125,9 +169,12 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             // do all them findViewByIds
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
             ivDefaultPic = itemView.findViewById(R.id.defaultProfilePic);
+            levelCircle = itemView.findViewById(R.id.levelCircle);
+            heart = itemView.findViewById(R.id.heart);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
             tvText = itemView.findViewById(R.id.tvConversation);
+            level = itemView.findViewById(R.id.level);
 
             // set onclick listener for each conversation
             itemView.setOnClickListener(this);
