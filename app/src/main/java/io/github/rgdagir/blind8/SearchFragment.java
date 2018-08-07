@@ -4,16 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -22,29 +16,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.PermissionRequest;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.FindCallback;
@@ -479,10 +466,7 @@ public class SearchFragment extends Fragment {
                 // For dropping a marker at a point on the Map
                 LatLng pin;
                 pin = new LatLng(location.getLatitude(), location.getLongitude());
-
-                MarkerOptions markerOptions = new MarkerOptions().position(pin).title("You're here");
-
-                addCustomMarkerFromDatabase(pin, markerOptions);
+//                addCustomMarkerFromDatabase(pin);
                 mGoogleMap.setMyLocationEnabled(false);
                 drawRangeAndSetZoom(mGoogleMap, pin);
             }
@@ -530,41 +514,38 @@ public class SearchFragment extends Fragment {
 //        Toast.makeText(this, R.string.permission_call_neverask, Toast.LENGTH_SHORT).show();
 //    }
 
-    private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
-
-        mMarkerImageView.setImageBitmap(bitmap);
-        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-        view.buildDrawingCache();
-        Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
-                Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(returnedBitmap);
-        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
-        Drawable drawable = view.getBackground();
-        if (drawable != null)
-            drawable.draw(canvas);
-        view.draw(canvas);
-        return returnedBitmap;
-    }
-
-    private void addCustomMarkerFromDatabase(final LatLng latLng, MarkerOptions markerOptions) {
-
-        if (mGoogleMap == null) {
-            return;
-        }
-        // adding a marker with image from URL using glide image loading library
-        Glide.with(context)
-                .load(currentUser.getParseFile("profilePic").getUrl()).asBitmap().fitCenter()
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-
-                        mGoogleMap.addMarker(new MarkerOptions().position(latLng)
-                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, bitmap))));
-
-                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-
-                    }
-                });
-    }
+//    private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
+//
+//        mMarkerImageView.setImageBitmap(bitmap);
+//        Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+//                Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(returnedBitmap);
+//        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+//        Drawable drawable = view.getBackground();
+//        if (drawable != null)
+//            drawable.draw(canvas);
+//        view.draw(canvas);
+//        return returnedBitmap;
+//    }
+//
+//    private void addCustomMarkerFromDatabase(final LatLng latLng) {
+//
+//        if (mGoogleMap == null) {
+//            return;
+//        }
+//        // adding a marker with image from URL using glide image loading library
+//        Glide.with(context)
+//                .load(currentUser.getParseFile("profilePic").getUrl()).asBitmap().fitCenter()
+//                .into(new SimpleTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+//                        mMarkerImageView.setImageBitmap(bitmap);
+//                        mGoogleMap.addMarker(new MarkerOptions().position(latLng)
+//                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, bitmap))));
+//
+//                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+//
+//                    }
+//                });
+//    }
 }
