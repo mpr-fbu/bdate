@@ -9,8 +9,9 @@
         <item name="colorAccent">@color/mediumBlue</item>
         <item name="android:colorBackground">@color/babyWhite</item>
         <item name="android:colorForeground">@color/offBlack</item>
-        <item name="android:statusBarColor">@color/shadowBlue</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back_arrow</item>
+        <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
+        <!--<item name="android:fitsSystemWindows">true</item>-->
     </style>
 
     <style name="DatePickerDialogTheme" parent="android:Theme.Holo.Light.Dialog.MinWidth">
