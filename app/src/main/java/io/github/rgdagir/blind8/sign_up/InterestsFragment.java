@@ -12,10 +12,6 @@ import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +54,16 @@ public class InterestsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_interests, container, false);
         setupViews(view);
         setupButtonListeners();
-        populateInterests();
+        //populateInterests();
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            ArrayList<Interest> received = bundle.getParcelableArrayList("interests");
+            for (int i = 0; i < received.size(); i++) {
+                Interest interest = received.get(i);
+                mInterests.add(interest);
+                signUpInterestAdapter.notifyItemInserted(mInterests.size() - 1);
+            }
+        }
         return view;
     }
 
@@ -127,21 +132,21 @@ public class InterestsFragment extends Fragment {
         });
     }
 
-    private void populateInterests() {
-        final ParseQuery<Interest> interestQuery = new Interest.Query();
-        interestQuery.findInBackground(new FindCallback<Interest>() {
-            @Override
-            public void done(List<Interest> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); ++i) {
-                        Interest interest = objects.get(i);
-                        mInterests.add(interest);
-                        signUpInterestAdapter.notifyItemInserted(mInterests.size() - 1);
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+//    private void populateInterests() {
+//        final ParseQuery<Interest> interestQuery = new Interest.Query();
+//        interestQuery.findInBackground(new FindCallback<Interest>() {
+//            @Override
+//            public void done(List<Interest> objects, ParseException e) {
+//                if (e == null) {
+//                    for (int i = 0; i < objects.size(); ++i) {
+//                        Interest interest = objects.get(i);
+//                        mInterests.add(interest);
+//                        signUpInterestAdapter.notifyItemInserted(mInterests.size() - 1);
+//                    }
+//                } else {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//    }
 }
