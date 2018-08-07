@@ -14,8 +14,10 @@
         android:layout_height="wrap_content"
         android:background="@color/mediumGrey"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="0dp">
+        app:layout_constraintBottom_toTopOf="@+id/dropshadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -44,23 +46,23 @@
                 android:background="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                app:srcCompat="@drawable/ic_baseline_check_24px"
                 android:tint="@color/babyWhite"
+                app:srcCompat="@drawable/ic_baseline_check_24px"
                 tools:ignore="VectorDrawableCompat" />
 
             <TextView
                 android:id="@+id/tvEditProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="60dp"
                 android:layout_marginStart="60dp"
                 android:text="Edit Profile"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/babyWhite"
-                android:textStyle="bold"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="60dp" />
+                android:textStyle="bold" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
@@ -84,7 +86,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
             <com.parse.ParseImageView
                 android:id="@+id/profilePic"
                 android:layout_width="120dp"
@@ -98,50 +99,27 @@
                 android:layout_marginTop="16dp"
                 android:foreground="@drawable/profile_border"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@android:color/darker_gray" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/changeProfilePicBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:clickable="true"
-                app:layout_constraintBottom_toBottomOf="@+id/profilePic"
-                app:layout_constraintEnd_toEndOf="@+id/profilePic"
-                app:srcCompat="@color/babyWhite" />
-
-            <EditText
-                android:id="@+id/editName"
-                android:layout_width="220dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/profilePic"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="Name"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textColor="@color/offBlack"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/rvGalleryPics"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.012"
-                app:layout_constraintStart_toEndOf="@+id/profilePic"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                android:focusable="true"
+                android:tint="@color/babyWhite"
+                app:elevation="3dp"
+                android:scaleType="center"
+                app:layout_constraintBottom_toBottomOf="@id/profilePic"
+                app:layout_constraintEnd_toEndOf="@id/profilePic"
+                app:srcCompat="@drawable/ic_add_photo" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvGalleryPics"
                 android:layout_width="match_parent"
-                android:layout_height="109dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -150,19 +128,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profilePic" />
-
-            <View
-                android:id="@+id/line"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_below="@id/rlMoreInfo"
-                android:layout_margin="15dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
-                android:background="@color/mediumGrey"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rvGalleryPics" />
 
             <EditText
                 android:id="@+id/editBio"
@@ -237,12 +202,12 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="29dp"
                 android:text="About me:"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.026"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/line" />
+                app:layout_constraintTop_toBottomOf="@+id/rvGalleryPics" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -362,6 +327,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
+            <EditText
+                android:id="@+id/editName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Name"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textColor="@color/offBlack"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editEmail" />
+
             <Button
                 android:id="@+id/button"
                 android:layout_width="370dp"
@@ -379,7 +361,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editEmail" />
+                app:layout_constraintTop_toBottomOf="@+id/editName" />
 
             <Spinner
                 android:id="@+id/myGender"
