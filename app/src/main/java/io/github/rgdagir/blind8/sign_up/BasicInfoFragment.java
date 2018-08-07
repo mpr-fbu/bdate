@@ -43,8 +43,9 @@ public class BasicInfoFragment extends Fragment {
     private Button btnContinue;
     private String gender;
     private String interestedIn;
-    private long age;
+    private int age;
     private String dateFromPicker;
+    private Date dob;
 
     public BasicInfoFragment() {
         // Required empty public constructor
@@ -92,7 +93,7 @@ public class BasicInfoFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onBackPressed();
-        void goToInterestsFragment(String gender, String interestedIn, long age, String name);
+        void goToInterestsFragment(String gender, String interestedIn, int age, String name, Date dob);
     }
 
     private void setupFragmentVariables(View view) {
@@ -114,7 +115,7 @@ public class BasicInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mListener.goToInterestsFragment(gender, interestedIn, age,
-                        etName.getText().toString());
+                        etName.getText().toString(), dob);
             }
         });
         placeholderBirthday.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +129,7 @@ public class BasicInfoFragment extends Fragment {
     private void getDateFromPicker() {
         DatePickerFragment dateFragment = new DatePickerFragment();
         // Set up current date Into dialog
-        Calendar cal = Calendar.getInstance();
+        Calendar cal /* go stanford! */ = Calendar.getInstance();
         Bundle args = new Bundle();
         args.putInt("year", cal.get(Calendar.YEAR));
         args.putInt("month", cal.get(Calendar.MONTH));
@@ -139,22 +140,33 @@ public class BasicInfoFragment extends Fragment {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
                 dateFromPicker = String.valueOf(monthOfYear + 1) + " / " + String.valueOf(dayOfMonth) + " / " + String.valueOf(year);
                 placeholderBirthday.setText(dateFromPicker);
+                DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                dob = null;
                 try {
-                    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-                    Date birthday = formatter.parse(dateFromPicker);
-                    Date today = new Date();
-                    long diffInMillies = Math.abs(today.getTime() - birthday.getTime());
-                    long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-                    age = diff;
+                    dob = formatter.parse(dateFromPicker);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                age = calculateAge(year, monthOfYear + 1, dayOfMonth);
             }
         });
         if (getActivity().getSupportFragmentManager() == null){
             Log.e("Wut", "it's null :(");
         }
         dateFragment.show(getActivity().getSupportFragmentManager(), "Date Picker");
+    }
+
+    private int calculateAge(int year, int monthOfYear, int dayOfMonth){
+        int returnAge = 0;
+        Calendar calendar = Calendar.getInstance();
+        int presentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        int presentMonthOfYear = calendar.get(Calendar.MONTH) + 1;
+        int presentYear = calendar.get(Calendar.YEAR);
+        returnAge = presentYear - year;
+        if ((presentMonthOfYear < monthOfYear) || (presentMonthOfYear == monthOfYear && presentDayOfMonth < dayOfMonth)){
+            returnAge--;
+        }
+        return returnAge;
     }
 
     private void setupRadioGroupListeners() {

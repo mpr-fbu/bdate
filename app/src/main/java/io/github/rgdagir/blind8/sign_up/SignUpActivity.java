@@ -18,6 +18,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -82,8 +83,9 @@ public class SignUpActivity extends AppCompatActivity
         switchFragment(fragmentManager.beginTransaction(), new BasicInfoFragment());
     }
 
-    public void goToInterestsFragment(String gender, String interestedIn, long age, String name) {
+    public void goToInterestsFragment(String gender, String interestedIn, int age, String name, Date dob) {
         newUser.put("gender", gender);
+        newUser.put("dob", dob);
         newUser.put("interestedIn", interestedIn);
         newUser.put("age", age);
         newUser.put("firstName", name);
