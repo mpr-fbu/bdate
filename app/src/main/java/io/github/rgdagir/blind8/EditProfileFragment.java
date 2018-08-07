@@ -65,7 +65,9 @@ public class EditProfileFragment extends Fragment {
     private HashMap changes;
     private EditProfileFragment.OnFragmentInteractionListener mListener;
     public final static int PICK_PHOTO_CODE = 1046;
-    ArrayList<ParseFile> images;
+    ArrayList<String> images;
+    PickGalleryAdapter galleryAdapter;
+    RecyclerView rvGalleryPicker;
     private ImageView submitChanges;
     private ImageView arrowBack;
 
@@ -144,13 +146,14 @@ public class EditProfileFragment extends Fragment {
                 onPickPhoto(v);
             }
         });
+
     }
 
     public void setupGallery(View v){
-        RecyclerView rvGalleryPicker = v.findViewById(R.id.rvGalleryPics);
+        rvGalleryPicker = v.findViewById(R.id.rvGalleryPics);
         images = fetchCoverImages(ParseUser.getCurrentUser());
-        PickGalleryAdapter adapter = new PickGalleryAdapter(images);
-        rvGalleryPicker.setAdapter(adapter);
+        galleryAdapter = new PickGalleryAdapter(images, this);
+        rvGalleryPicker.setAdapter(galleryAdapter);
         rvGalleryPicker.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
     }
 
@@ -180,19 +183,31 @@ public class EditProfileFragment extends Fragment {
         });
     }
 
-    public ArrayList<ParseFile> fetchCoverImages(ParseUser user){
-        ArrayList<ParseFile> coverImages = new ArrayList<>();
+    public ArrayList<String> fetchCoverImages(ParseUser user){
+        ArrayList<String> coverImages = new ArrayList<>();
+        ParseFile photo0 = user.getParseFile("coverPhoto0");
         ParseFile photo1 = user.getParseFile("coverPhoto1");
         ParseFile photo2 = user.getParseFile("coverPhoto2");
         ParseFile photo3 = user.getParseFile("coverPhoto3");
+        if (photo0 != null) {
+            coverImages.add(photo0.getUrl());
+        } else {
+            coverImages.add("placeholder");
+        }
         if (photo1 != null) {
-            coverImages.add(photo1);
+            coverImages.add(photo1.getUrl());
+        } else {
+            coverImages.add("placeholder");
         }
         if (photo2 != null) {
-            coverImages.add(photo2);
+            coverImages.add(photo2.getUrl());
+        } else {
+            coverImages.add("placeholder");
         }
         if (photo3 != null) {
-            coverImages.add(photo3);
+            coverImages.add(photo3.getUrl());
+        } else {
+            coverImages.add("placeholder");
         }
         return coverImages;
     }
@@ -437,32 +452,51 @@ public class EditProfileFragment extends Fragment {
         if (data != null) {
             Uri photoUri = data.getData();
             // Do something with the photo based on Uri
-            Bitmap selectedImage = null;
-            byte[] img = null;
+            Bitmap selectedImage;
+            byte[] img;
             try {
                 selectedImage = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photoUri);
                 img = Utils.getbytearray(selectedImage);
+                if (requestCode == PICK_PHOTO_CODE){ // profile pic
+                    // Load the selected image into a preview
+                    Glide.with(context).load(photoUri)
+                            .asBitmap().centerCrop().dontAnimate()
+                            .placeholder(R.drawable.ic_action_name)
+                            .error(R.drawable.ic_action_name)
+                            .into(new BitmapImageViewTarget(profilePic) {
+                                @Override
+                                protected void setResource(Bitmap resource) {
+                                    RoundedBitmapDrawable circularBitmapDrawable =
+                                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                                    circularBitmapDrawable.setCircular(true);
+                                    profilePic.setImageDrawable(circularBitmapDrawable);
+                                }
+                            });
+                    ParseFile imageFile = new ParseFile(currUser.getObjectId() + "profilePic.jpg", img);
+                    currUser.put("profilePic", imageFile);
+                    currUser.saveInBackground();
+                } else if (requestCode == PICK_PHOTO_CODE + 1) { // first gallery pic
+                    processNewCoverPhoto(0, photoUri.toString(), img);
+                } else if (requestCode == PICK_PHOTO_CODE + 2) { // second gallery pic
+                    processNewCoverPhoto(1, photoUri.toString(), img);
+                } else if (requestCode == PICK_PHOTO_CODE + 3) { // third gallery pic
+                    processNewCoverPhoto(2, photoUri.toString(), img);
+                } else if (requestCode == PICK_PHOTO_CODE + 4) { // third gallery pic
+                    processNewCoverPhoto(3, photoUri.toString(), img);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // Load the selected image into a preview
-            Glide.with(context).load(photoUri)
-                    .asBitmap().centerCrop().dontAnimate()
-                    .placeholder(R.drawable.ic_action_name)
-                    .error(R.drawable.ic_action_name)
-                    .into(new BitmapImageViewTarget(profilePic) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                            circularBitmapDrawable.setCircular(true);
-                            profilePic.setImageDrawable(circularBitmapDrawable);
-                        }
-                    });
-            ParseFile imageFile = new ParseFile(currUser.getObjectId() + "profilePic.jpg", img);
-            currUser.put("profilePic", imageFile);
-            currUser.saveInBackground();
         }
     }
 
+    private void processNewCoverPhoto(int position, String fileUri, byte[] image) {
+        images.remove(position);
+        images.add(position, fileUri);
+        galleryAdapter.notifyDataSetChanged();
+        rvGalleryPicker.scrollToPosition(0);
+        ParseFile imageFile = new ParseFile(currUser.getObjectId() + "galleryPic.jpg", image);
+        currUser.put("coverPhoto" + Integer.toString(position), imageFile);
+        currUser.saveInBackground();
+    }
 }

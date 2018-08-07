@@ -287,6 +287,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private void populateGallery(ParseUser user) {
+        if (user.getParseFile("coverPhoto0") != null) {
+            mGalleryImages.add(user.getParseFile("coverPhoto0").getUrl());
+        }
         if (user.getParseFile("coverPhoto1") != null) {
             mGalleryImages.add(user.getParseFile("coverPhoto1").getUrl());
         }
