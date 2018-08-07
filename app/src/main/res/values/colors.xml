@@ -18,4 +18,12 @@
     <color name="aqua">#14FFDB</color>
     <color name="oceanBlue">#6095FF</color>
     <color name="superLightBlue">#a2edff</color>
+    <color name="pastelRed">#EFB4B3</color>
+    <color name="pastelOrange">#FFDAC1</color>
+    <color name="pastelYellow">#E2F0CB</color>
+    <color name="pastelGreen">#B5EAD7</color>
+    <color name="pastelBlue2">#C7CEEA</color>
+    <color name="pastelPurple2">#CFB1F4</color>
+    <color name="pastelPink2">#F0C3F5</color>
+    <color name="heartRed">#EF8683</color>
 </resources>

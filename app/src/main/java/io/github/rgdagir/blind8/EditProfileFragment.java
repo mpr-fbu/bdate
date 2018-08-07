@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,6 +38,9 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -47,6 +51,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 
+import io.github.rgdagir.blind8.utils.BitmapScaler;
 import io.github.rgdagir.blind8.utils.Utils;
 
 public class EditProfileFragment extends Fragment {
@@ -70,6 +75,8 @@ public class EditProfileFragment extends Fragment {
     RecyclerView rvGalleryPicker;
     private ImageView submitChanges;
     private ImageView arrowBack;
+    private TextView savingIndicator;
+    public final String APP_TAG = "Blind8";
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -113,6 +120,8 @@ public class EditProfileFragment extends Fragment {
         displayProgress = v.findViewById(R.id.ageProgress);
         submitChanges = v.findViewById(R.id.done);
         arrowBack = v.findViewById(R.id.goBackArrow);
+        savingIndicator = v.findViewById(R.id.tvSaving);
+        savingIndicator.setVisibility(View.INVISIBLE);
 
         setupButtonListeners();
         setupTextContainerListeners();
@@ -383,7 +392,7 @@ public class EditProfileFragment extends Fragment {
         });
     }
 
-    public void saveUpdatedUser(){
+    public void saveUpdatedUser() {
         Iterator it = changes.entrySet().iterator();
         while (it.hasNext()) {
             HashMap.Entry entry = (HashMap.Entry) it.next();
@@ -431,12 +440,10 @@ public class EditProfileFragment extends Fragment {
         mListener = null;
     }
 
-
     public interface OnFragmentInteractionListener {
         // Placeholder, to be inserted when clicking is introduced
         void goBackToProfile();
     }
-
 
     public void onPickPhoto(View view) {
         // Create intent for picking a photo from the gallery
@@ -447,17 +454,19 @@ public class EditProfileFragment extends Fragment {
         }
     }
 
+    // after user picks image to upload from their gallery
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             Uri photoUri = data.getData();
             // Do something with the photo based on Uri
-            Bitmap selectedImage;
+            final Bitmap selectedImage;
             byte[] img;
             try {
-                selectedImage = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photoUri);
-                img = Utils.getbytearray(selectedImage);
+                Bitmap rawSelectedImage = BitmapScaler.getCorrectlyOrientedImage(context, photoUri);
                 if (requestCode == PICK_PHOTO_CODE){ // profile pic
+                    selectedImage = resizeImage(rawSelectedImage, "profilePic");
+                    img = Utils.getbytearray(selectedImage);
                     // Load the selected image into a preview
                     Glide.with(context).load(photoUri)
                             .asBitmap().centerCrop().dontAnimate()
@@ -472,16 +481,30 @@ public class EditProfileFragment extends Fragment {
                                     profilePic.setImageDrawable(circularBitmapDrawable);
                                 }
                             });
-                    ParseFile imageFile = new ParseFile(currUser.getObjectId() + "profilePic.jpg", img);
+                    ParseFile imageFile = new ParseFile(currUser.getObjectId() + "profilePic_resized.jpg", img);
                     currUser.put("profilePic", imageFile);
-                    currUser.saveInBackground();
+                    savingIndicator.setVisibility(View.VISIBLE);
+                    currUser.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(com.parse.ParseException e) {
+                            savingIndicator.setVisibility(View.INVISIBLE);
+                        }
+                    });
                 } else if (requestCode == PICK_PHOTO_CODE + 1) { // first gallery pic
+                    selectedImage = resizeImage(rawSelectedImage, "galleryPic");
+                    img = Utils.getbytearray(selectedImage);
                     processNewCoverPhoto(0, photoUri.toString(), img);
                 } else if (requestCode == PICK_PHOTO_CODE + 2) { // second gallery pic
+                    selectedImage = resizeImage(rawSelectedImage, "galleryPic");
+                    img = Utils.getbytearray(selectedImage);
                     processNewCoverPhoto(1, photoUri.toString(), img);
                 } else if (requestCode == PICK_PHOTO_CODE + 3) { // third gallery pic
+                    selectedImage = resizeImage(rawSelectedImage, "galleryPic");
+                    img = Utils.getbytearray(selectedImage);
                     processNewCoverPhoto(2, photoUri.toString(), img);
                 } else if (requestCode == PICK_PHOTO_CODE + 4) { // third gallery pic
+                    selectedImage = resizeImage(rawSelectedImage, "galleryPic");
+                    img = Utils.getbytearray(selectedImage);
                     processNewCoverPhoto(3, photoUri.toString(), img);
                 }
             } catch (IOException e) {
@@ -495,8 +518,52 @@ public class EditProfileFragment extends Fragment {
         images.add(position, fileUri);
         galleryAdapter.notifyDataSetChanged();
         rvGalleryPicker.scrollToPosition(0);
-        ParseFile imageFile = new ParseFile(currUser.getObjectId() + "galleryPic.jpg", image);
+        ParseFile imageFile = new ParseFile(currUser.getObjectId() + "galleryPic_resized.jpg", image);
         currUser.put("coverPhoto" + Integer.toString(position), imageFile);
-        currUser.saveInBackground();
+        savingIndicator.setVisibility(View.VISIBLE);
+        currUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(com.parse.ParseException e) {
+                savingIndicator.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
+    // RESIZE BITMAP
+    private Bitmap resizeImage(Bitmap rawImage, String imagePrefix) {
+        Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawImage, 800);
+        // Configure byte output stream
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        // Compress the image further
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
+        // Create a new file for the resized bitmap (`getPhotoFileUri` defined above)
+        final File resizedFile = getPhotoFileUri(currUser.getObjectId() + imagePrefix + "_resized.jpg");
+        // Write the bytes of the bitmap to file
+        try {
+            FileOutputStream fos = new FileOutputStream(resizedFile);
+            fos.write(bytes.toByteArray());
+            fos.close();
+            Log.d("SaveImage", "the image was compressed correctly");
+        } catch (IOException e) {
+            Log.d("SaveImage", "problem compressing");
+            e.printStackTrace();
+        }
+        return resizedBitmap;
+    }
+
+    // Returns the File for a photo stored on disk given the fileName
+    public File getPhotoFileUri(String fileName) {
+        // Get safe storage directory for photos
+        // Use `getExternalFilesDir` on Context to access package-specific directories.
+        // This way, we don't need to request external read/write runtime permissions.
+        File mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+            Log.d(APP_TAG, "failed to create directory");
+        }
+
+        // Return the file target for the photo based on filename
+        return new File(mediaStorageDir.getPath() + File.separator + fileName);
     }
 }

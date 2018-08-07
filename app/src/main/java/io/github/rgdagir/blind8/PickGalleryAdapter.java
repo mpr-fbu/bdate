@@ -44,7 +44,7 @@ public class PickGalleryAdapter extends RecyclerView.Adapter<PickGalleryAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PickGalleryAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final PickGalleryAdapter.ViewHolder holder, int position) {
         String fileUrl = mCoverImageUrls.get(position);
 
         // Set item views based on our views and data model
@@ -66,7 +66,7 @@ public class PickGalleryAdapter extends RecyclerView.Adapter<PickGalleryAdapter.
         holder.changeImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onPickPhoto(position);
+                onPickPhoto(holder.getAdapterPosition());
             }
         });
     }
