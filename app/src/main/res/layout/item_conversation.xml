@@ -63,8 +63,8 @@
 
     <ImageView
         android:id="@+id/levelCircle"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="10dp"
@@ -73,11 +73,11 @@
 
     <TextView
         android:id="@+id/level"
-        android:layout_width="16dp"
+        android:layout_width="19dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignRight="@+id/levelCircle"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="17dp"
+        android:layout_marginEnd="8dp"
         android:background="@color/white"
         android:ellipsize="end"
         android:gravity="center"
@@ -89,8 +89,8 @@
 
     <ImageView
         android:id="@+id/heart"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="10dp"
