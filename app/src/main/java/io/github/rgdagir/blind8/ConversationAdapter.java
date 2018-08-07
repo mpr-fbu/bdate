@@ -116,7 +116,6 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     private void updateLevel(Conversation conversation, ConversationAdapter.ViewHolder holder) {
         holder.heart.setVisibility(View.INVISIBLE);
-        holder.level.setTextColor(R.color.offBlack);
         if (Milestone.canGoOnDate(conversation)) {
             holder.level.setText("");
             holder.heart.setVisibility(View.VISIBLE);
@@ -124,30 +123,37 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                     R.color.heartRed));
         } else if (Milestone.canSeeGallery(conversation)) {
             holder.level.setText("7");
+            holder.level.setTextColor(context.getResources().getColor(R.color.pastelRed));
             holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
                     R.color.pastelRed));
         } else if (Milestone.canSeeProfilePicture(conversation)) {
             holder.level.setText("6");
+            holder.level.setTextColor(context.getResources().getColor(R.color.pastelOrange));
             holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
                     R.color.pastelOrange));
         } else if (Milestone.canSeeOccupation(conversation)) {
             holder.level.setText("5");
+            holder.level.setTextColor(context.getResources().getColor(R.color.pastelYellow));
             holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
                     R.color.pastelYellow));
         } else if (Milestone.canSeeDistanceAway(conversation)) {
             holder.level.setText("4");
+            holder.level.setTextColor(context.getResources().getColor(R.color.pastelGreen));
             holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
                     R.color.pastelGreen));
         } else if (Milestone.canSeeAge(conversation)) {
             holder.level.setText("3");
+            holder.level.setTextColor(context.getResources().getColor(R.color.pastelBlue2));
             holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
                     R.color.pastelBlue2));
         } else if (Milestone.canSeeName(conversation)) {
             holder.level.setText("2");
+            holder.level.setTextColor(context.getResources().getColor(R.color.pastelPurple2));
             holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
                     R.color.pastelPurple2));
         } else if (Milestone.canSeeInterests(conversation)) {
             holder.level.setText("1");
+            holder.level.setTextColor(context.getResources().getColor(R.color.pastelPink2));
             holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
                     R.color.pastelPink2));
         }

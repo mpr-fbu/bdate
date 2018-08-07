@@ -56,43 +56,44 @@
         android:id="@+id/tvTimestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_margin="5dp" />
+        android:layout_centerVertical="true"
+        android:layout_margin="5dp"
+        android:layout_toLeftOf="@id/levelCircle" />
 
     <ImageView
         android:id="@+id/levelCircle"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="80dp"
-        android:tint="@color/offBlack"
+        android:layout_marginEnd="10dp"
+        android:tint="@color/mediumGrey"
         app:srcCompat="@drawable/ic_level_indicator_circle" />
 
     <TextView
         android:id="@+id/level"
         android:layout_width="16dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="87dp"
+        android:layout_marginEnd="17dp"
         android:background="@color/white"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
         android:scrollHorizontally="true"
         android:text="0"
-        android:textColor="@color/offBlack"
+        android:textColor="@color/mediumGrey"
         android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/heart"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="80dp"
+        android:layout_marginEnd="10dp"
         android:tint="@color/heartRed"
         app:srcCompat="@drawable/date_heart_icon"
         tools:ignore="VectorDrawableCompat" />
