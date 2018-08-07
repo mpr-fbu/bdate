@@ -98,8 +98,8 @@ public class SearchFragment extends Fragment {
         rangeMatchBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                range = progress;
-                circle.setRadius(range * 1609.4);
+                range = progress; // in miles
+                circle.setRadius(range * 1609.4); // in meters
             }
 
             @Override
@@ -460,6 +460,7 @@ public class SearchFragment extends Fragment {
                 LatLng pin;
                 pin = new LatLng(location.getLatitude(), location.getLongitude());
                 mGoogleMap.addMarker(new MarkerOptions().position(pin).title("You're here"));
+                mGoogleMap.setMyLocationEnabled(false);
                 drawRangeAndSetZoom(mGoogleMap, pin);
             }
         });
@@ -470,12 +471,13 @@ public class SearchFragment extends Fragment {
         // Instantiates a new CircleOptions object and defines the center and radius
         CircleOptions circleOptions = new CircleOptions()
                 .center(pin)
-                .radius(range * 1609.34); // In meters
-
+                .radius(range * 1609.34) // In meters
+                .strokeWidth(0)
+                .fillColor(R.color.mediumBlue);
         // Get back the mutable Circle
         circle = gMap.addCircle(circleOptions);
         // For zooming automatically to the location of the marker
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(pin).zoom(12).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(pin).zoom(8).build();
         gMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
