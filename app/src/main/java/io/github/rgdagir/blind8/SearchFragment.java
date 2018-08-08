@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseCloud;
@@ -127,14 +128,12 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 searchForOpenConversations();
-                searchButton.setVisibility(View.INVISIBLE);
             }
         });
         stopSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //stopSearching();
-                searchButton.setVisibility(View.VISIBLE);
+                stopSearching();
             }
         });
     }
@@ -307,6 +306,7 @@ public class SearchFragment extends Fragment {
                     public void done(ParseException e) {
                         if (e == null) {
                             Log.d("SearchFragment", "Create conversation success!");
+                            searchButton.setVisibility(View.INVISIBLE);
                         } else {
                             Log.e("SearchFragment", "Creating conversation failed :(");
                         }
@@ -349,6 +349,33 @@ public class SearchFragment extends Fragment {
             }
         }
         return true;
+    }
+
+    private void stopSearching() {
+        final ParseQuery<Conversation> currentUserQuery = new Conversation.Query();
+        currentUserQuery.whereDoesNotExist("user2");
+        currentUserQuery.whereEqualTo("user1", currentUser);
+        currentUserQuery.findInBackground(new FindCallback<Conversation>() {
+            @Override
+            public void done(List<Conversation> objects, ParseException e) {
+                if (e == null) {
+                    Conversation toDelete = objects.get(0);
+                    toDelete.deleteInBackground(new DeleteCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                searchButton.setVisibility(View.VISIBLE);
+                                Toast.makeText(getContext(), "Stopped searching", Toast.LENGTH_LONG).show();
+                            } else {
+                                Log.e("SearchFragment", "Error deleting open conversation.");
+                            }
+                        }
+                    });
+                } else {
+                    Log.e("SearchFragment", "Error while trying to find open conversation to delete.");
+                }
+            }
+        });
     }
 
     private void sendConversationPushNotification(Conversation conversation) {
