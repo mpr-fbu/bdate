@@ -96,7 +96,6 @@
             android:value="@string/maps_api_key" />
 
         <!-- <activity android:name=".CustomPhotoGallery" /> -->
-        <activity android:name=".TestSeekBar"></activity>
     </application>
 
 </manifest>

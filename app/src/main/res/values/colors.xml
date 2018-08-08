@@ -26,4 +26,5 @@
     <color name="pastelPurple2">#CFB1F4</color>
     <color name="pastelPink2">#F0C3F5</color>
     <color name="heartRed">#EF8683</color>
+    <color name="transparentBlue">#0A3BCBEE</color>
 </resources>

@@ -482,7 +482,7 @@ public class SearchFragment extends Fragment {
                 .center(pin)
                 .radius(range * 1609.34) // In meters
                 .strokeWidth(0)
-                .fillColor(R.color.mediumBlue);
+                .fillColor(R.color.transparentBlue);
         // Get back the mutable Circle
         circle = gMap.addCircle(circleOptions);
 

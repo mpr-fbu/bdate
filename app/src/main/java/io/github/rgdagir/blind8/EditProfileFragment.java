@@ -70,6 +70,7 @@ public class EditProfileFragment extends Fragment {
     private EditText editBio;
     private EditText editOccupation;
     private EditText editEducation;
+    private EditText editAlias;
 
     private Spinner myGenderSpinner;
     private Spinner interestedInSpinner;
@@ -120,6 +121,7 @@ public class EditProfileFragment extends Fragment {
         editBio = v.findViewById(R.id.editBio);
         editEducation = v.findViewById(R.id.editEducation);
         editOccupation = v.findViewById(R.id.editOccupation);
+        editAlias = v.findViewById(R.id.editAlias);
 
         myGenderSpinner = v.findViewById(R.id.myGender);
         interestedInSpinner = v.findViewById(R.id.interestedInGender);
@@ -290,6 +292,18 @@ public class EditProfileFragment extends Fragment {
                 changes.put("education", s.toString());
             }
         });
+        editAlias.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                changes.put("fakeName", s.toString());
+            }
+        });
     }
 
     public void fetchCurrentUserAndLoadPage(){
@@ -299,6 +313,7 @@ public class EditProfileFragment extends Fragment {
         editBio.setText(currUser.getString("bio"));
         editEducation.setText(currUser.getString("education"));
         editOccupation.setText(currUser.getString("occupation"));
+        editAlias.setText(currUser.getString("fakeName"));
         Glide.with(context).load(currUser.getParseFile("profilePic").getUrl())
                 .asBitmap().centerCrop().dontAnimate()
                 .placeholder(R.mipmap.ic_picture)

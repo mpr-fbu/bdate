@@ -382,10 +382,29 @@
                         android:ems="8" />
 
                     <TextView
-                        android:id="@+id/tvGenderLabel"
+                        android:id="@+id/tvAliasLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/editName"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Alias" />
+
+                    <EditText
+                        android:id="@+id/editAlias"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvAliasLabel"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="8" />
+
+                    <TextView
+                        android:id="@+id/tvGenderLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/editAlias"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="5dp"
                         android:text="I identify as" />
