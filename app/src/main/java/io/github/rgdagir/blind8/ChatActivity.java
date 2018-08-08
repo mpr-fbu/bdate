@@ -350,7 +350,9 @@ public class ChatActivity extends AppCompatActivity {
     /* Helpers for other methods */
 
     private void checkNewUnlockedMilestones(final Conversation conversation) {
-        if (Milestone.canSeeGallery(conversation)) {
+        if (Milestone.canGoOnDate(conversation)) {
+            milestone.showNotification(conversation);
+        } else if (Milestone.canSeeGallery(conversation)) {
             milestone.showNotification(conversation);
         } else if (Milestone.canSeeProfilePicture(conversation)) {
             milestone.showNotification(conversation);
@@ -432,6 +434,9 @@ public class ChatActivity extends AppCompatActivity {
             case "gallery":
                 animateTextView(R.string.notification_gallery);
                 return;
+            case "date":
+                animateTextView(R.string.notification_date);
+                return;
         }
     }
 
@@ -441,6 +446,9 @@ public class ChatActivity extends AppCompatActivity {
             public void run() {
                 notification.setText(unlockMessage);
                 notification.setBackgroundResource(R.color.oceanBlue);
+                if (unlockMessage == R.string.notification_date) {
+                    notification.setBackgroundResource(R.color.pastelPink);
+                }
                 notification.setVisibility(View.VISIBLE);
                 notification.postDelayed(new Runnable() {
                     public void run() {
