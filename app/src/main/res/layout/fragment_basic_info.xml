@@ -124,15 +124,19 @@
 
     <EditText
         android:id="@+id/placeholderBirthday"
-        android:layout_alignLeft="@+id/explanation"
-        android:layout_alignRight="@+id/explanation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/explanation"
+        android:layout_alignRight="@+id/explanation"
         android:layout_below="@+id/birthday"
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:hint="MM / DD / YYYY"
-        android:inputType="textPersonName" />
+        android:inputType="none"
+        android:clickable="true"
+        android:focusable="false"
+        android:cursorVisible="false"
+        android:focusableInTouchMode="false" />
 
     <TextView
         android:id="@+id/name"
@@ -153,7 +157,8 @@
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:hint="Add your first name "
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        />
 
     <Button
         android:id="@+id/btnContinue"
