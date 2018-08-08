@@ -47,7 +47,7 @@ public final class Utils extends Fragment {
 
     public static byte[] getbytearray(Bitmap bm){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bm.compress(Bitmap.CompressFormat.PNG, 50, stream);
         byte[] byteArray = stream.toByteArray();
         return byteArray;
     }

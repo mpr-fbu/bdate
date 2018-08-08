@@ -63,6 +63,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
     implementation "com.google.android.gms:play-services-maps:$googlePlayVersion"
     implementation "com.google.android.gms:play-services-location:$googlePlayVersion"
+    implementation 'com.android.support:design:25.1.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

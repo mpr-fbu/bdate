@@ -2,8 +2,10 @@ package io.github.rgdagir.blind8.sign_up;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,7 @@ public class LoginInfoFragment extends Fragment {
     private EditText etAlias;
     private Button btnContinue;
     private ImageView refresh;
+    private TextInputLayout emailLayout;
 
     public LoginInfoFragment() {
         // Required empty public constructor
@@ -98,6 +101,7 @@ public class LoginInfoFragment extends Fragment {
         aliasNote = view.findViewById(R.id.aliasNote);
         etAlias = view.findViewById(R.id.etAlias);
         refresh = view.findViewById(R.id.refresh);
+        emailLayout = view.findViewById(R.id.emailLayout);
     }
 
     private void setupButtonListeners() {
@@ -138,11 +142,33 @@ public class LoginInfoFragment extends Fragment {
             public void afterTextChanged(Editable s) {
             }
         });
+        etEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!isValidEmail(s.toString())){
+                    emailLayout.setError("Inavlid email");
+                    btnContinue.setEnabled(false);
+                } else {
+                    emailLayout.setError(null);
+                    btnContinue.setEnabled(true);
+                }
+            }
+        });
     }
 
 
     private int rng(int size) {
         Random rand = new Random();
         return rand.nextInt(size);
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 }
