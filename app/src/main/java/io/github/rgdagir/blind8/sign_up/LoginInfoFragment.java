@@ -158,9 +158,13 @@ public class LoginInfoFragment extends Fragment {
                 if (!isValidEmail(s.toString())){
                     tilEmail.setError("Invalid email");
                     btnContinue.setEnabled(false);
+                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_gray));
+
                 } else {
                     tilEmail.setError(null);
                     btnContinue.setEnabled(true);
+                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_style));
+
                 }
             }
         });

@@ -50,6 +50,7 @@ public class BasicInfoFragment extends Fragment {
     private Date dob;
     private TextInputLayout tilBirthday;
 
+
     public BasicInfoFragment() {
         // Required empty public constructor
     }
@@ -155,9 +156,11 @@ public class BasicInfoFragment extends Fragment {
                 if (age < 18){
                     tilBirthday.setError("You have to be 18 or older to use this app");
                     btnContinue.setEnabled(false);
+                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_gray));
                 } else {
                     tilBirthday.setError(null);
                     btnContinue.setEnabled(true);
+                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_style));
                 }
             }
         });
@@ -168,7 +171,7 @@ public class BasicInfoFragment extends Fragment {
     }
 
     private int calculateAge(int year, int monthOfYear, int dayOfMonth){
-        int returnAge = 0;
+        int returnAge;
         Calendar calendar = Calendar.getInstance();
         int presentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         int presentMonthOfYear = calendar.get(Calendar.MONTH) + 1;

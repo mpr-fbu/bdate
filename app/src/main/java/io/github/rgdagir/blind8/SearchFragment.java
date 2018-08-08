@@ -104,7 +104,7 @@ public class SearchFragment extends Fragment {
 
     public void setupListeners(){
         // Setup any handles to view objects here
-        mTvRange.setText(String.valueOf(currentUser.get("matchRange")) + " mi.");
+        mTvRange.setText(String.valueOf(currentUser.getInt("matchRange")) + " mi.");
         rangeMatchBar.setProgress((Integer) currentUser.get("matchRange"));
         rangeMatchBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
