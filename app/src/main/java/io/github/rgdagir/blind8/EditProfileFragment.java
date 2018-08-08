@@ -174,8 +174,9 @@ public class EditProfileFragment extends Fragment {
         // get min and max text view
         final TextView tvMin = view.findViewById(R.id.rangeSeekBarMin);
         final TextView tvMax = view.findViewById(R.id.rangeSeekBarMax);
-        tvMin.setText(String.valueOf(currUser.getNumber("minAge")));
-        tvMax.setText(String.valueOf(currUser.getNumber("maxAge")));
+        rangeSeekbar.setMinStartValue(currUser.getNumber("minAge").floatValue());
+        rangeSeekbar.setMaxStartValue(currUser.getNumber("maxAge").floatValue());
+        rangeSeekbar.apply();
 
         // set listener
         rangeSeekbar.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
@@ -320,18 +321,21 @@ public class EditProfileFragment extends Fragment {
         final String[] preferences = getResources().getStringArray(R.array.preferences);
         // create spinners
         myGenderSpinner = v.findViewById(R.id.myGender);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
-                R.array.genders, android.R.layout.simple_spinner_dropdown_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        myGenderSpinner.setAdapter(adapter);
-        myGenderSpinner.setSelection(adapter.getPosition(userGender), true);
         interestedInSpinner = v.findViewById(R.id.interestedInGender);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(context,
+                R.array.genders, android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> interestedAdapter = ArrayAdapter.createFromResource(context,
+                R.array.preferences, android.R.layout.simple_spinner_dropdown_item);
+        // Specify the layout to use when the list of choices appears
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        interestedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        interestedInSpinner.setAdapter(adapter);
-        interestedInSpinner.setSelection(adapter.getPosition(userInterest), true);
+        myGenderSpinner.setAdapter(genderAdapter);
+        myGenderSpinner.setSelection(genderAdapter.getPosition(userGender), true);
+        // Apply the adapter to the spinner
+        interestedInSpinner.setAdapter(interestedAdapter);
+        interestedInSpinner.setSelection(interestedAdapter.getPosition(userInterest), true);
         myGenderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -354,11 +358,12 @@ public class EditProfileFragment extends Fragment {
     }
 
     public void setupRangeBar(){
-        displayProgress.setText(String.valueOf(currUser.getNumber("matchRange")));
+        displayProgress.setText(String.valueOf(currUser.getNumber("matchRange")) + " mi.");
+        rangeDistanceSeekBar.setProgress((Integer) currUser.getNumber("matchRange"));
         rangeDistanceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                displayProgress.setText(Integer.toString(progress));
+                displayProgress.setText(Integer.toString(progress) + " mi.");
                 changes.put("matchRange", Integer.toString(progress));
             }
 

@@ -26,8 +26,8 @@
     </string-array>
     <string-array name="preferences">
         <item>Choose one...</item>
-        <item>Men</item>
-        <item>Women</item>
+        <item>Male</item>
+        <item>Female</item>
         <item>No preference</item>
     </string-array>
 </resources>
