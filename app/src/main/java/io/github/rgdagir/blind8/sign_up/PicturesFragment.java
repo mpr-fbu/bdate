@@ -22,6 +22,7 @@ import com.parse.ParseFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.github.rgdagir.blind8.R;
@@ -39,7 +40,7 @@ public class PicturesFragment extends Fragment {
     private ImageView galleryPicThree;
     private Button finish;
     public final static int PICK_PHOTO_CODE = 1046;
-    private List<byte[]> images;
+    private HashMap<String, byte[]> images;
 
 
     public PicturesFragment() {
@@ -54,7 +55,7 @@ public class PicturesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pictures, container, false);
-        images = new ArrayList<>();
+        images = new HashMap();
         context = getActivity();
         setupFragmentVariables(view);
         setupButtonListeners();
@@ -88,7 +89,7 @@ public class PicturesFragment extends Fragment {
         //void onFragmentInteraction(Uri uri);
         void onBackPressed();
         void createNewUser();
-        void addPicturesToUser(List<byte[]> files);
+        void addPicturesToUser(HashMap<String, byte[]> files);
     }
 
     private void setupFragmentVariables(View view) {
@@ -157,16 +158,16 @@ public class PicturesFragment extends Fragment {
                 img = Utils.getbytearray(selectedImage);
                 if (requestCode == PICK_PHOTO_CODE){ // top left corner - profile pic
                     loadPhoto(context, photoUri, profilePic);
-                    images.add(img);
+                    images.put("profilePic", img);
                 } else if (requestCode == PICK_PHOTO_CODE + 1) { // top right corner - first gallery pic
                     loadPhoto(context, photoUri, galleryPicOne);
-                    images.add(img);
+                    images.put("coverPhoto1", img);
                 } else if (requestCode == PICK_PHOTO_CODE + 2) { // bottom right corner - second gallery pic
                     loadPhoto(context, photoUri, galleryPicTwo);
-                    images.add(img);
+                    images.put("coverPhoto2", img);
                 } else if (requestCode == PICK_PHOTO_CODE + 3) { // bottom left corner - third gallery pic
                     loadPhoto(context, photoUri, galleryPicThree);
-                    images.add(img);
+                    images.put("coverPhoto3", img);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
