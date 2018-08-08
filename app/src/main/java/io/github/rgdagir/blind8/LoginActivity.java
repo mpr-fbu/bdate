@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
         installation.put("currentUserId", ParseUser.getCurrentUser().getObjectId());
         installation.saveInBackground();
         // redirect to main activity
-        final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        final Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
         startActivity(intent);
         finish();
     }

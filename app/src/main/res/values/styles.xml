@@ -24,5 +24,9 @@
         <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
 
-
+    <!-- Splash Screen theme -->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:background">@drawable/splash_screen</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
 </resources>
