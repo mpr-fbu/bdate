@@ -25,6 +25,15 @@ public class HolderActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        conversation = (Conversation) getIntent().getSerializableExtra("conversation");
+        ProfileFragment profileFragment = ProfileFragment.newInstance(conversation);
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.flContainer, profileFragment).commit();
+    }
+
+    @Override
     public void goToEditProfile() {
         // do nothing since this is someone else's profile
     }

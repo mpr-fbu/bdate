@@ -79,6 +79,8 @@ public class Milestone {
             activity.showTextViewNotification("profile picture");
         } else if (currentPoints == GALLERY_SCORE){
             activity.showTextViewNotification("gallery");
+        } else if (currentPoints == DATE_SCORE) {
+            activity.showTextViewNotification("date");
         }
     }
 }

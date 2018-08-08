@@ -16,9 +16,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.PermissionRequest;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -31,7 +32,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.FindCallback;
@@ -63,6 +63,9 @@ public class SearchFragment extends Fragment {
     private SeekBar rangeMatchBar;
     private int range;
     private Circle circle;
+    private TextView mTvRange;
+    private View mCustomMarkerView;
+    private ImageView mMarkerImageView;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -80,9 +83,12 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         mMapView = rootView.findViewById(R.id.mapView);
+        mTvRange = rootView.findViewById(R.id.tvRange);
         searchButton = rootView.findViewById(R.id.btnSearch);
         context = getActivity();
         rangeMatchBar = rootView.findViewById(R.id.matchRangeBar);
+        mCustomMarkerView = inflater.inflate(R.layout.map_marker, null);
+        mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
         setupMap(savedInstanceState);
         getLocationPermissionsIfNeeded(rootView, savedInstanceState);
         return rootView;
@@ -99,6 +105,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 range = progress; // in miles
+                mTvRange.setText(String.valueOf(range) + " mi.");
                 circle.setRadius(range * 1609.4); // in meters
             }
 
@@ -281,7 +288,7 @@ public class SearchFragment extends Fragment {
                 if (myLoc != null) {
                     newConvo.setMatchLocation(myLoc);
                 }
-                newConvo.setMatchRange(currentUser.getInt("matchRange"));
+                newConvo.setMatchRange(range);
 
                 newConvo.saveInBackground(new SaveCallback() {
                     @Override
@@ -459,7 +466,7 @@ public class SearchFragment extends Fragment {
                 // For dropping a marker at a point on the Map
                 LatLng pin;
                 pin = new LatLng(location.getLatitude(), location.getLongitude());
-                mGoogleMap.addMarker(new MarkerOptions().position(pin).title("You're here"));
+//                addCustomMarkerFromDatabase(pin);
                 mGoogleMap.setMyLocationEnabled(false);
                 drawRangeAndSetZoom(mGoogleMap, pin);
             }
@@ -476,8 +483,9 @@ public class SearchFragment extends Fragment {
                 .fillColor(R.color.mediumBlue);
         // Get back the mutable Circle
         circle = gMap.addCircle(circleOptions);
+
         // For zooming automatically to the location of the marker
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(pin).zoom(8).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(pin).zoom(10).build();
         gMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
@@ -504,5 +512,40 @@ public class SearchFragment extends Fragment {
 //    @OnNeverAskAgain(Manifest.permission.ACCESS_FINE_LOCATION)
 //    void showNeverAskForPhoneCall() {
 //        Toast.makeText(this, R.string.permission_call_neverask, Toast.LENGTH_SHORT).show();
+//    }
+
+//    private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
+//
+//        mMarkerImageView.setImageBitmap(bitmap);
+//        Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+//                Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(returnedBitmap);
+//        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+//        Drawable drawable = view.getBackground();
+//        if (drawable != null)
+//            drawable.draw(canvas);
+//        view.draw(canvas);
+//        return returnedBitmap;
+//    }
+//
+//    private void addCustomMarkerFromDatabase(final LatLng latLng) {
+//
+//        if (mGoogleMap == null) {
+//            return;
+//        }
+//        // adding a marker with image from URL using glide image loading library
+//        Glide.with(context)
+//                .load(currentUser.getParseFile("profilePic").getUrl()).asBitmap().fitCenter()
+//                .into(new SimpleTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+//                        mMarkerImageView.setImageBitmap(bitmap);
+//                        mGoogleMap.addMarker(new MarkerOptions().position(latLng)
+//                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, bitmap))));
+//
+//                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+//
+//                    }
+//                });
 //    }
 }

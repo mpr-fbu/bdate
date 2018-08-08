@@ -9,15 +9,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
+import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,12 +40,14 @@ public class SignUpActivity extends AppCompatActivity
     LoginInfoFragment initialFragment = new LoginInfoFragment();
     HashMap<Interest, Boolean> checkedInterests = new HashMap();
     Boolean interestsSkipped = false;
+    ArrayList<Interest> mInterests = new ArrayList<>();
     final FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        populateInterests();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.flContainer, initialFragment)
                 .commit();
@@ -82,14 +88,19 @@ public class SignUpActivity extends AppCompatActivity
         switchFragment(fragmentManager.beginTransaction(), new BasicInfoFragment());
     }
 
-    public void goToInterestsFragment(String gender, String interestedIn, long age, String name) {
+    public void goToInterestsFragment(String gender, String interestedIn, int age, String name, Date dob) {
         newUser.put("gender", gender);
+        newUser.put("dob", dob);
         newUser.put("interestedIn", interestedIn);
         newUser.put("age", age);
         newUser.put("firstName", name);
         newUser.put("minAge", 18);
         newUser.put("maxAge", 30);
-        switchFragment(fragmentManager.beginTransaction(), new InterestsFragment());
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("interests", mInterests);
+        InterestsFragment interestsFragment = new InterestsFragment();
+        interestsFragment.setArguments(bundle);
+        switchFragment(fragmentManager.beginTransaction(), interestsFragment);
     }
 
     public void goToPicturesFragment(HashMap<Interest, Boolean> checked, Boolean skipped) {
@@ -183,6 +194,23 @@ public class SignUpActivity extends AppCompatActivity
                 });
             }
         }
+    }
+
+    private void populateInterests() {
+        final ParseQuery<Interest> interestQuery = new Interest.Query();
+        interestQuery.findInBackground(new FindCallback<Interest>() {
+            @Override
+            public void done(List<Interest> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); ++i) {
+                        Interest interest = objects.get(i);
+                        mInterests.add(interest);
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void launchMainActivity() {
