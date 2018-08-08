@@ -461,6 +461,7 @@
                         android:paddingBottom="10dp"
                         android:paddingTop="10dp"
                         android:text="Change my password"
+                        android:foreground="?android:attr/selectableItemBackground"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                         android:textColor="@color/babyWhite" />
                 </RelativeLayout>
@@ -493,6 +494,7 @@
                 android:layout_margin="5dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:srcCompat="@drawable/ic_back_arrow"
                 tools:ignore="VectorDrawableCompat" />
 
@@ -509,6 +511,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:tint="@color/babyWhite"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:srcCompat="@drawable/ic_baseline_check_24px"
                 tools:ignore="VectorDrawableCompat" />
 

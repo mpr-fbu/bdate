@@ -25,6 +25,7 @@
                 android:layout_margin="5dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:srcCompat="@drawable/ic_back_arrow"
                 tools:ignore="VectorDrawableCompat" />
 

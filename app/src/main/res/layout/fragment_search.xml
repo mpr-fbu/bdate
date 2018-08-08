@@ -59,17 +59,34 @@
             android:max="100"
             android:min="1"
             android:thumb="@drawable/range_seekbar_dot" />
-
-        <Button
-            android:id="@+id/btnSearch"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:background="@drawable/sign_up_button_style"
-            android:text="match"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:textColor="@color/babyWhite"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:layout_margin="5dp">
+
+            <Button
+                android:id="@+id/btnStopSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:background="@drawable/sign_up_button_style"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:text="Stop matching"
+                android:textColor="@color/babyWhite"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:background="@drawable/sign_up_button_style"
+                android:text="match"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:textColor="@color/babyWhite"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 
