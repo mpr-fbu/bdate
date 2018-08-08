@@ -112,6 +112,7 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/sign_up_button_style"
         android:textColor="@color/white"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="Continue" />
 
     <ImageView
@@ -121,6 +122,7 @@
         android:layout_alignBottom="@+id/etAlias"
         android:layout_alignRight="@+id/etPassword"
         android:tint="@color/lightGrey"
+        android:foreground="?android:attr/selectableItemBackground"
         app:srcCompat="@drawable/ic_refresh" />
 
     <ImageView

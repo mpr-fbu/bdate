@@ -65,6 +65,7 @@
             android:layout_margin="5dp"
             android:background="@drawable/sign_up_button_style"
             android:text="match"
+            android:foreground="?android:attr/selectableItemBackground"
             android:textColor="@color/babyWhite"
             android:textStyle="bold" />
 

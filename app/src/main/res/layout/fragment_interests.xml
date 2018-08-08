@@ -38,6 +38,7 @@
         android:layout_alignParentTop="true"
         android:background="@android:color/transparent"
         android:text="Skip"
+        android:foreground="?android:attr/selectableItemBackground"
         android:textColor="@android:color/darker_gray" />
 
     <Button
@@ -51,6 +52,7 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/sign_up_button_style"
         android:textColor="@color/white"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="Continue" />
 
     <android.support.v7.widget.RecyclerView
