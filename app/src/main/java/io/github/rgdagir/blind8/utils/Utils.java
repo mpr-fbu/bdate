@@ -7,10 +7,17 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.DatePicker;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import io.github.rgdagir.blind8.DatePickerFragment;
+import io.github.rgdagir.blind8.models.Interest;
 
 public final class Utils extends Fragment {
 
@@ -19,6 +26,7 @@ public final class Utils extends Fragment {
     }
 
     private String dateFromPicker;
+    private static ArrayList<Interest> allInterests = new ArrayList<>();
 
     /*
     Function: getDateFromPicker
@@ -50,5 +58,23 @@ public final class Utils extends Fragment {
         bm.compress(Bitmap.CompressFormat.PNG, 50, stream);
         byte[] byteArray = stream.toByteArray();
         return byteArray;
+    }
+
+    public static ArrayList<Interest> fetchInterests() {
+        final ParseQuery<Interest> interestQuery = new Interest.Query();
+        interestQuery.findInBackground(new FindCallback<Interest>() {
+            @Override
+            public void done(List<Interest> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); ++i) {
+                        Interest interest = objects.get(i);
+                        allInterests.add(interest);
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+        return allInterests;
     }
 }
