@@ -65,6 +65,7 @@ public class ChatActivity extends AppCompatActivity {
     public ParseLiveQueryClient parseLiveQueryClient;
     Milestone milestone;
     private boolean sent;
+    private boolean isUpdated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +162,7 @@ public class ChatActivity extends AppCompatActivity {
         rvMessages.setAdapter(mMessageAdapter);
         notification.setVisibility(View.INVISIBLE);
         notification.setGravity(Gravity.CENTER);
+        isUpdated = true;
     }
 
     private void setUpRecyclerView() {
@@ -293,24 +295,34 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
-        final Intent intent = new Intent(ChatActivity.this, HolderActivity.class);
-        intent.putExtra("conversation", (Serializable) conversation);
         tvUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intent);
+                if (isUpdated) {
+                    Intent intent = new Intent(ChatActivity.this, HolderActivity.class);
+                    intent.putExtra("conversation", (Serializable) conversation);
+                    startActivity(intent);
+                }
             }
         });
         ivProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intent);
+                if (isUpdated) {
+                    Intent intent = new Intent(ChatActivity.this, HolderActivity.class);
+                    intent.putExtra("conversation", (Serializable) conversation);
+                    startActivity(intent);
+                }
             }
         });
         defaultProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intent);
+                if (isUpdated) {
+                    Intent intent = new Intent(ChatActivity.this, HolderActivity.class);
+                    intent.putExtra("conversation", (Serializable) conversation);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -552,12 +564,14 @@ public class ChatActivity extends AppCompatActivity {
         Integer exchanges = conversation.getExchanges();
         if (!mMessages.isEmpty()) {
             if (!currUser.getObjectId().equals(mMessages.get(0).getSender().getObjectId())) {
+                isUpdated = false;
                 conversation.setExchanges(exchanges + 1);
                 conversation.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
                         if (e == null) {
                             Log.d("ChatActivity", "exchange updated");
+                            isUpdated = true;
                         } else {
                             Log.e("ChatActivity", "exchange failed to update");
                         }

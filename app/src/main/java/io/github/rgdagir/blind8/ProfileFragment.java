@@ -158,8 +158,8 @@ public class ProfileFragment extends Fragment {
 
     private void fetchProfileData(ParseUser user) {
         ParseQuery<ParseUser> profileDataQuery = ParseUser.getQuery();
-        profileDataQuery.whereEqualTo("username", user.getUsername());
-        Log.e("ProfileQuery", user.getUsername());
+        profileDataQuery.whereEqualTo("objectId", user.getObjectId());
+        Log.e("ProfileQuery", user.getObjectId());
         profileDataQuery.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> userDataList, ParseException e) {
