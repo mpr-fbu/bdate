@@ -42,41 +42,40 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
 
 import io.github.rgdagir.blind8.utils.BitmapScaler;
 import io.github.rgdagir.blind8.utils.Utils;
 
 public class EditProfileFragment extends Fragment {
     private Context context;
-    private EditText editName;
-    private EditText editEmail;
-    private EditText editBio;
-    // private TextView editBirthDate;
-    private FloatingActionButton changeProfilePic;
-    private Spinner myGenderSpinner;
-    private Spinner interestedInSpinner;
-    private SeekBar rangeSeekBar;
-    private ImageView profilePic;
     private ParseUser currUser;
-    private TextView displayProgress;
-    private HashMap changes;
+    public final String APP_TAG = "Blind8";
     private EditProfileFragment.OnFragmentInteractionListener mListener;
+    private ImageView submitChanges;
+    private ImageView arrowBack;
+
+    private TextView savingIndicator;
+    private ImageView profilePic;
+    private FloatingActionButton changeProfilePic;
     public final static int PICK_PHOTO_CODE = 1046;
     ArrayList<String> images;
     PickGalleryAdapter galleryAdapter;
     RecyclerView rvGalleryPicker;
-    private ImageView submitChanges;
-    private ImageView arrowBack;
-    private TextView savingIndicator;
-    public final String APP_TAG = "Blind8";
+
+    private EditText editName;
+    private EditText editEmail;
+    private EditText editBio;
+    private EditText editOccupation;
+    private EditText editEducation;
+
+    private Spinner myGenderSpinner;
+    private Spinner interestedInSpinner;
+    private SeekBar rangeDistanceSeekBar;
+    private TextView displayProgress;
+    private HashMap changes;
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -108,20 +107,24 @@ public class EditProfileFragment extends Fragment {
 
     public void setupViews(View v){
         // associating views from xml file with the Java class
+        submitChanges = v.findViewById(R.id.done);
+        arrowBack = v.findViewById(R.id.goBackArrow);
+
+        savingIndicator = v.findViewById(R.id.tvSaving);
+        savingIndicator.setVisibility(View.INVISIBLE);
+        profilePic = v.findViewById(R.id.profilePic);
+        changeProfilePic = v.findViewById(R.id.changeProfilePicBtn);
+
         editName = v.findViewById(R.id.editName);
         editEmail = v.findViewById(R.id.editEmail);
         editBio = v.findViewById(R.id.editBio);
-        // editBirthDate = v.findViewById(R.id.editBirthDate);
-        changeProfilePic = v.findViewById(R.id.changeProfilePicBtn);
-        profilePic = v.findViewById(R.id.profilePic);
+        editEducation = v.findViewById(R.id.editEducation);
+        editOccupation = v.findViewById(R.id.editOccupation);
+
         myGenderSpinner = v.findViewById(R.id.myGender);
         interestedInSpinner = v.findViewById(R.id.interestedInGender);
-        rangeSeekBar = v.findViewById(R.id.rangeSeekBar);
-        displayProgress = v.findViewById(R.id.ageProgress);
-        submitChanges = v.findViewById(R.id.done);
-        arrowBack = v.findViewById(R.id.goBackArrow);
-        savingIndicator = v.findViewById(R.id.tvSaving);
-        savingIndicator.setVisibility(View.INVISIBLE);
+        rangeDistanceSeekBar = v.findViewById(R.id.rangeDistanceSeekBar);
+        displayProgress = v.findViewById(R.id.distanceProgress);
 
         setupButtonListeners();
         setupTextContainerListeners();
@@ -145,7 +148,6 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("Arrow button", "pressed!");
-
                 mListener.goBackToProfile();
             }
         });
@@ -155,7 +157,6 @@ public class EditProfileFragment extends Fragment {
                 onPickPhoto(v);
             }
         });
-
     }
 
     public void setupGallery(View v){
@@ -168,11 +169,13 @@ public class EditProfileFragment extends Fragment {
 
     public void setupCrystalSeekBar(View view){
         // get seekbar from view
-        final CrystalRangeSeekbar rangeSeekbar = view.findViewById(R.id.crystalRangeSeekBar);
+        final CrystalRangeSeekbar rangeSeekbar = view.findViewById(R.id.crystalRangeAgeSeekBar);
 
         // get min and max text view
         final TextView tvMin = view.findViewById(R.id.rangeSeekBarMin);
         final TextView tvMax = view.findViewById(R.id.rangeSeekBarMax);
+        tvMin.setText(String.valueOf(currUser.getNumber("minAge")));
+        tvMax.setText(String.valueOf(currUser.getNumber("maxAge")));
 
         // set listener
         rangeSeekbar.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
@@ -188,6 +191,8 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void finalValue(Number minValue, Number maxValue) {
                 Log.d("CRS=>", String.valueOf(minValue) + " : " + String.valueOf(maxValue));
+                changes.put("minAge", String.valueOf(minValue));
+                changes.put("maxAge", String.valueOf(maxValue));
             }
         });
     }
@@ -221,27 +226,6 @@ public class EditProfileFragment extends Fragment {
         return coverImages;
     }
 
-//    private void showDatePicker() {
-//        DatePickerFragment dateFragment = new DatePickerFragment();
-//
-//        // Set up current date Into dialog
-//        Calendar cal = Calendar.getInstance();
-//        Bundle args = new Bundle();
-//        args.putInt("year", cal.get(Calendar.YEAR));
-//        args.putInt("month", cal.get(Calendar.MONTH));
-//        args.putInt("day", cal.get(Calendar.DAY_OF_MONTH));
-//        dateFragment.setArguments(args);
-//
-//        // Set up callback to retrieve date info
-//        dateFragment.setCallBack(new DatePickerDialog.OnDateSetListener(){
-//            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
-//                editBirthDate.setText(String.valueOf(dayOfMonth) + "/" + String.valueOf(monthOfYear+1) + "/"+String.valueOf(year));
-//            }
-//        });
-//        dateFragment.show(getFragmentManager(), "Date Picker");
-//
-//    }
-
     private void setupTextContainerListeners() {
         // adding listeners to text containers
         editName.addTextChangedListener(new TextWatcher() {
@@ -269,7 +253,6 @@ public class EditProfileFragment extends Fragment {
                 changes.put("username", s.toString());
             }
         });
-
         editBio.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -282,22 +265,30 @@ public class EditProfileFragment extends Fragment {
                 changes.put("bio", s.toString());
             }
         });
-//        editBirthDate.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                changes.put("dob", s.toString());
-//            }
-//        });
+        editOccupation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                changes.put("occupation", s.toString());
+            }
+        });
+        editEducation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                changes.put("education", s.toString());
+            }
+        });
     }
 
     public void fetchCurrentUserAndLoadPage(){
@@ -305,19 +296,8 @@ public class EditProfileFragment extends Fragment {
         editName.setText(currUser.getString("firstName"));
         editEmail.setText(currUser.getString("email"));
         editBio.setText(currUser.getString("bio"));
-        Date inputDate = currUser.getDate("dob");
-        DateFormat dataFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS", Locale.getDefault());
-        String strDate = dataFormat.format(inputDate);
-        DateFormat inputFormatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS", Locale.getDefault());
-        Date date = null;
-        try {
-            date = inputFormatter.parse(strDate);
-            DateFormat outputFormatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
-            String output = outputFormatter.format(date);
-            // editBirthDate.setText(output);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        editEducation.setText(currUser.getString("education"));
+        editOccupation.setText(currUser.getString("occupation"));
         Glide.with(context).load(currUser.getParseFile("profilePic").getUrl())
                 .asBitmap().centerCrop().dontAnimate()
                 .placeholder(R.mipmap.ic_picture)
@@ -337,6 +317,7 @@ public class EditProfileFragment extends Fragment {
         String userGender = currUser.getString("gender");
         String userInterest = currUser.getString("interestedIn");
         final String[] genders = getResources().getStringArray(R.array.genders);
+        final String[] preferences = getResources().getStringArray(R.array.preferences);
         // create spinners
         myGenderSpinner = v.findViewById(R.id.myGender);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -364,7 +345,7 @@ public class EditProfileFragment extends Fragment {
         interestedInSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                changes.put("interestedIn", genders[position]);
+                changes.put("interestedIn", preferences[position]);
 
             }
             @Override
@@ -373,7 +354,8 @@ public class EditProfileFragment extends Fragment {
     }
 
     public void setupRangeBar(){
-        rangeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        displayProgress.setText(String.valueOf(currUser.getNumber("matchRange")));
+        rangeDistanceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 displayProgress.setText(Integer.toString(progress));
@@ -396,19 +378,19 @@ public class EditProfileFragment extends Fragment {
         Iterator it = changes.entrySet().iterator();
         while (it.hasNext()) {
             HashMap.Entry entry = (HashMap.Entry) it.next();
-            if (entry.getKey().toString().equals("dob")) { // handle birth dates
-                String sDate = entry.getValue().toString();
-                try {
-                    Date date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(sDate);
-                    currUser.put("dob", date);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                continue;
-            }
             if (entry.getKey().toString().equals("matchRange")) {
                 int range = Integer.parseInt(entry.getValue().toString());
                 currUser.put("matchRange", range);
+                continue;
+            }
+            if (entry.getKey().toString().equals("minAge")) {
+                int num = Integer.parseInt(entry.getValue().toString());
+                currUser.put("minAge", num);
+                continue;
+            }
+            if (entry.getKey().toString().equals("maxAge")) {
+                int num = Integer.parseInt(entry.getValue().toString());
+                currUser.put("maxAge", num);
                 continue;
             }
             currUser.put(entry.getKey().toString(), entry.getValue().toString());
