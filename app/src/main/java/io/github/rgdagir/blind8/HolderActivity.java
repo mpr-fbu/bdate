@@ -1,11 +1,17 @@
 package io.github.rgdagir.blind8;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import io.github.rgdagir.blind8.models.Conversation;
 
@@ -27,6 +33,15 @@ public class HolderActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.flContainer, profileFragment).commit();
 
         arrowBack = findViewById(R.id.goBackArrow);
+        Glide.with(getApplicationContext()).load(R.drawable.ic_back_arrow).asBitmap().centerCrop().into(new BitmapImageViewTarget(arrowBack) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                arrowBack.setImageDrawable(circularBitmapDrawable);
+            }
+        });
         arrowBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

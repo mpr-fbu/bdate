@@ -54,6 +54,7 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 public class SearchFragment extends Fragment {
     private SearchFragment.OnFragmentInteractionListener mListener;
     private Button searchButton;
+    private Button stopSearchButton;
     private static final int LOCATION_PERMISSION_REQUEST = 1;
     private Context context;
     private ParseGeoPoint myLoc;
@@ -85,6 +86,7 @@ public class SearchFragment extends Fragment {
         mMapView = rootView.findViewById(R.id.mapView);
         mTvRange = rootView.findViewById(R.id.tvRange);
         searchButton = rootView.findViewById(R.id.btnSearch);
+        stopSearchButton = rootView.findViewById(R.id.btnStopSearch);
         context = getActivity();
         rangeMatchBar = rootView.findViewById(R.id.matchRangeBar);
         mCustomMarkerView = inflater.inflate(R.layout.map_marker, null);
@@ -125,6 +127,14 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 searchForOpenConversations();
+                searchButton.setVisibility(View.INVISIBLE);
+            }
+        });
+        stopSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //stopSearching();
+                searchButton.setVisibility(View.VISIBLE);
             }
         });
     }
