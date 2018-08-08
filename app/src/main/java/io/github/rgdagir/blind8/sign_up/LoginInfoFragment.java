@@ -38,7 +38,8 @@ public class LoginInfoFragment extends Fragment {
     private EditText etAlias;
     private Button btnContinue;
     private ImageView refresh;
-    private TextInputLayout emailLayout;
+    private TextInputLayout tilEmail;
+    private TextInputLayout tilPassword;
 
     public LoginInfoFragment() {
         // Required empty public constructor
@@ -101,7 +102,8 @@ public class LoginInfoFragment extends Fragment {
         aliasNote = view.findViewById(R.id.aliasNote);
         etAlias = view.findViewById(R.id.etAlias);
         refresh = view.findViewById(R.id.refresh);
-        emailLayout = view.findViewById(R.id.emailLayout);
+        tilEmail = view.findViewById(R.id.tilEmail);
+        tilPassword = view.findViewById(R.id.tilPassword);
     }
 
     private void setupButtonListeners() {
@@ -127,9 +129,11 @@ public class LoginInfoFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
                 if (s.length() < 6) {
+                    tilPassword.setError("Password has to be at least 6 characters long");
                     btnContinue.setEnabled(false);
                     btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_gray));
                 } else {
+                    tilPassword.setError(null);
                     btnContinue.setEnabled(true);
                     btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_style));
                 }
@@ -152,10 +156,10 @@ public class LoginInfoFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!isValidEmail(s.toString())){
-                    emailLayout.setError("Inavlid email");
+                    tilEmail.setError("Invalid email");
                     btnContinue.setEnabled(false);
                 } else {
-                    emailLayout.setError(null);
+                    tilEmail.setError(null);
                     btnContinue.setEnabled(true);
                 }
             }

@@ -90,7 +90,9 @@ public class SignUpActivity extends AppCompatActivity
 
     public void goToInterestsFragment(String gender, String interestedIn, int age, String name, Date dob) {
         newUser.put("gender", gender);
-        newUser.put("dob", dob);
+        if (dob != null) {
+            newUser.put("dob", dob);
+        }
         newUser.put("interestedIn", interestedIn);
         newUser.put("age", age);
         newUser.put("firstName", name);

@@ -2,7 +2,9 @@ package io.github.rgdagir.blind8.sign_up;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -46,6 +48,7 @@ public class BasicInfoFragment extends Fragment {
     private int age;
     private String dateFromPicker;
     private Date dob;
+    private TextInputLayout tilBirthday;
 
     public BasicInfoFragment() {
         // Required empty public constructor
@@ -108,6 +111,7 @@ public class BasicInfoFragment extends Fragment {
         genderOptions = view.findViewById(R.id.genderOptions);
         preferenceOptions = view.findViewById(R.id.preferenceOptions);
         btnContinue = view.findViewById(R.id.btnContinue);
+        tilBirthday = view.findViewById(R.id.tilBirthday);
     }
 
     private void setupButtonListeners() {
@@ -138,9 +142,9 @@ public class BasicInfoFragment extends Fragment {
         // Set up callback to retrieve date info
         dateFragment.setCallBack(new DatePickerDialog.OnDateSetListener(){
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
-                dateFromPicker = String.valueOf(monthOfYear + 1) + " / " + String.valueOf(dayOfMonth) + " / " + String.valueOf(year);
+                dateFromPicker = String.valueOf(monthOfYear + 1) + "/" + String.valueOf(dayOfMonth) + "/" + String.valueOf(year);
                 placeholderBirthday.setText(dateFromPicker);
-                DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
                 dob = null;
                 try {
                     dob = formatter.parse(dateFromPicker);
@@ -148,6 +152,13 @@ public class BasicInfoFragment extends Fragment {
                     e.printStackTrace();
                 }
                 age = calculateAge(year, monthOfYear + 1, dayOfMonth);
+                if (age < 18){
+                    tilBirthday.setError("You have to be 18 or older to use this app");
+                    btnContinue.setEnabled(false);
+                } else {
+                    tilBirthday.setError(null);
+                    btnContinue.setEnabled(true);
+                }
             }
         });
         if (getActivity().getSupportFragmentManager() == null){
@@ -227,5 +238,6 @@ public class BasicInfoFragment extends Fragment {
             }
         });
     }
+
 
 }

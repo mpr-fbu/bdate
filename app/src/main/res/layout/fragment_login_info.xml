@@ -38,28 +38,30 @@
         android:layout_alignLeft="@+id/explanation"
         android:text="Email" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/emailLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:errorEnabled="true">
 
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tilEmail"
+        android:layout_alignLeft="@+id/explanation"
+        android:layout_alignRight="@+id/explanation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        app:hintEnabled="false"
+        >
         <EditText
             android:id="@+id/etEmail"
             android:layout_alignLeft="@+id/explanation"
             android:layout_alignRight="@+id/explanation"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/email"
             android:layout_centerHorizontal="true"
             android:ems="10"
             android:hint="Add an email"
-            android:inputType="textPersonName"
-            />
-
+            android:inputType="textPersonName" />
     </android.support.design.widget.TextInputLayout>
-
-
 
     <TextView
         android:id="@+id/password"
@@ -67,12 +69,13 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/explanation"
         android:layout_centerVertical="true"
-        android:layout_below="@+id/etEmail"
+        android:layout_below="@+id/tilEmail"
         android:layout_marginTop="20dp"
         android:text="Password (min. 6 characters)" />
 
-    <EditText
-        android:id="@+id/etPassword"
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tilPassword"
         android:layout_alignLeft="@+id/explanation"
         android:layout_alignRight="@+id/explanation"
         android:layout_width="310dp"
@@ -80,14 +83,26 @@
         android:layout_below="@+id/password"
         android:layout_centerHorizontal="true"
         android:ems="10"
-        android:hint="Add a password "
-        android:inputType="textPassword" />
+        app:hintEnabled="false"
+        >
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_alignLeft="@+id/explanation"
+            android:layout_alignRight="@+id/explanation"
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/password"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:hint="Add a password "
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
 
     <TextView
         android:id="@+id/alias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etPassword"
+        android:layout_below="@+id/tilPassword"
         android:layout_marginTop="20dp"
         android:layout_alignLeft="@+id/explanation"
         android:text="Alias" />
@@ -130,7 +145,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignBottom="@+id/etAlias"
-        android:layout_alignRight="@+id/etPassword"
+        android:layout_alignRight="@+id/tilPassword"
         android:tint="@color/lightGrey"
         app:srcCompat="@drawable/ic_refresh" />
 
