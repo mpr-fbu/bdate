@@ -31,13 +31,13 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="3dp">
+            android:layout_margin="5dp">
 
             <TextView
                 android:id="@+id/tvSetMatchRange"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
+                android:layout_margin="5dp"
                 android:text="Set match range:" />
 
             <TextView
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
-                android:layout_margin="3dp"
+                android:layout_margin="5dp"
                 android:text="0 mi."
                 android:layout_alignParentRight="true" />
         </RelativeLayout>
@@ -64,7 +64,7 @@
             android:id="@+id/btnSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="12dp"
             android:background="@drawable/sign_up_button_style"
             android:text="match"
             android:foreground="?android:attr/selectableItemBackground"
@@ -87,10 +87,17 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:src="@mipmap/full_logo"
-
-            />
+            android:src="@mipmap/full_logo" />
 
     </android.support.v7.widget.Toolbar>
+
+    <View
+        android:id="@+id/dropshadow"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/dropshadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
 </android.support.constraint.ConstraintLayout>
