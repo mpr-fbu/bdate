@@ -34,7 +34,10 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -81,7 +84,7 @@ public class EditProfileFragment extends Fragment {
     private SeekBar rangeDistanceSeekBar;
     private TextView displayProgress;
     private HashMap changes;
-    private RecyclerView rvInterests;
+    private RecyclerView rvEditInterests;
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -133,7 +136,7 @@ public class EditProfileFragment extends Fragment {
         rangeDistanceSeekBar = v.findViewById(R.id.rangeDistanceSeekBar);
         displayProgress = v.findViewById(R.id.distanceProgress);
 
-        rvInterests = v.findViewById(R.id.rvInterests);
+        rvEditInterests = v.findViewById(R.id.rvEditInterests);
 
         setupButtonListeners();
         setupTextContainerListeners();
@@ -141,6 +144,7 @@ public class EditProfileFragment extends Fragment {
         setupSpinners(v);
         setupRangeBar();
         setupCrystalSeekBar(v);
+        fetchInterestsAndSetupRv();
     }
 
     private void setupButtonListeners() {
@@ -576,12 +580,24 @@ public class EditProfileFragment extends Fragment {
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
     }
 
-    public void setupInterestsRv(){
-        mInterests = Utils.fetchInterests();
-        SignUpInterestAdapter iAdapter = new SignUpInterestAdapter(mInterests);
-        rvInterests.setLayoutManager(new LinearLayoutManager(context));
-        rvInterests.setAdapter(iAdapter);
-
-
+    private void fetchInterestsAndSetupRv() {
+        final ParseQuery<Interest> interestQuery = new Interest.Query();
+        interestQuery.findInBackground(new FindCallback<Interest>() {
+            @Override
+            public void done(List<Interest> objects, ParseException e) {
+                if (e == null) {
+                    mInterests = new ArrayList<>();
+                    for (int i = 0; i < objects.size(); ++i) {
+                        Interest interest = objects.get(i);
+                        mInterests.add(interest);
+                    }
+                    SignUpInterestAdapter iAdapter = new SignUpInterestAdapter(mInterests);
+                    rvEditInterests.setAdapter(iAdapter);
+                    rvEditInterests.setLayoutManager(new LinearLayoutManager(context));
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

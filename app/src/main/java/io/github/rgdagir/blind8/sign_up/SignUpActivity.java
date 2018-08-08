@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 
@@ -49,7 +50,7 @@ public class SignUpActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        mInterests = Utils.fetchInterests();
+        fetchInterests();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.flContainer, initialFragment)
                 .commit();
@@ -225,5 +226,22 @@ public class SignUpActivity extends AppCompatActivity
 
     public void onCheckboxClicked(View view) {
 
+    }
+
+    private void fetchInterests() {
+        final ParseQuery<Interest> interestQuery = new Interest.Query();
+        interestQuery.findInBackground(new FindCallback<Interest>() {
+            @Override
+            public void done(List<Interest> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); ++i) {
+                        Interest interest = objects.get(i);
+                        mInterests.add(interest);
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

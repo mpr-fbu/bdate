@@ -60,21 +60,4 @@ public final class Utils extends Fragment {
         return byteArray;
     }
 
-    public static ArrayList<Interest> fetchInterests() {
-        final ParseQuery<Interest> interestQuery = new Interest.Query();
-        interestQuery.findInBackground(new FindCallback<Interest>() {
-            @Override
-            public void done(List<Interest> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); ++i) {
-                        Interest interest = objects.get(i);
-                        allInterests.add(interest);
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-        return allInterests;
-    }
 }
