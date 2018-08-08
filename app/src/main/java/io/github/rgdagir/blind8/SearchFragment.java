@@ -93,6 +93,7 @@ public class SearchFragment extends Fragment {
         mCustomMarkerView = inflater.inflate(R.layout.map_marker, null);
         mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
         setupMap(savedInstanceState);
+        checkIfSearching();
         getLocationPermissionsIfNeeded(rootView, savedInstanceState);
         return rootView;
     }
@@ -260,7 +261,7 @@ public class SearchFragment extends Fragment {
                     }
                 }
                 // create new convo if there does not already exist open convo with only current user
-                Toast.makeText(getContext(), "Searching...", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Searching for matches...", Toast.LENGTH_LONG).show();
                 createConversation(currentUser);
             }
         });
@@ -365,12 +366,30 @@ public class SearchFragment extends Fragment {
                         public void done(ParseException e) {
                             if (e == null) {
                                 searchButton.setVisibility(View.VISIBLE);
-                                Toast.makeText(getContext(), "Stopped searching", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "Stopped searching for matches", Toast.LENGTH_LONG).show();
                             } else {
                                 Log.e("SearchFragment", "Error deleting open conversation.");
                             }
                         }
                     });
+                } else {
+                    Log.e("SearchFragment", "Error while trying to find open conversation to delete.");
+                }
+            }
+        });
+    }
+
+    private void checkIfSearching() {
+        final ParseQuery<Conversation> currentUserQuery = new Conversation.Query();
+        currentUserQuery.whereDoesNotExist("user2");
+        currentUserQuery.whereEqualTo("user1", currentUser);
+        currentUserQuery.findInBackground(new FindCallback<Conversation>() {
+            @Override
+            public void done(List<Conversation> objects, ParseException e) {
+                if (e == null) {
+                    if (objects.size() != 0) {
+                        searchButton.setVisibility(View.INVISIBLE);
+                    }
                 } else {
                     Log.e("SearchFragment", "Error while trying to find open conversation to delete.");
                 }
