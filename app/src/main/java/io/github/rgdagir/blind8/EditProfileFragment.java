@@ -94,7 +94,7 @@ public class EditProfileFragment extends Fragment {
         context = getActivity();
         currUser = ParseUser.getCurrentUser();
         changes = new HashMap<String, String>();
-        View v = inflater.inflate(R.layout.new_fragment_edit_profile, container, false);
+        View v = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         setupViews(v);
         fetchCurrentUserAndLoadPage();
         return v;

@@ -114,7 +114,7 @@ public class SignUpActivity extends AppCompatActivity
     public void addPicturesToUser(HashMap<String, byte[]> imagesHMap){
         if(imagesHMap.get("profilePic") != null) {
             // create parse file
-            final ParseFile profilePic = new ParseFile(newUser.getObjectId() + "-profilepic.jpg", imagesHMap.get("profilePic"));
+            final ParseFile profilePic = new ParseFile(newUser.getObjectId() + "profilePic_resized.jpg", imagesHMap.get("profilePic"));
             profilePic.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -122,9 +122,19 @@ public class SignUpActivity extends AppCompatActivity
                 }
             });
         }
+        if(imagesHMap.get("coverPhoto0") != null) {
+            // create parse file
+            final ParseFile cover1 = new ParseFile(newUser.getObjectId() + "galleryPic0_resized.jpg", imagesHMap.get("coverPhoto0"));
+            cover1.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    newUser.put("coverPhoto0", cover1);
+                }
+            });
+        }
         if(imagesHMap.get("coverPhoto1") != null) {
             // create parse file
-            final ParseFile cover1 = new ParseFile(newUser.getObjectId() + "-cover1.jpg", imagesHMap.get("coverPhoto1"));
+            final ParseFile cover1 = new ParseFile(newUser.getObjectId() + "galleryPic1_resized.jpg", imagesHMap.get("coverPhoto1"));
             cover1.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -134,7 +144,7 @@ public class SignUpActivity extends AppCompatActivity
         }
         if(imagesHMap.get("coverPhoto2") != null) {
             // create parse file
-            final ParseFile cover2 = new ParseFile(newUser.getObjectId() + "-cover2.jpg", imagesHMap.get("coverPhoto2"));
+            final ParseFile cover2 = new ParseFile(newUser.getObjectId() + "galleryPic2_resized.jpg", imagesHMap.get("coverPhoto2"));
             cover2.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -144,7 +154,7 @@ public class SignUpActivity extends AppCompatActivity
         }
         if(imagesHMap.get("coverPhoto3") != null) {
             // create parse file
-            final ParseFile cover3 = new ParseFile(newUser.getObjectId() + "-cover3.jpg", imagesHMap.get("coverPhoto3"));
+            final ParseFile cover3 = new ParseFile(newUser.getObjectId() + "galleryPic3_resized.jpg", imagesHMap.get("coverPhoto3"));
             cover3.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {

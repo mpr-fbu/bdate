@@ -5,10 +5,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +23,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.parse.ParseFile;
+import com.parse.ParseImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
+import io.github.rgdagir.blind8.PickGalleryAdapter;
 import io.github.rgdagir.blind8.R;
+import io.github.rgdagir.blind8.utils.BitmapScaler;
 import io.github.rgdagir.blind8.utils.Utils;
 
 public class PicturesFragment extends Fragment {
@@ -34,14 +43,16 @@ public class PicturesFragment extends Fragment {
     private Context context;
     private TextView title;
     private TextView explanation;
-    private ImageView profilePic;
-    private ImageView galleryPicOne;
-    private ImageView galleryPicTwo;
-    private ImageView galleryPicThree;
-    private Button finish;
+    private TextView savingIndicator;
+    private ParseImageView profilePic;
+    private FloatingActionButton changeProfilePic;
     public final static int PICK_PHOTO_CODE = 1046;
+    ArrayList<String> displayImages;
     private HashMap<String, byte[]> images;
-
+    PickGalleryAdapter galleryAdapter;
+    RecyclerView rvGalleryPicker;
+    private Button finish;
+    final String APP_TAG = "Blind8";
 
     public PicturesFragment() {
     }
@@ -55,8 +66,8 @@ public class PicturesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pictures, container, false);
-        images = new HashMap();
         context = getActivity();
+        images = new HashMap();
         setupFragmentVariables(view);
         setupButtonListeners();
         return view;
@@ -85,9 +96,6 @@ public class PicturesFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // Placeholder, to be inserted when clicking is introduced
-        //void onFragmentInteraction(Uri uri);
-        void onBackPressed();
         void createNewUser();
         void addPicturesToUser(HashMap<String, byte[]> files);
     }
@@ -95,10 +103,15 @@ public class PicturesFragment extends Fragment {
     private void setupFragmentVariables(View view) {
         title = view.findViewById(R.id.title);
         explanation = view.findViewById(R.id.explanation);
+        savingIndicator = view.findViewById(R.id.tvSaving);
+        savingIndicator.setVisibility(View.INVISIBLE);
         profilePic = view.findViewById(R.id.profilePic);
-        galleryPicOne = view.findViewById(R.id.galleryPicOne);
-        galleryPicTwo = view.findViewById(R.id.galleryPicTwo);
-        galleryPicThree = view.findViewById(R.id.galleryPicThree);
+        changeProfilePic = view.findViewById(R.id.changeProfilePicBtn);
+        rvGalleryPicker = view.findViewById(R.id.rvGalleryPics);
+        displayImages = setupCoverImages();
+        galleryAdapter = new PickGalleryAdapter(displayImages, this);
+        rvGalleryPicker.setAdapter(galleryAdapter);
+        rvGalleryPicker.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         finish = view.findViewById(R.id.finish);
     }
 
@@ -111,67 +124,28 @@ public class PicturesFragment extends Fragment {
             }
         });
 
-        profilePic.setOnClickListener(new View.OnClickListener() {
+        changeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onPickPhoto(0);
-            }
-        });
-        galleryPicOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPickPhoto(1);
-            }
-        });
-        galleryPicTwo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPickPhoto(2);
-            }
-        });
-        galleryPicThree.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPickPhoto(3);
+                onPickPhoto(v);
             }
         });
     }
 
-    public void onPickPhoto(int position) {
+    public ArrayList<String> setupCoverImages(){
+        ArrayList<String> coverImages = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            coverImages.add("placeholder");
+        }
+        return coverImages;
+    }
+
+    public void onPickPhoto(View view) {
         // Create intent for picking a photo from the gallery
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if (i.resolveActivity(context.getPackageManager()) != null) {
             // Bring up gallery to select a photo
-            startActivityForResult(i, PICK_PHOTO_CODE + position);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
-            Uri photoUri = data.getData();
-            // Do something with the photo based on Uri
-            Bitmap selectedImage;
-            byte[] img;
-            try {
-                selectedImage = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photoUri);
-                img = Utils.getbytearray(selectedImage);
-                if (requestCode == PICK_PHOTO_CODE){ // top left corner - profile pic
-                    loadPhoto(context, photoUri, profilePic);
-                    images.put("profilePic", img);
-                } else if (requestCode == PICK_PHOTO_CODE + 1) { // top right corner - first gallery pic
-                    loadPhoto(context, photoUri, galleryPicOne);
-                    images.put("coverPhoto1", img);
-                } else if (requestCode == PICK_PHOTO_CODE + 2) { // bottom right corner - second gallery pic
-                    loadPhoto(context, photoUri, galleryPicTwo);
-                    images.put("coverPhoto2", img);
-                } else if (requestCode == PICK_PHOTO_CODE + 3) { // bottom left corner - third gallery pic
-                    loadPhoto(context, photoUri, galleryPicThree);
-                    images.put("coverPhoto3", img);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            startActivityForResult(i, PICK_PHOTO_CODE);
         }
     }
 
@@ -192,4 +166,90 @@ public class PicturesFragment extends Fragment {
                 });
     }
 
+    // after user picks image to upload from their gallery
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            Uri photoUri = data.getData();
+            // Do something with the photo based on Uri
+            final Bitmap selectedImage;
+            byte[] img;
+            try {
+                Bitmap rawSelectedImage = BitmapScaler.getCorrectlyOrientedImage(context, photoUri);
+                if (requestCode == PICK_PHOTO_CODE){ // profile pic
+                    selectedImage = resizeImage(rawSelectedImage, "profilePic");
+                    img = Utils.getbytearray(selectedImage);
+                    loadPhoto(context, photoUri, profilePic);
+                    images.put("profilePic", img);
+                } else if (requestCode == PICK_PHOTO_CODE + 1) { // first gallery pic
+                    selectedImage = resizeImage(rawSelectedImage, "galleryPic0");
+                    img = Utils.getbytearray(selectedImage);
+                    images.put("coverPhoto0", img);
+                    addToAdapter(0, photoUri.toString());
+                } else if (requestCode == PICK_PHOTO_CODE + 2) { // second gallery pic
+                    selectedImage = resizeImage(rawSelectedImage, "galleryPic1");
+                    img = Utils.getbytearray(selectedImage);
+                    images.put("coverPhoto1", img);
+                    addToAdapter(1, photoUri.toString());
+                } else if (requestCode == PICK_PHOTO_CODE + 3) { // third gallery pic
+                    selectedImage = resizeImage(rawSelectedImage, "galleryPic2");
+                    img = Utils.getbytearray(selectedImage);
+                    images.put("coverPhoto2", img);
+                    addToAdapter(2, photoUri.toString());
+                } else if (requestCode == PICK_PHOTO_CODE + 4) { // third gallery pic
+                    selectedImage = resizeImage(rawSelectedImage, "galleryPic3");
+                    img = Utils.getbytearray(selectedImage);
+                    images.put("coverPhoto3", img);
+                    addToAdapter(3, photoUri.toString());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void addToAdapter(int position, String fileUri) {
+        displayImages.remove(position);
+        displayImages.add(position, fileUri);
+        galleryAdapter.notifyDataSetChanged();
+        rvGalleryPicker.scrollToPosition(0);
+    }
+
+    // RESIZE BITMAP
+    private Bitmap resizeImage(Bitmap rawImage, String imagePrefix) {
+        Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawImage, 800);
+        // Configure byte output stream
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        // Compress the image further
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
+        // Create a new file for the resized bitmap (`getPhotoFileUri` defined above)
+        final File resizedFile = getPhotoFileUri(imagePrefix + "_resized.jpg");
+        // Write the bytes of the bitmap to file
+        try {
+            FileOutputStream fos = new FileOutputStream(resizedFile);
+            fos.write(bytes.toByteArray());
+            fos.close();
+            Log.d("SaveImage", "the image was compressed correctly");
+        } catch (IOException e) {
+            Log.d("SaveImage", "problem compressing");
+            e.printStackTrace();
+        }
+        return resizedBitmap;
+    }
+
+    // Returns the File for a photo stored on disk given the fileName
+    public File getPhotoFileUri(String fileName) {
+        // Get safe storage directory for photos
+        // Use `getExternalFilesDir` on Context to access package-specific directories.
+        // This way, we don't need to request external read/write runtime permissions.
+        File mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+            Log.d(APP_TAG, "failed to create directory");
+        }
+
+        // Return the file target for the photo based on filename
+        return new File(mediaStorageDir.getPath() + File.separator + fileName);
+    }
 }
