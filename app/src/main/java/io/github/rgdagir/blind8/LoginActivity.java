@@ -86,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(ACTIVITY_TAG, "Login failed :(");
                             e.printStackTrace();
                             Toast.makeText(context, "Login failed, please try again.", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
                 });

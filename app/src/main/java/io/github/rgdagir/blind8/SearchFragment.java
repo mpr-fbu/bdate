@@ -101,6 +101,8 @@ public class SearchFragment extends Fragment {
 
     public void setupListeners(){
         // Setup any handles to view objects here
+        mTvRange.setText(String.valueOf(currentUser.get("matchRange")) + " mi.");
+        rangeMatchBar.setProgress((Integer) currentUser.get("matchRange"));
         rangeMatchBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -480,7 +482,7 @@ public class SearchFragment extends Fragment {
                 .center(pin)
                 .radius(range * 1609.34) // In meters
                 .strokeWidth(0)
-                .fillColor(R.color.mediumBlue);
+                .fillColor(R.color.transparentBlue);
         // Get back the mutable Circle
         circle = gMap.addCircle(circleOptions);
 

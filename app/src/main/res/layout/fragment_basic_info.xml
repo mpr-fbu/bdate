@@ -186,6 +186,7 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/sign_up_button_style"
         android:textColor="@color/white"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="Continue" />
 
     <ImageView

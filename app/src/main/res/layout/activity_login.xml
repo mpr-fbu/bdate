@@ -52,6 +52,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:background="@drawable/sign_up_button_style"
+        android:foreground="?android:attr/selectableItemBackground"
         android:textColor="@color/white"
         android:text="Log in" />
 
@@ -64,6 +65,7 @@
         android:background="@drawable/sign_up_button_style"
         android:textColor="@color/white"
         android:layout_marginTop="10dp"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="Sign up" />
 
     <RelativeLayout

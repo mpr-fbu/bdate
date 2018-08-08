@@ -24,7 +24,8 @@
                 android:id="@+id/pager"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentTop="true" />
+                android:layout_alignParentTop="true"
+                android:background="@color/lightGrey" />
 
             <me.relex.circleindicator.CircleIndicator
                 android:id="@+id/indicator"
@@ -225,13 +226,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/rlInterests"
             android:text="Logout"
-            android:layout_margin="15dp"
-            android:textColor="@color/offBlack"
+            android:layout_margin="20dp"
+            android:textColor="@color/white"
             android:textStyle="bold"
-            android:background="@drawable/rounded_button_style"
+            android:background="@drawable/sign_up_button_style"
             android:minHeight="0dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:foreground="?android:attr/selectableItemBackground"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
         <ImageButton

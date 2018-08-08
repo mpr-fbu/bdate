@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="5dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground" >
 
     <RelativeLayout
         android:id="@+id/rlProfilePic"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp" >
 
         <ImageView
             android:id="@+id/defaultProfilePic"
@@ -46,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvUsername"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginRight="105dp"
+        android:layout_marginRight="110dp"
         android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:maxLines="1"
@@ -58,7 +60,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
-        android:layout_margin="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="5dp"
         android:layout_toLeftOf="@id/levelCircle" />
 
     <ImageView
