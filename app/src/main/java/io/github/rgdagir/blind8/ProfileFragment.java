@@ -26,6 +26,7 @@ import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
 import com.parse.ParseInstallation;
@@ -182,12 +183,36 @@ public class ProfileFragment extends Fragment {
 
     private void setMyUserDetails(ParseUser user) {
         // simply display your personal information
-        String name = user.get("firstName").toString();
-        String age = user.get("age").toString();
-        String status = user.get("bio").toString();
-        Object occupation = user.get("occupation");
-        Object education = user.get("education");
-
+        String name = "";
+        try {
+            name = user.get("firstName").toString();
+        } catch (NullPointerException npe){
+            npe.printStackTrace();
+        }
+        String age = "";
+        try {
+            age = user.get("age").toString();
+        } catch (NullPointerException npe){
+            npe.printStackTrace();
+        }
+        String status = "";
+        try {
+            status = user.get("bio").toString();
+        } catch (NullPointerException npe){
+            npe.printStackTrace();
+        }
+        Object occupation = new Object();
+        try {
+            occupation = user.get("occupation");
+        } catch (NullPointerException npe){
+            npe.printStackTrace();
+        }
+        Object education = new Object();
+        try {
+            education = user.get("education");
+        } catch (NullPointerException npe){
+            npe.printStackTrace();
+        }
         profileName.setText(name);
         profileAge.setText("Age: " + age);
         profileDistance.setText("0 miles away");

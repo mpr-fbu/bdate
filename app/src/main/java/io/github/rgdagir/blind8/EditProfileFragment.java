@@ -45,7 +45,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
+import io.github.rgdagir.blind8.models.Interest;
+import io.github.rgdagir.blind8.sign_up.SignUpInterestAdapter;
 import io.github.rgdagir.blind8.utils.BitmapScaler;
 import io.github.rgdagir.blind8.utils.Utils;
 
@@ -61,7 +64,8 @@ public class EditProfileFragment extends Fragment {
     private ImageView profilePic;
     private FloatingActionButton changeProfilePic;
     public final static int PICK_PHOTO_CODE = 1046;
-    ArrayList<String> images;
+    private ArrayList<String> images;
+    private ArrayList<Interest> mInterests;
     PickGalleryAdapter galleryAdapter;
     RecyclerView rvGalleryPicker;
 
@@ -77,6 +81,7 @@ public class EditProfileFragment extends Fragment {
     private SeekBar rangeDistanceSeekBar;
     private TextView displayProgress;
     private HashMap changes;
+    private RecyclerView rvInterests;
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -127,6 +132,8 @@ public class EditProfileFragment extends Fragment {
         interestedInSpinner = v.findViewById(R.id.interestedInGender);
         rangeDistanceSeekBar = v.findViewById(R.id.rangeDistanceSeekBar);
         displayProgress = v.findViewById(R.id.distanceProgress);
+
+        rvInterests = v.findViewById(R.id.rvInterests);
 
         setupButtonListeners();
         setupTextContainerListeners();
@@ -567,5 +574,14 @@ public class EditProfileFragment extends Fragment {
 
         // Return the file target for the photo based on filename
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
+    }
+
+    public void setupInterestsRv(){
+        mInterests = Utils.fetchInterests();
+        SignUpInterestAdapter iAdapter = new SignUpInterestAdapter(mInterests);
+        rvInterests.setLayoutManager(new LinearLayoutManager(context));
+        rvInterests.setAdapter(iAdapter);
+
+
     }
 }
