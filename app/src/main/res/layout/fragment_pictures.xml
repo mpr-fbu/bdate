@@ -5,88 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="20sp"
-        android:textColor="@color/oceanBlue"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="70dp"
-        android:text="Snapshots of you" />
-
-    <TextView
-        android:id="@+id/explanation"
-        android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_below="@+id/title"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="Add a profile photo and gallery photos to show off your interests and individuality." />
-
-    <ImageView
-        android:id="@+id/profilePic"
-        android:layout_width="125dp"
-        android:layout_height="125dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="163dp"
-        app:srcCompat="@mipmap/ic_picture" />
-
-    <ImageView
-        android:id="@+id/galleryPicOne"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/galleryPicTwo"
-        app:srcCompat="@drawable/ic_square_picture" />
-
-    <ImageView
-        android:id="@+id/galleryPicTwo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/galleryPicThree"
-        android:padding="-50dp"
-        app:srcCompat="@drawable/ic_square_picture" />
-
-    <ImageView
-        android:id="@+id/galleryPicThree"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="201dp"
-        app:srcCompat="@drawable/ic_square_picture" />
-
-    <Button
-        android:id="@+id/finish"
-        android:layout_alignLeft="@+id/explanation"
-        android:layout_alignRight="@+id/explanation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profilePic"
-        android:layout_marginTop="250dp"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/sign_up_button_style"
-        android:textColor="@color/white"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:text="Finish" />
-
-    <TextView
-        android:id="@+id/centerReference"
-        android:layout_width="wrap_content"
-        android:layout_height="300dp"
-        android:layout_below="@+id/explanation"
-        android:layout_centerHorizontal="true"
-        android:text="" />
-
     <ImageView
         android:id="@+id/dot1"
         android:layout_width="wrap_content"
@@ -126,5 +44,88 @@
         android:paddingLeft="5dp"
         android:tint="@color/oceanBlue"
         app:srcCompat="@drawable/divider_dot" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:textColor="@color/oceanBlue"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="70dp"
+        android:text="Snapshots of you" />
+
+    <TextView
+        android:id="@+id/explanation"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Add a profile photo and gallery photos to show off your interests and individuality." />
+
+    <TextView
+        android:id="@+id/tvSaving"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="Saving..."
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="28dp"
+        android:layout_marginRight="15dp" />
+
+    <com.parse.ParseImageView
+        android:id="@+id/profilePic"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_below="@+id/explanation"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:foreground="@drawable/profile_border"
+        app:srcCompat="@android:color/darker_gray" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/changeProfilePicBtn"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignBottom="@+id/profilePic"
+        android:layout_alignEnd="@+id/profilePic"
+        android:layout_alignRight="@+id/profilePic"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="center"
+        android:tint="@color/babyWhite"
+        app:elevation="3dp"
+        app:srcCompat="@drawable/ic_add_photo" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvGalleryPics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/profilePic" />
+
+    <Button
+        android:id="@+id/finish"
+        android:layout_alignLeft="@+id/explanation"
+        android:layout_alignRight="@+id/explanation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/sign_up_button_style"
+        android:textColor="@color/white"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:text="Finish" />
 
 </RelativeLayout>

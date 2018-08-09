@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +23,7 @@ import java.util.List;
 public class PickGalleryAdapter extends RecyclerView.Adapter<PickGalleryAdapter.ViewHolder>{
 
     private Context context;
-    private EditProfileFragment mFragment;
+    private Fragment mFragment;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ParseImageView imgContainer;
@@ -38,7 +39,7 @@ public class PickGalleryAdapter extends RecyclerView.Adapter<PickGalleryAdapter.
     public final static int PICK_PHOTO_CODE = 1046;
     private List<String> mCoverImageUrls;
 
-    public PickGalleryAdapter(List<String> imageUrls, EditProfileFragment fragment){
+    public PickGalleryAdapter(List<String> imageUrls, Fragment fragment){
         mCoverImageUrls = imageUrls;
         mFragment = fragment;
     }

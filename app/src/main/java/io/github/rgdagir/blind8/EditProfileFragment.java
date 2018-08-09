@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -85,6 +86,7 @@ public class EditProfileFragment extends Fragment {
     private TextView displayProgress;
     private HashMap changes;
     private RecyclerView rvEditInterests;
+    private AutoCompleteTextView mAutoCompleteInterests;
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -136,15 +138,24 @@ public class EditProfileFragment extends Fragment {
         rangeDistanceSeekBar = v.findViewById(R.id.rangeDistanceSeekBar);
         displayProgress = v.findViewById(R.id.distanceProgress);
 
-        rvEditInterests = v.findViewById(R.id.rvEditInterests);
+        //rvEditInterests = v.findViewById(R.id.rvEditInterests);
+        mAutoCompleteInterests = v.findViewById(R.id.autoCompleteInterests);
 
         setupButtonListeners();
         setupTextContainerListeners();
+        setupAutoCompleteInterests();
         setupGallery(v);
         setupSpinners(v);
         setupRangeBar();
         setupCrystalSeekBar(v);
-        fetchInterestsAndSetupRv();
+        //fetchInterestsAndSetupRv();
+    }
+
+    private void setupAutoCompleteInterests(){
+        String[] interestsArray = context.getResources().getStringArray(R.array.interests);
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, interestsArray);
+        mAutoCompleteInterests.setAdapter(adapter);
     }
 
     private void setupButtonListeners() {
