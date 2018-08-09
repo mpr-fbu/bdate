@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import io.github.rgdagir.blind8.PickGalleryAdapter;
 import io.github.rgdagir.blind8.R;
@@ -41,14 +40,11 @@ public class PicturesFragment extends Fragment {
 
     private PicturesFragment.OnFragmentInteractionListener mListener;
     private Context context;
-    private TextView title;
-    private TextView explanation;
     private TextView savingIndicator;
     private ParseImageView profilePic;
     private FloatingActionButton changeProfilePic;
     public final static int PICK_PHOTO_CODE = 1046;
     ArrayList<String> displayImages;
-    private HashMap<String, byte[]> images;
     PickGalleryAdapter galleryAdapter;
     RecyclerView rvGalleryPicker;
     private Button finish;
@@ -67,7 +63,6 @@ public class PicturesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pictures, container, false);
         context = getActivity();
-        images = new HashMap();
         setupFragmentVariables(view);
         setupButtonListeners();
         return view;
@@ -97,13 +92,11 @@ public class PicturesFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void createNewUser();
-        void addPicturesToUser(HashMap<String, byte[]> files);
+        void addPicturesToUser(String itemName, byte[] image);
     }
 
     private void setupFragmentVariables(View view) {
-        title = view.findViewById(R.id.title);
-        explanation = view.findViewById(R.id.explanation);
-        savingIndicator = view.findViewById(R.id.tvSaving);
+        savingIndicator = getActivity().findViewById(R.id.tvSaving);
         savingIndicator.setVisibility(View.INVISIBLE);
         profilePic = view.findViewById(R.id.profilePic);
         changeProfilePic = view.findViewById(R.id.changeProfilePicBtn);
@@ -119,7 +112,6 @@ public class PicturesFragment extends Fragment {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.addPicturesToUser(images);
                 mListener.createNewUser();
             }
         });
@@ -170,6 +162,7 @@ public class PicturesFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
+            savingIndicator.setVisibility(View.VISIBLE);
             Uri photoUri = data.getData();
             // Do something with the photo based on Uri
             final Bitmap selectedImage;
@@ -180,27 +173,27 @@ public class PicturesFragment extends Fragment {
                     selectedImage = resizeImage(rawSelectedImage, "profilePic");
                     img = Utils.getbytearray(selectedImage);
                     loadPhoto(context, photoUri, profilePic);
-                    images.put("profilePic", img);
+                    mListener.addPicturesToUser("profilePic", img);
                 } else if (requestCode == PICK_PHOTO_CODE + 1) { // first gallery pic
-                    selectedImage = resizeImage(rawSelectedImage, "galleryPic0");
+                    selectedImage = resizeImage(rawSelectedImage, "coverPhoto0");
                     img = Utils.getbytearray(selectedImage);
-                    images.put("coverPhoto0", img);
                     addToAdapter(0, photoUri.toString());
+                    mListener.addPicturesToUser("coverPhoto0", img);
                 } else if (requestCode == PICK_PHOTO_CODE + 2) { // second gallery pic
-                    selectedImage = resizeImage(rawSelectedImage, "galleryPic1");
+                    selectedImage = resizeImage(rawSelectedImage, "coverPhoto1");
                     img = Utils.getbytearray(selectedImage);
-                    images.put("coverPhoto1", img);
                     addToAdapter(1, photoUri.toString());
+                    mListener.addPicturesToUser("coverPhoto1", img);
                 } else if (requestCode == PICK_PHOTO_CODE + 3) { // third gallery pic
-                    selectedImage = resizeImage(rawSelectedImage, "galleryPic2");
+                    selectedImage = resizeImage(rawSelectedImage, "coverPhoto2");
                     img = Utils.getbytearray(selectedImage);
-                    images.put("coverPhoto2", img);
                     addToAdapter(2, photoUri.toString());
+                    mListener.addPicturesToUser("coverPhoto2", img);
                 } else if (requestCode == PICK_PHOTO_CODE + 4) { // third gallery pic
-                    selectedImage = resizeImage(rawSelectedImage, "galleryPic3");
+                    selectedImage = resizeImage(rawSelectedImage, "coverPhoto3");
                     img = Utils.getbytearray(selectedImage);
-                    images.put("coverPhoto3", img);
                     addToAdapter(3, photoUri.toString());
+                    mListener.addPicturesToUser("coverPhoto3", img);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -221,7 +214,7 @@ public class PicturesFragment extends Fragment {
         // Configure byte output stream
         final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         // Compress the image further
-        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
         // Create a new file for the resized bitmap (`getPhotoFileUri` defined above)
         final File resizedFile = getPhotoFileUri(imagePrefix + "_resized.jpg");
         // Write the bytes of the bitmap to file

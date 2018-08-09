@@ -573,7 +573,7 @@ public class EditProfileFragment extends Fragment {
         // Configure byte output stream
         final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         // Compress the image further
-        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
         // Create a new file for the resized bitmap (`getPhotoFileUri` defined above)
         final File resizedFile = getPhotoFileUri(currUser.getObjectId() + imagePrefix + "_resized.jpg");
         // Write the bytes of the bitmap to file

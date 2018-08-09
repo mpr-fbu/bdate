@@ -70,17 +70,6 @@
         android:layout_marginTop="10dp"
         android:text="Add a profile photo and gallery photos to show off your interests and individuality." />
 
-    <TextView
-        android:id="@+id/tvSaving"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:text="Saving..."
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="28dp"
-        android:layout_marginRight="15dp" />
-
     <com.parse.ParseImageView
         android:id="@+id/profilePic"
         android:layout_width="110dp"
