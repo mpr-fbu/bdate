@@ -2,12 +2,10 @@ package io.github.rgdagir.blind8.sign_up;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +17,6 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,12 +40,15 @@ public class BasicInfoFragment extends Fragment {
     private RadioGroup genderOptions;
     private RadioGroup preferenceOptions;
     private Button btnContinue;
+    private Button autoFill;
     private String gender;
     private String interestedIn;
     private int age;
     private String dateFromPicker;
     private Date dob;
     private TextInputLayout tilBirthday;
+    private boolean genderPicked;
+    private boolean preferencePicked;
 
 
     public BasicInfoFragment() {
@@ -68,8 +68,7 @@ public class BasicInfoFragment extends Fragment {
         setupButtonListeners();
         setupRadioGroupListeners();
         setupTextChangeListeners();
-        btnContinue.setEnabled(false);
-        btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_gray));
+        btnContinue.setVisibility(View.INVISIBLE);
         return view;
     }
 
@@ -112,6 +111,7 @@ public class BasicInfoFragment extends Fragment {
         genderOptions = view.findViewById(R.id.genderOptions);
         preferenceOptions = view.findViewById(R.id.preferenceOptions);
         btnContinue = view.findViewById(R.id.btnContinue);
+        autoFill = view.findViewById(R.id.autoFill);
         tilBirthday = view.findViewById(R.id.tilBirthday);
     }
 
@@ -129,6 +129,13 @@ public class BasicInfoFragment extends Fragment {
                 getDateFromPicker();
             }
         });
+        autoFill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etName.setText("Demo");
+            }
+        });
+
     }
 
     private void getDateFromPicker() {
@@ -136,7 +143,7 @@ public class BasicInfoFragment extends Fragment {
         // Set up current date Into dialog
         Calendar cal /* go stanford! */ = Calendar.getInstance();
         Bundle args = new Bundle();
-        args.putInt("year", cal.get(Calendar.YEAR));
+        args.putInt("year", 1999);
         args.putInt("month", cal.get(Calendar.MONTH));
         args.putInt("day", cal.get(Calendar.DAY_OF_MONTH));
         dateFragment.setArguments(args);
@@ -155,12 +162,12 @@ public class BasicInfoFragment extends Fragment {
                 age = calculateAge(year, monthOfYear + 1, dayOfMonth);
                 if (age < 18){
                     tilBirthday.setError("You have to be 18 or older to use this app");
-                    btnContinue.setEnabled(false);
-                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_gray));
+                    btnContinue.setVisibility(View.INVISIBLE);
                 } else {
                     tilBirthday.setError(null);
-                    btnContinue.setEnabled(true);
-                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_style));
+                    if (genderPicked && preferencePicked && etName.getText().length() > 0) {
+                        btnContinue.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
@@ -187,15 +194,19 @@ public class BasicInfoFragment extends Fragment {
         genderOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                genderPicked = true;
                 switch(checkedId) {
                     case R.id.gender_male:
                         gender = "Male";
+                        checkCanContinue();
                         break;
                     case R.id.gender_female:
                         gender = "Female";
+                        checkCanContinue();
                         break;
                     case R.id.gender_other:
                         gender = "Other";
+                        checkCanContinue();
                         break;
                 }
             }
@@ -204,19 +215,29 @@ public class BasicInfoFragment extends Fragment {
         preferenceOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                preferencePicked = true;
                 switch(checkedId) {
                     case R.id.prefer_men:
                         interestedIn = "Male";
+                        checkCanContinue();
                         break;
                     case R.id.prefer_women:
                         interestedIn = "Female";
+                        checkCanContinue();
                         break;
                     case R.id.no_preference:
                         interestedIn = "No preference";
+                        checkCanContinue();
                         break;
                 }
             }
         });
+    }
+
+    private void checkCanContinue() {
+        if (genderPicked && preferencePicked && tilBirthday.getError() == null && etName.getText().length() != 0) {
+            btnContinue.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupTextChangeListeners() {
@@ -225,11 +246,11 @@ public class BasicInfoFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
                 if (s.length() < 1) {
-                    btnContinue.setEnabled(false);
-                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_gray));
+                    btnContinue.setVisibility(View.INVISIBLE);
                 } else {
-                    btnContinue.setEnabled(true);
-                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_style));
+                    if (genderPicked && preferencePicked && tilBirthday.getError() == null) {
+                        btnContinue.setVisibility(View.VISIBLE);
+                    }
                 }
             }
             @Override

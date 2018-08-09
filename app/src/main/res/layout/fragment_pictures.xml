@@ -104,6 +104,21 @@
         android:layout_below="@+id/profilePic" />
 
     <Button
+        android:id="@+id/btnFakeFinish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:background="@drawable/sign_up_button_gray"
+        android:clickable="false"
+        android:layout_alignLeft="@id/explanation"
+        android:layout_alignRight="@id/explanation"
+        android:layout_below="@id/aliasNote"
+        android:text="Finish"
+        android:textColor="@color/white" />
+
+    <Button
         android:id="@+id/finish"
         android:layout_alignLeft="@+id/explanation"
         android:layout_alignRight="@+id/explanation"
