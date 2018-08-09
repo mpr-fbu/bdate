@@ -161,6 +161,7 @@ public class SearchFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+        checkIfSearching();
     }
 
     @Override

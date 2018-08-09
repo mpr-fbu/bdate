@@ -48,8 +48,7 @@
         android:layout_below="@+id/email"
         android:layout_centerHorizontal="true"
         android:ems="10"
-        app:hintEnabled="false"
-        >
+        app:hintEnabled="false">
         <EditText
             android:id="@+id/etEmail"
             android:layout_alignLeft="@+id/explanation"
@@ -83,8 +82,7 @@
         android:layout_below="@+id/password"
         android:layout_centerHorizontal="true"
         android:ems="10"
-        app:hintEnabled="false"
-        >
+        app:hintEnabled="false">
         <EditText
             android:id="@+id/etPassword"
             android:layout_alignLeft="@+id/explanation"
@@ -127,19 +125,33 @@
         android:layout_alignRight="@+id/explanation"
         android:text="*Your display name for other users. Please do not use your real name." />
 
-    <Button
-        android:id="@+id/btnContinue"
-        android:layout_alignLeft="@+id/explanation"
-        android:layout_alignRight="@+id/explanation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/aliasNote"
-        android:layout_marginTop="40dp"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/sign_up_button_style"
-        android:textColor="@color/white"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:text="Continue" />
+        <Button
+            android:id="@+id/btnFakeContinue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/sign_up_button_gray"
+            android:clickable="false"
+            android:layout_alignLeft="@id/explanation"
+            android:layout_alignRight="@id/explanation"
+            android:layout_below="@id/aliasNote"
+            android:text="Continue"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btnContinue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/sign_up_button_style"
+            android:textColor="@color/white"
+            android:layout_alignLeft="@id/explanation"
+            android:layout_alignRight="@id/explanation"
+            android:layout_below="@id/aliasNote"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="Continue" />
 
     <ImageView
         android:id="@+id/refresh"
