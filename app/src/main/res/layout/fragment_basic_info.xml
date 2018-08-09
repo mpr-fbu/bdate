@@ -242,4 +242,14 @@
         android:paddingLeft="5dp"
         app:srcCompat="@drawable/divider_dot" />
 
+    <Button
+        android:id="@+id/autoFill"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/btnContinue"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:foreground="@android:color/transparent" />
+
 </RelativeLayout>

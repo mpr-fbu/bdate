@@ -40,6 +40,7 @@ public class BasicInfoFragment extends Fragment {
     private RadioGroup genderOptions;
     private RadioGroup preferenceOptions;
     private Button btnContinue;
+    private Button autoFill;
     private String gender;
     private String interestedIn;
     private int age;
@@ -110,6 +111,7 @@ public class BasicInfoFragment extends Fragment {
         genderOptions = view.findViewById(R.id.genderOptions);
         preferenceOptions = view.findViewById(R.id.preferenceOptions);
         btnContinue = view.findViewById(R.id.btnContinue);
+        autoFill = view.findViewById(R.id.autoFill);
         tilBirthday = view.findViewById(R.id.tilBirthday);
     }
 
@@ -127,6 +129,13 @@ public class BasicInfoFragment extends Fragment {
                 getDateFromPicker();
             }
         });
+        autoFill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etName.setText("Demo");
+            }
+        });
+
     }
 
     private void getDateFromPicker() {
