@@ -48,8 +48,7 @@
         android:layout_below="@+id/email"
         android:layout_centerHorizontal="true"
         android:ems="10"
-        app:hintEnabled="false"
-        >
+        app:hintEnabled="false">
         <EditText
             android:id="@+id/etEmail"
             android:layout_alignLeft="@+id/explanation"
