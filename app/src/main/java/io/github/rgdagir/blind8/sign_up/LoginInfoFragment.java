@@ -38,6 +38,7 @@ public class LoginInfoFragment extends Fragment {
     private EditText etAlias;
     private Button btnContinue;
     private Button fakeContinue;
+    private Button autoFill;
     private ImageView refresh;
     private TextInputLayout tilEmail;
     private TextInputLayout tilPassword;
@@ -99,6 +100,7 @@ public class LoginInfoFragment extends Fragment {
         etPassword = view.findViewById(R.id.etPassword);
         btnContinue = view.findViewById(R.id.btnContinue);
         fakeContinue = view.findViewById(R.id.btnFakeContinue);
+        autoFill = view.findViewById(R.id.autoFill);
         alias = view.findViewById(R.id.alias);
         aliasNote = view.findViewById(R.id.aliasNote);
         etAlias = view.findViewById(R.id.etAlias);
@@ -120,6 +122,13 @@ public class LoginInfoFragment extends Fragment {
             public void onClick(View v) {
                 mListener.goToBasicInfoFragment(etEmail.getText().toString(),
                         etPassword.getText().toString(), etAlias.getText().toString());
+            }
+        });
+        autoFill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etEmail.setText("demo@fbu.com");
+                etPassword.setText("asdfgh");
             }
         });
     }
@@ -162,7 +171,7 @@ public class LoginInfoFragment extends Fragment {
 
                 } else {
                     tilEmail.setError(null);
-                    if (etPassword.getText().length() != 0 && etAlias.getText().length() != 0) {
+                    if (etPassword.getError() == null && etAlias.getText().length() != 0) {
                         btnContinue.setVisibility(View.VISIBLE);
                     }
 
@@ -179,7 +188,7 @@ public class LoginInfoFragment extends Fragment {
                 if (s.length() == 0) {
                     btnContinue.setVisibility(View.INVISIBLE);
                 } else {
-                    if (etEmail.getText().length() != 0 && etPassword.getText().length() >= 6) {
+                    if (etEmail.getError() == null && etPassword.getError() == null) {
                         btnContinue.setVisibility(View.VISIBLE);
                     }
                 }

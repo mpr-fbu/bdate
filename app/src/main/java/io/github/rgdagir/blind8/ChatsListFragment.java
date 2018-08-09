@@ -43,6 +43,7 @@ public class ChatsListFragment extends Fragment {
     private TextView tvUsername;
     private TextView tvNumConversations;
     private TextView placeholderText;
+    private TextView matchText;
     private ImageView placeholder;
     private ConversationAdapter conversationAdapter;
     RecyclerView rvConversations;
@@ -149,6 +150,7 @@ public class ChatsListFragment extends Fragment {
                     if (objects.size() == 0) {
                         placeholder.setVisibility(View.VISIBLE);
                         placeholderText.setVisibility(View.VISIBLE);
+                        matchText.setVisibility(View.VISIBLE);
                     }
                     tvNumConversations.setText(Integer.toString(mConversations.size()));
                 } else {
@@ -200,6 +202,7 @@ public class ChatsListFragment extends Fragment {
         currUser = ParseUser.getCurrentUser();
         placeholderText = view.findViewById(R.id.placeholderText);
         placeholder = view.findViewById(R.id.placeholder);
+        matchText = view.findViewById(R.id.matchText);
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         tvUsername = view.findViewById(R.id.tvUsername);
         tvNumConversations = view.findViewById(R.id.tvNumMessages);
@@ -244,5 +247,6 @@ public class ChatsListFragment extends Fragment {
         rvConversations.setAdapter(conversationAdapter);
         placeholder.setVisibility(View.INVISIBLE);
         placeholderText.setVisibility(View.INVISIBLE);
+        matchText.setVisibility(View.INVISIBLE);
     }
 }

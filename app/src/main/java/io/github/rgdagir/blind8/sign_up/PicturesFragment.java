@@ -48,6 +48,7 @@ public class PicturesFragment extends Fragment {
     PickGalleryAdapter galleryAdapter;
     RecyclerView rvGalleryPicker;
     private Button finish;
+    private Button fakeFinish;
     final String APP_TAG = "Blind8";
 
     public PicturesFragment() {
@@ -65,6 +66,7 @@ public class PicturesFragment extends Fragment {
         context = getActivity();
         setupFragmentVariables(view);
         setupButtonListeners();
+        finish.setVisibility(View.INVISIBLE);
         return view;
     }
 
@@ -106,6 +108,7 @@ public class PicturesFragment extends Fragment {
         rvGalleryPicker.setAdapter(galleryAdapter);
         rvGalleryPicker.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         finish = view.findViewById(R.id.finish);
+        fakeFinish = view.findViewById(R.id.btnFakeFinish);
     }
 
     private void setupButtonListeners() {
@@ -174,6 +177,7 @@ public class PicturesFragment extends Fragment {
                     img = Utils.getbytearray(selectedImage);
                     loadPhoto(context, photoUri, profilePic);
                     mListener.addPicturesToUser("profilePic", img);
+                    finish.setVisibility(View.VISIBLE);
                 } else if (requestCode == PICK_PHOTO_CODE + 1) { // first gallery pic
                     selectedImage = resizeImage(rawSelectedImage, "coverPhoto0");
                     img = Utils.getbytearray(selectedImage);

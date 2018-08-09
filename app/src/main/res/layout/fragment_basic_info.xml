@@ -126,14 +126,13 @@
         android:id="@+id/tilBirthday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:errorEnabled="true"
         android:layout_alignLeft="@+id/explanation"
         android:layout_alignRight="@+id/explanation"
         android:layout_below="@+id/birthday"
         android:layout_centerHorizontal="true"
         android:ems="10"
-        app:hintEnabled="false"
-        >
+        app:errorEnabled="true"
+        app:hintEnabled="false">
 
         <EditText
             android:id="@+id/placeholderBirthday"
@@ -242,5 +241,15 @@
         android:layout_toEndOf="@+id/dot3"
         android:paddingLeft="5dp"
         app:srcCompat="@drawable/divider_dot" />
+
+    <Button
+        android:id="@+id/autoFill"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/btnContinue"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:foreground="@android:color/transparent" />
 
 </RelativeLayout>
