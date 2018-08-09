@@ -72,17 +72,16 @@ Tasks:
 
 ## DEMO
 * Two phones
-* One phone logs in, another one signs up
-* Main screen  (one has chats already, the other one is new and empty)
-* The new user goes to profile and takes picture
-* The old user clicks on a chat scrolls up and down and goes back
-* Both match (one tapping button, the other one shaking)
-* They choose the distance in the map and tap Go
+* One phone logs in, another one signs up (date picker and choose photos)
+* Both go to conversations list  (one has chats already, the other one is new and empty)
+* One press the match navigation, then stop, and press again
+* One cancels and enters again
+* They choose the distance in the map and tap Match
 * They appear on the chat screen
-* They chat for a while (and first achievement notification appears)
-* One taps on the notification to see achievements
-* The other user can tap on the top bar to see other user's profile
+* They chat for a while (unlocking all achievements, notifications appears and content unlocks)
+* One taps on the unlock notification to see other person's profile to check unlocked information
+* The other user can tap on the top bar to see other user's profile too
 * One of them presses home button and leave the app
-* The other user messages so you see push notification
-* User taps notification and goes back to chat
-* Then they chat a bit more and unlock profile picture
+* The other user messages so you see push the notification
+* User taps the push notification and goes back to chat
+* Go to self profile and to edit profile
