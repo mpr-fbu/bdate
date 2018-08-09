@@ -189,12 +189,15 @@ public class BasicInfoFragment extends Fragment {
                 switch(checkedId) {
                     case R.id.gender_male:
                         gender = "Male";
+                        checkCanContinue();
                         break;
                     case R.id.gender_female:
                         gender = "Female";
+                        checkCanContinue();
                         break;
                     case R.id.gender_other:
                         gender = "Other";
+                        checkCanContinue();
                         break;
                 }
             }
@@ -207,16 +210,25 @@ public class BasicInfoFragment extends Fragment {
                 switch(checkedId) {
                     case R.id.prefer_men:
                         interestedIn = "Male";
+                        checkCanContinue();
                         break;
                     case R.id.prefer_women:
                         interestedIn = "Female";
+                        checkCanContinue();
                         break;
                     case R.id.no_preference:
                         interestedIn = "No preference";
+                        checkCanContinue();
                         break;
                 }
             }
         });
+    }
+
+    private void checkCanContinue() {
+        if (genderPicked && preferencePicked && tilBirthday.getError() == null && etName.getText().length() != 0) {
+            btnContinue.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupTextChangeListeners() {
