@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity
 
     public void goBackToProfile() {
         viewPager.setVisibility(View.VISIBLE);
-        vpAdapter.notifyDataSetChanged();
+        viewPager.getAdapter().notifyDataSetChanged();
         flContainer.setVisibility(View.INVISIBLE);
         viewPager.setCurrentItem(2);
     }
