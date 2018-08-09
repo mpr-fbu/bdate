@@ -176,6 +176,20 @@
         />
 
     <Button
+        android:id="@+id/btnFakeContinue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/sign_up_button_gray"
+        android:clickable="false"
+        android:layout_alignLeft="@id/explanation"
+        android:layout_alignRight="@id/explanation"
+        android:layout_below="@+id/etName"
+        android:text="Continue"
+        android:textColor="@color/white" />
+
+    <Button
         android:id="@+id/btnContinue"
         android:layout_alignLeft="@+id/explanation"
         android:layout_alignRight="@+id/explanation"

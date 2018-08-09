@@ -28,7 +28,5 @@
     <color name="heartRed">#EF8683</color>
     <color name="transparentBlue">#0A3BCBEE</color>
 
-    <color name="background_dark">#ffb8860b</color>
-    <color name="background_light">#ffd2b48c</color>
     <color name="transparent">#00b8860b</color>
 </resources>

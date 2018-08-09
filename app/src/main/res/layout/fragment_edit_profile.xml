@@ -8,537 +8,575 @@
     android:fillViewport="true"
     tools:context=".MainActivity">
 
-    <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintHorizontal_bias="0.0"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/my_toolbar" >-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" >
 
-        <!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-            <!--xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <!--<TextView-->
-                <!--android:id="@+id/tvSaving"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginEnd="8dp"-->
-                <!--android:layout_marginRight="8dp"-->
-                <!--android:layout_marginTop="16dp"-->
-                <!--android:text="Saving..."-->
-                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <TextView
+                android:id="@+id/tvSaving"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="16dp"
+                android:text="Saving..."
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <!--<com.parse.ParseImageView-->
-                <!--android:id="@+id/profilePic"-->
-                <!--android:layout_width="120dp"-->
-                <!--android:layout_height="120dp"-->
-                <!--android:layout_alignParentTop="true"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--android:layout_marginEnd="8dp"-->
-                <!--android:layout_marginLeft="8dp"-->
-                <!--android:layout_marginRight="8dp"-->
-                <!--android:layout_marginStart="8dp"-->
-                <!--android:layout_marginTop="16dp"-->
-                <!--android:foreground="@drawable/profile_border"-->
-                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                <!--app:layout_constraintStart_toStartOf="parent"-->
-                <!--app:layout_constraintTop_toTopOf="parent"-->
-                <!--app:srcCompat="@android:color/darker_gray" />-->
+            <com.parse.ParseImageView
+                android:id="@+id/profilePic"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:foreground="@drawable/profile_border"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@android:color/darker_gray" />
 
-            <!--<android.support.design.widget.FloatingActionButton-->
-                <!--android:id="@+id/changeProfilePicBtn"-->
-                <!--android:layout_width="45dp"-->
-                <!--android:layout_height="45dp"-->
-                <!--android:clickable="true"-->
-                <!--android:focusable="true"-->
-                <!--android:scaleType="center"-->
-                <!--android:tint="@color/babyWhite"-->
-                <!--app:elevation="3dp"-->
-                <!--app:layout_constraintBottom_toBottomOf="@id/profilePic"-->
-                <!--app:layout_constraintEnd_toEndOf="@id/profilePic"-->
-                <!--app:srcCompat="@drawable/ic_add_photo" />-->
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/changeProfilePicBtn"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="center"
+                android:tint="@color/babyWhite"
+                app:elevation="3dp"
+                app:layout_constraintBottom_toBottomOf="@id/profilePic"
+                app:layout_constraintEnd_toEndOf="@id/profilePic"
+                app:srcCompat="@drawable/ic_add_photo" />
 
-            <!--<android.support.v7.widget.RecyclerView-->
-                <!--android:id="@+id/rvGalleryPics"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginEnd="8dp"-->
-                <!--android:layout_marginLeft="8dp"-->
-                <!--android:layout_marginRight="8dp"-->
-                <!--android:layout_marginStart="8dp"-->
-                <!--android:layout_marginTop="8dp"-->
-                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                <!--app:layout_constraintStart_toStartOf="parent"-->
-                <!--app:layout_constraintTop_toBottomOf="@+id/profilePic" />-->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvGalleryPics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profilePic" />
 
-            <!--<TextView-->
-                <!--android:id="@+id/tvBasicInfo"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="8dp"-->
-                <!--android:layout_marginLeft="15dp"-->
-                <!--android:layout_marginStart="15dp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:text="Basic Information"-->
-                <!--android:textColor="@color/offBlack"-->
-                <!--android:textSize="14sp"-->
-                <!--app:layout_constraintBottom_toTopOf="@+id/cvBasicInfo"-->
-                <!--app:layout_constraintStart_toStartOf="parent"-->
-                <!--app:layout_constraintTop_toBottomOf="@+id/rvGalleryPics" />-->
+            <TextView
+                android:id="@+id/tvBasicInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="Basic Information"
+                android:textColor="@color/offBlack"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/cvBasicInfo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rvGalleryPics" />
 
-            <!--<android.support.v7.widget.CardView-->
-                <!--android:id="@+id/cvBasicInfo"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="8dp"-->
-                <!--android:layout_marginBottom="8dp"-->
-                <!--android:layout_marginLeft="12dp"-->
-                <!--android:layout_marginRight="12dp"-->
-                <!--app:cardBackgroundColor="@color/navBarGrey"-->
-                <!--app:layout_constraintTop_toBottomOf="@+id/tvBasicInfo"-->
-                <!--card_view:cardCornerRadius="8dp">-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvBasicInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                app:cardBackgroundColor="@color/navBarGrey"
+                app:layout_constraintTop_toBottomOf="@+id/tvBasicInfo"
+                card_view:cardCornerRadius="8dp">
 
-                <!--<RelativeLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content">-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvBioLabel"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:text="Status" />-->
+                    <TextView
+                        android:id="@+id/tvBioLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Status" />
 
-                    <!--<EditText-->
-                        <!--android:id="@+id/editBio"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/tvBioLabel"-->
-                        <!--android:layout_marginLeft="8dp"-->
-                        <!--android:layout_marginRight="8dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:ems="8"-->
-                        <!--android:inputType="textMultiLine" />-->
+                    <EditText
+                        android:id="@+id/editBio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvBioLabel"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="8"
+                        android:inputType="textMultiLine" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvOccupationLabel"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/editBio"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginTop="5dp"-->
-                        <!--android:text="Occupation" />-->
+                    <TextView
+                        android:id="@+id/tvOccupationLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/editBio"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:text="Occupation" />
 
-                    <!--<EditText-->
-                        <!--android:id="@+id/editOccupation"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/tvOccupationLabel"-->
-                        <!--android:layout_marginLeft="8dp"-->
-                        <!--android:layout_marginRight="8dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:ems="8" />-->
+                    <EditText
+                        android:id="@+id/editOccupation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvOccupationLabel"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="8" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvEducationLabel"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/editOccupation"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginTop="5dp"-->
-                        <!--android:text="Education" />-->
+                    <TextView
+                        android:id="@+id/tvEducationLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/editOccupation"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:text="Education" />
 
-                    <!--<EditText-->
-                        <!--android:id="@+id/editEducation"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/tvEducationLabel"-->
-                        <!--android:layout_marginLeft="8dp"-->
-                        <!--android:layout_marginRight="8dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:layout_marginBottom="10dp"-->
-                        <!--android:ems="8" />-->
-                <!--</RelativeLayout>-->
+                    <EditText
+                        android:id="@+id/editEducation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvEducationLabel"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:ems="8" />
+                </RelativeLayout>
 
-            <!--</android.support.v7.widget.CardView>-->
+            </android.support.v7.widget.CardView>
 
-            <!--<TextView-->
-                <!--android:id="@+id/tvInterests"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="8dp"-->
-                <!--android:layout_marginLeft="15dp"-->
-                <!--android:layout_marginStart="15dp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:text="Interests"-->
-                <!--android:textColor="@color/offBlack"-->
-                <!--android:textSize="14sp"-->
-                <!--app:layout_constraintBottom_toTopOf="@+id/cvInterests"-->
-                <!--app:layout_constraintStart_toStartOf="parent"-->
-                <!--app:layout_constraintTop_toBottomOf="@+id/cvBasicInfo" />-->
+            <TextView
+                android:id="@+id/tvInterests"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="Interests"
+                android:textColor="@color/offBlack"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/cvInterests"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cvBasicInfo" />
 
-            <!--<android.support.v7.widget.CardView-->
-                <!--android:id="@+id/cvInterests"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="8dp"-->
-                <!--android:layout_marginBottom="8dp"-->
-                <!--android:layout_marginLeft="12dp"-->
-                <!--android:layout_marginRight="12dp"-->
-                <!--app:cardBackgroundColor="@color/navBarGrey"-->
-                <!--app:layout_constraintTop_toBottomOf="@+id/tvInterests"-->
-                <!--card_view:cardCornerRadius="8dp">-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvInterests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                app:cardBackgroundColor="@color/navBarGrey"
+                app:layout_constraintTop_toBottomOf="@+id/tvInterests"
+                card_view:cardCornerRadius="8dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/autoCompleteTxtLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteInterests"
+                            android:layout_width="328dp"
+                            android:layout_height="wrap_content" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageButton
+                        android:id="@+id/addInterestImageButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="54dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:background="@color/transparent"
+                        app:srcCompat="@drawable/add_button_select" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rvEditInterests"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_below="@+id/addInterestImageButton"
+                        android:layout_marginTop="10dp" />
+
+
+                </RelativeLayout>
 
                 <!--&lt;!&ndash; Fill in to choose interests! &ndash;&gt;-->
                 <!--<android.support.v7.widget.RecyclerView-->
                     <!--android:id="@+id/rvEditInterests"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginTop="20dp" />-->
-
-            <!--</android.support.v7.widget.CardView>-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/tvPreferences"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="8dp"-->
-                <!--android:layout_marginLeft="15dp"-->
-                <!--android:layout_marginStart="15dp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:text="Preferences"-->
-                <!--android:textColor="@color/offBlack"-->
-                <!--android:textSize="14sp"-->
-                <!--app:layout_constraintBottom_toTopOf="@+id/cvPreferences"-->
-                <!--app:layout_constraintStart_toStartOf="parent"-->
-                <!--app:layout_constraintTop_toBottomOf="@+id/cvInterests" />-->
-
-            <!--<android.support.v7.widget.CardView-->
-                <!--android:id="@+id/cvPreferences"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="8dp"-->
-                <!--android:layout_marginBottom="8dp"-->
-                <!--android:layout_marginLeft="12dp"-->
-                <!--android:layout_marginRight="12dp"-->
-                <!--app:cardBackgroundColor="@color/navBarGrey"-->
-                <!--app:layout_constraintTop_toBottomOf="@+id/tvPreferences"-->
-                <!--card_view:cardCornerRadius="8dp">-->
-
-                <!--<RelativeLayout-->
                     <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content">-->
+                    <!--android:layout_height="200dp"-->
+                    <!--android:layout_marginTop="20dp">-->
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvDistanceLabel"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_alignParentTop="true"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:text="Match Range" />-->
+                <!--</android.support.v7.widget.RecyclerView>-->
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/distanceProgress"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_alignParentTop="true"-->
-                        <!--android:layout_alignRight="@+id/rangeDistanceSeekBar"-->
-                        <!--android:layout_margin="10dp"-->
-                        <!--android:text="100" />-->
+            </android.support.v7.widget.CardView>
 
-                    <!--<SeekBar-->
-                        <!--android:id="@+id/rangeDistanceSeekBar"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/tvDistanceLabel"-->
-                        <!--android:layout_marginLeft="8dp"-->
-                        <!--android:layout_marginRight="8dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:thumb="@drawable/range_seekbar_dot" />-->
+            <TextView
+                android:id="@+id/tvPreferences"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="Preferences"
+                android:textColor="@color/offBlack"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/cvPreferences"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cvInterests" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvAgeLabel"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/rangeDistanceSeekBar"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:text="Age Range" />-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvPreferences"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                app:cardBackgroundColor="@color/navBarGrey"
+                app:layout_constraintTop_toBottomOf="@+id/tvPreferences"
+                card_view:cardCornerRadius="8dp">
 
-                    <!--<com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar-->
-                        <!--android:id="@+id/crystalRangeAgeSeekBar"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/tvAgeLabel"-->
-                        <!--android:layout_marginLeft="8dp"-->
-                        <!--android:layout_marginRight="8dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--app:bar_color="@color/lightGrey"-->
-                        <!--app:bar_highlight_color="@color/mediumBlue"-->
-                        <!--app:left_thumb_image="@drawable/ic_seekbar_dot"-->
-                        <!--app:right_thumb_image="@drawable/ic_seekbar_dot"-->
-                        <!--app:left_thumb_image_pressed="@drawable/ic_seekbar_selected_dot"-->
-                        <!--app:right_thumb_image_pressed="@drawable/ic_seekbar_selected_dot"-->
-                        <!--app:corner_radius="10"-->
-                        <!--app:data_type="_integer"-->
-                        <!--app:gap="2"-->
-                        <!--app:max_value="100"-->
-                        <!--app:min_value="18" />-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/rangeSeekBarMin"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/crystalRangeAgeSeekBar"-->
-                        <!--android:layout_alignLeft="@+id/crystalRangeAgeSeekBar"-->
-                        <!--android:layout_margin="5dp"-->
-                        <!--android:text="18" />-->
+                    <TextView
+                        android:id="@+id/tvDistanceLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Match Range" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/rangeSeekBarMax"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/crystalRangeAgeSeekBar"-->
-                        <!--android:layout_margin="5dp"-->
-                        <!--android:layout_alignRight="@+id/crystalRangeAgeSeekBar"-->
-                        <!--android:text="100" />-->
+                    <TextView
+                        android:id="@+id/distanceProgress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignRight="@+id/rangeDistanceSeekBar"
+                        android:layout_margin="10dp"
+                        android:text="100" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvInterestedLabel"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/rangeSeekBarMin"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginTop="8dp"-->
-                        <!--android:text="I'm interested in" />-->
+                    <SeekBar
+                        android:id="@+id/rangeDistanceSeekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvDistanceLabel"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="10dp"
+                        android:thumb="@drawable/range_seekbar_dot" />
 
-                    <!--<Spinner-->
-                        <!--android:id="@+id/interestedInGender"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/tvInterestedLabel"-->
-                        <!--android:layout_margin="10dp" />-->
+                    <TextView
+                        android:id="@+id/tvAgeLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rangeDistanceSeekBar"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Age Range" />
 
-                <!--</RelativeLayout>-->
+                    <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+                        android:id="@+id/crystalRangeAgeSeekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvAgeLabel"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="10dp"
+                        app:bar_color="@color/lightGrey"
+                        app:bar_highlight_color="@color/mediumBlue"
+                        app:left_thumb_image="@drawable/ic_seekbar_dot"
+                        app:right_thumb_image="@drawable/ic_seekbar_dot"
+                        app:left_thumb_image_pressed="@drawable/ic_seekbar_selected_dot"
+                        app:right_thumb_image_pressed="@drawable/ic_seekbar_selected_dot"
+                        app:corner_radius="10"
+                        app:data_type="_integer"
+                        app:gap="2"
+                        app:max_value="100"
+                        app:min_value="18" />
 
-            <!--</android.support.v7.widget.CardView>-->
+                    <TextView
+                        android:id="@+id/rangeSeekBarMin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/crystalRangeAgeSeekBar"
+                        android:layout_alignLeft="@+id/crystalRangeAgeSeekBar"
+                        android:layout_margin="5dp"
+                        android:text="18" />
 
-            <!--<TextView-->
-                <!--android:id="@+id/tvAccountInfo"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="8dp"-->
-                <!--android:layout_marginLeft="15dp"-->
-                <!--android:layout_marginStart="15dp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:text="Account Information"-->
-                <!--android:textColor="@color/offBlack"-->
-                <!--android:textSize="14sp"-->
-                <!--app:layout_constraintBottom_toTopOf="@+id/cvAccountInfo"-->
-                <!--app:layout_constraintStart_toStartOf="parent"-->
-                <!--app:layout_constraintTop_toBottomOf="@+id/cvPreferences" />-->
+                    <TextView
+                        android:id="@+id/rangeSeekBarMax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/crystalRangeAgeSeekBar"
+                        android:layout_margin="5dp"
+                        android:layout_alignRight="@+id/crystalRangeAgeSeekBar"
+                        android:text="100" />
 
-            <!--<android.support.v7.widget.CardView-->
-                <!--android:id="@+id/cvAccountInfo"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="8dp"-->
-                <!--android:layout_marginBottom="60dp"-->
-                <!--android:layout_marginLeft="12dp"-->
-                <!--android:layout_marginRight="12dp"-->
-                <!--app:cardBackgroundColor="@color/navBarGrey"-->
-                <!--app:layout_constraintTop_toBottomOf="@+id/cvPreferences"-->
-                <!--app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--card_view:cardCornerRadius="8dp">-->
+                    <TextView
+                        android:id="@+id/tvInterestedLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rangeSeekBarMin"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="8dp"
+                        android:text="I'm interested in" />
 
-                <!--<RelativeLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content">-->
+                    <Spinner
+                        android:id="@+id/interestedInGender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvInterestedLabel"
+                        android:layout_margin="10dp" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvNameLabel"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_alignParentTop="true"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:text="Name" />-->
+                </RelativeLayout>
 
-                    <!--<EditText-->
-                        <!--android:id="@+id/editName"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/tvNameLabel"-->
-                        <!--android:layout_marginLeft="8dp"-->
-                        <!--android:layout_marginRight="8dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:ems="8" />-->
+            </android.support.v7.widget.CardView>
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvAliasLabel"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/editName"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:text="Alias" />-->
+            <TextView
+                android:id="@+id/tvAccountInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="Account Information"
+                android:textColor="@color/offBlack"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/cvAccountInfo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cvPreferences" />
 
-                    <!--<EditText-->
-                        <!--android:id="@+id/editAlias"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/tvAliasLabel"-->
-                        <!--android:layout_marginLeft="8dp"-->
-                        <!--android:layout_marginRight="8dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:ems="8" />-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvAccountInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="60dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                app:cardBackgroundColor="@color/navBarGrey"
+                app:layout_constraintTop_toBottomOf="@+id/cvPreferences"
+                app:layout_constraintBottom_toBottomOf="parent"
+                card_view:cardCornerRadius="8dp">
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvGenderLabel"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/editAlias"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginTop="5dp"-->
-                        <!--android:text="I identify as" />-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                    <!--<Spinner-->
-                        <!--android:id="@+id/myGender"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginRight="10dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:layout_below="@+id/tvGenderLabel" />-->
+                    <TextView
+                        android:id="@+id/tvNameLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Name" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvEmailLabel"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/myGender"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginTop="5dp"-->
-                        <!--android:text="Email" />-->
+                    <EditText
+                        android:id="@+id/editName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvNameLabel"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="8" />
 
-                    <!--<EditText-->
-                        <!--android:id="@+id/editEmail"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/tvEmailLabel"-->
-                        <!--android:inputType="textEmailAddress"-->
-                        <!--android:layout_marginLeft="8dp"-->
-                        <!--android:layout_marginRight="8dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:ems="8" />-->
+                    <TextView
+                        android:id="@+id/tvAliasLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/editName"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Alias" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvPasswordLabel"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/editEmail"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginTop="5dp"-->
-                        <!--android:text="Password" />-->
+                    <EditText
+                        android:id="@+id/editAlias"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvAliasLabel"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="8" />
 
-                    <!--<Button-->
-                        <!--android:id="@+id/changePasswordButton"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginRight="10dp"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:layout_marginBottom="20dp"-->
-                        <!--android:layout_below="@+id/tvPasswordLabel"-->
-                        <!--android:background="@drawable/sign_up_button_style"-->
-                        <!--android:minHeight="0dp"-->
-                        <!--android:paddingBottom="10dp"-->
-                        <!--android:paddingTop="10dp"-->
-                        <!--android:text="Change my password"-->
-                        <!--android:foreground="?android:attr/selectableItemBackground"-->
-                        <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"-->
-                        <!--android:textColor="@color/babyWhite" />-->
-                <!--</RelativeLayout>-->
+                    <TextView
+                        android:id="@+id/tvGenderLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/editAlias"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:text="I identify as" />
 
-            <!--</android.support.v7.widget.CardView>-->
+                    <Spinner
+                        android:id="@+id/myGender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@+id/tvGenderLabel" />
 
-        <!--</android.support.constraint.ConstraintLayout>-->
-    <!--</ScrollView>-->
+                    <TextView
+                        android:id="@+id/tvEmailLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/myGender"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:text="Email" />
 
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/my_toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@color/mediumGrey"-->
-        <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/dropshadow"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent">-->
+                    <EditText
+                        android:id="@+id/editEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvEmailLabel"
+                        android:inputType="textEmailAddress"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="8" />
 
-        <!--<RelativeLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content">-->
+                    <TextView
+                        android:id="@+id/tvPasswordLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/editEmail"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:text="Password" />
 
-            <!--<ImageView-->
-                <!--android:id="@+id/goBackArrow"-->
-                <!--android:layout_width="40dp"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:layout_alignParentTop="true"-->
-                <!--android:layout_margin="5dp"-->
-                <!--android:clickable="true"-->
-                <!--android:focusable="true"-->
-                <!--android:foreground="?android:attr/selectableItemBackground"-->
-                <!--app:srcCompat="@drawable/ic_back_arrow"-->
-                <!--tools:ignore="VectorDrawableCompat" />-->
+                    <Button
+                        android:id="@+id/changePasswordButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_below="@+id/tvPasswordLabel"
+                        android:background="@drawable/sign_up_button_style"
+                        android:minHeight="0dp"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:text="Change my password"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/babyWhite" />
+                </RelativeLayout>
 
-            <!--<ImageView-->
-                <!--android:id="@+id/done"-->
-                <!--android:layout_width="30dp"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_alignParentTop="true"-->
-                <!--android:layout_marginBottom="5dp"-->
-                <!--android:layout_marginRight="20dp"-->
-                <!--android:layout_marginTop="5dp"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--android:clickable="true"-->
-                <!--android:focusable="true"-->
-                <!--android:tint="@color/babyWhite"-->
-                <!--android:foreground="?android:attr/selectableItemBackground"-->
-                <!--app:srcCompat="@drawable/ic_baseline_check_24px"-->
-                <!--tools:ignore="VectorDrawableCompat" />-->
+            </android.support.v7.widget.CardView>
 
-            <!--<TextView-->
-                <!--android:id="@+id/tvEditProfile"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentLeft="true"-->
-                <!--android:layout_alignParentStart="true"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_marginLeft="60dp"-->
-                <!--android:layout_marginStart="60dp"-->
-                <!--android:text="Edit Profile"-->
-                <!--android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
-                <!--android:textColor="@color/babyWhite"-->
-                <!--android:textStyle="bold" />-->
-        <!--</RelativeLayout>-->
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 
-    <!--</android.support.v7.widget.Toolbar>-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/mediumGrey"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintBottom_toTopOf="@+id/dropshadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!--<View-->
-        <!--android:id="@+id/dropshadow"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="5dp"-->
-        <!--android:background="@drawable/dropshadow"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />-->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/goBackArrow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:srcCompat="@drawable/ic_back_arrow"
+                tools:ignore="VectorDrawableCompat" />
+
+            <ImageView
+                android:id="@+id/done"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:tint="@color/babyWhite"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:srcCompat="@drawable/ic_baseline_check_24px"
+                tools:ignore="VectorDrawableCompat" />
+
+            <TextView
+                android:id="@+id/tvEditProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="60dp"
+                android:layout_marginStart="60dp"
+                android:text="Edit Profile"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/babyWhite"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <View
+        android:id="@+id/dropshadow"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/dropshadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
 
 </android.support.constraint.ConstraintLayout>

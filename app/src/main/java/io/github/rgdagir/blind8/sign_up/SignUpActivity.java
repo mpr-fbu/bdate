@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
@@ -43,11 +44,14 @@ public class SignUpActivity extends AppCompatActivity
     ArrayList<Interest> mInterests = new ArrayList<>();
     final FragmentManager fragmentManager = getSupportFragmentManager();
     private int DEFAULT_RANGE = 10;
+    TextView savingIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        savingIndicator = findViewById(R.id.tvSaving);
+        savingIndicator.setVisibility(View.INVISIBLE);
         fetchInterests();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.flContainer, initialFragment)
@@ -113,57 +117,17 @@ public class SignUpActivity extends AppCompatActivity
         switchFragment(fragmentManager.beginTransaction(), new PicturesFragment());
     }
 
-    public void addPicturesToUser(HashMap<String, byte[]> imagesHMap){
-        if(imagesHMap.get("profilePic") != null) {
-            // create parse file
-            final ParseFile profilePic = new ParseFile(newUser.getObjectId() + "profilePic_resized.jpg", imagesHMap.get("profilePic"));
-            profilePic.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    newUser.put("profilePic", profilePic);
-                }
-            });
-        }
-        if(imagesHMap.get("coverPhoto0") != null) {
-            // create parse file
-            final ParseFile cover1 = new ParseFile(newUser.getObjectId() + "galleryPic0_resized.jpg", imagesHMap.get("coverPhoto0"));
-            cover1.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    newUser.put("coverPhoto0", cover1);
-                }
-            });
-        }
-        if(imagesHMap.get("coverPhoto1") != null) {
-            // create parse file
-            final ParseFile cover1 = new ParseFile(newUser.getObjectId() + "galleryPic1_resized.jpg", imagesHMap.get("coverPhoto1"));
-            cover1.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    newUser.put("coverPhoto1", cover1);
-                }
-            });
-        }
-        if(imagesHMap.get("coverPhoto2") != null) {
-            // create parse file
-            final ParseFile cover2 = new ParseFile(newUser.getObjectId() + "galleryPic2_resized.jpg", imagesHMap.get("coverPhoto2"));
-            cover2.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    newUser.put("coverPhoto2", cover2);
-                }
-            });
-        }
-        if(imagesHMap.get("coverPhoto3") != null) {
-            // create parse file
-            final ParseFile cover3 = new ParseFile(newUser.getObjectId() + "galleryPic3_resized.jpg", imagesHMap.get("coverPhoto3"));
-            cover3.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    newUser.put("coverPhoto3", cover3);
-                }
-            });
-        }
+    public void addPicturesToUser(final String itemName, byte[] image){
+        // create parse file
+        final ParseFile savedImage = new ParseFile(itemName + "_resized.jpg", image);
+        savedImage.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                newUser.put(itemName, savedImage);
+                Log.d("PictureAdding", "photo was added successfully!");
+                savingIndicator.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     public void createNewUser() {
@@ -209,8 +173,6 @@ public class SignUpActivity extends AppCompatActivity
             }
         }
     }
-
-
 
     private void launchMainActivity() {
         // default ACLs for User object
