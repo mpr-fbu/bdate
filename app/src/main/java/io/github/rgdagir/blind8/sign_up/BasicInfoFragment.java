@@ -136,7 +136,7 @@ public class BasicInfoFragment extends Fragment {
         // Set up current date Into dialog
         Calendar cal /* go stanford! */ = Calendar.getInstance();
         Bundle args = new Bundle();
-        args.putInt("year", cal.get(Calendar.YEAR));
+        args.putInt("year", 1999);
         args.putInt("month", cal.get(Calendar.MONTH));
         args.putInt("day", cal.get(Calendar.DAY_OF_MONTH));
         dateFragment.setArguments(args);

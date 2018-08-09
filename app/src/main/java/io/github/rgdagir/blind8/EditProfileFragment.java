@@ -42,8 +42,10 @@ import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -78,6 +80,7 @@ public class EditProfileFragment extends Fragment {
     private ArrayList<String> images;
     private ArrayList<Interest> mInterests;
     private ArrayList<Boolean> mIsInCommon;
+    private ArrayList<String> mStrInterests;
     private InterestAdapter interestAdapter;
     PickGalleryAdapter galleryAdapter;
     RecyclerView rvGalleryPicker;
@@ -179,8 +182,10 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void setupAutoCompleteInterests(){
+        mStrInterests = new ArrayList<String>();
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, interestsArray);
+        mAutoCompleteInterests.setThreshold(0);
         mAutoCompleteInterests.setAdapter(adapter);
     }
 
@@ -196,8 +201,7 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("Done button", "pressed!");
-                saveUpdatedUser();
-                mListener.goBackToProfile();
+                deleteUserInterestsThenCreateTheNewOnes();
             }
         });
         arrowBack.setOnClickListener(new View.OnClickListener() {
@@ -217,17 +221,56 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String strInterest = mAutoCompleteInterests.getText().toString();
-                if (isValid(strInterest) && !Arrays.asList(mInterests).contains(strInterest)){
-                    autoCompleteTxtLayout.setError(null);
-                    Interest interest = new Interest();
-                    interest.setName(String.valueOf(mAutoCompleteInterests.getText().toString()));
-                    mInterests.add(interest);
-                    mIsInCommon.add(false);
-                    interestAdapter.notifyItemInserted(mInterests.size() - 1);
-
+                if (isValid(strInterest)){
+                    if (!mStrInterests.contains(strInterest)) {
+                        mStrInterests.add(strInterest);
+                        autoCompleteTxtLayout.setError(null);
+                        Interest interest = new Interest();
+                        interest.setName(String.valueOf(mAutoCompleteInterests.getText().toString()));
+                        mInterests.add(interest);
+                        mIsInCommon.add(false);
+                        interestAdapter.notifyItemInserted(mInterests.size() - 1);
+                    } else {
+                        autoCompleteTxtLayout.setError("You're already interested in that :)");
+                    }
+                    mAutoCompleteInterests.setText(null);
                 } else {
                     autoCompleteTxtLayout.setError("Invalid interest. Please select one from the list");
                 }
+            }
+        });
+    }
+
+    private void createUserInterests() {
+        for (int i = 0; i < mInterests.size(); i++) {
+            UserInterest userInterest = new UserInterest();
+            userInterest.put("user", currUser);
+            userInterest.put("interest", mInterests.get(i));
+            userInterest.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.e("ChatActivity", "Creating user interest success! :)");
+                    } else {
+                        Log.e("ChatActivity", "Creating user interest failed :(");
+                    }
+                }
+            });
+        }
+        saveUpdatedUser();
+        mListener.goBackToProfile();
+    }
+
+    public void deleteUserInterestsThenCreateTheNewOnes(){
+        ParseQuery<UserInterest> query = new UserInterest.Query();
+        query.whereEqualTo("user", currUser);
+        query.findInBackground(new FindCallback<UserInterest>() {
+            @Override
+            public void done(List<UserInterest> objects, ParseException e) {
+                for (UserInterest ui : objects){
+                    ui.deleteInBackground();
+                }
+                createUserInterests();
             }
         });
     }
@@ -650,6 +693,7 @@ public class EditProfileFragment extends Fragment {
                 if (e == null) {
                     for (int i = 0; i < objects.size(); ++i) {
                         Interest interest = objects.get(i).getInterest();
+                        mStrInterests.add(interest.getName());
                         mInterests.add(interest);
                         mIsInCommon.add(false);
                         interestAdapter.notifyItemInserted(mInterests.size() - 1);
