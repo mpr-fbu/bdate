@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etLoginPassword;
     private Button loginBtn;
     private Button toSignUpBtn;
+    private Button autoFill;
     private Context context;
     private ProgressBar progressBar = null;
 
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         etLoginPassword = findViewById(R.id.loginPassword);
         loginBtn = findViewById(R.id.loginButton);
         toSignUpBtn = findViewById(R.id.toSignUpButton);
+        autoFill = findViewById(R.id.autoFill);
     }
 
     private void setOnClickListeners() {
@@ -90,6 +92,13 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+            }
+        });
+        autoFill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etLoginEmail.setText("test@gmail.com");
+                etLoginPassword.setText("asdf");
             }
         });
     }
