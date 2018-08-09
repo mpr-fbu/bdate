@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity
     MenuItem prevMenuItem;
     FrameLayout flContainer;
     final FragmentManager fragmentManager = getSupportFragmentManager();
+    private ViewPagerAdapter vpAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
 
     // set up broadcast receiver for push notifications
     private BroadcastReceiver mBroadcastReceiver = new CustomPushReceiver();
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);
 
         flContainer = findViewById(R.id.flContainer);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -98,14 +103,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         ChatsListFragment chatsListFragment = new ChatsListFragment();
         SearchFragment searchFragment = new SearchFragment();
         ProfileFragment profileFragment = new ProfileFragment();
-        adapter.addFragment(chatsListFragment);
-        adapter.addFragment(searchFragment);
-        adapter.addFragment(profileFragment);
-        viewPager.setAdapter(adapter);
+        vpAdapter.addFragment(chatsListFragment);
+        vpAdapter.addFragment(searchFragment);
+        vpAdapter.addFragment(profileFragment);
+        viewPager.setAdapter(vpAdapter);
         viewPager.setCurrentItem(0);
     }
 
@@ -152,6 +156,7 @@ public class MainActivity extends AppCompatActivity
 
     public void goBackToProfile() {
         viewPager.setVisibility(View.VISIBLE);
+        viewPager.getAdapter().notifyDataSetChanged();
         flContainer.setVisibility(View.INVISIBLE);
         viewPager.setCurrentItem(2);
     }

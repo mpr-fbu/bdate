@@ -103,4 +103,21 @@
         app:srcCompat="@drawable/date_heart_icon"
         tools:ignore="VectorDrawableCompat" />
 
+    <View
+        android:id="@+id/line"
+        android:layout_width="wrap_content"
+        android:layout_height="0.3dp"
+        android:layout_below="@+id/rlProfilePic"
+        android:layout_alignLeft="@+id/marker"
+        android:layout_alignRight="@+id/levelCircle"
+        android:background="@color/lightGrey"
+        android:layout_marginLeft="5dp" />
+
+    <View
+        android:id="@+id/marker"
+        android:layout_width="0dp"
+        android:layout_height="5dp"
+        android:layout_alignBottom="@+id/rlProfilePic"
+        android:layout_toEndOf="@+id/rlProfilePic" />
+
 </RelativeLayout>

@@ -102,7 +102,7 @@ public class SignUpActivity extends AppCompatActivity
         newUser.put("age", age);
         newUser.put("firstName", name);
         newUser.put("minAge", 18);
-        newUser.put("maxAge", 30);
+        newUser.put("maxAge", 100);
         newUser.put("matchRange", DEFAULT_RANGE);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("interests", mInterests);

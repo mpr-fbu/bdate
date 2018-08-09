@@ -40,8 +40,7 @@
                 android:layout_marginStart="60dp"
                 android:text="Match Profile"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/babyWhite"
-                android:textStyle="bold" />
+                android:textColor="@color/babyWhite" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>

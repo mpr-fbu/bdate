@@ -53,7 +53,6 @@
                 android:text="Toolbar Title"
                 android:textColor="@color/babyWhite"
                 android:textSize="18sp"
-                android:textStyle="bold"
                 tools:layout_editor_absoluteX="61dp"
                 tools:layout_editor_absoluteY="16dp"
                 android:clickable="true"

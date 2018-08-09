@@ -3,100 +3,106 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp"
     tools:context=".ChatsListFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="top">
+        android:layout_height="match_parent">
 
-        <com.parse.ParseImageView
-            android:id="@+id/ivProfilePic"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="10dp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/my_toolbar"
+            android:layout_margin="5dp"
+            android:gravity="top">
 
-        <TextView
-            android:id="@+id/tvUsername"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/placeholder"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/chatlist_placeholder" />
+
+            <TextView
+                android:id="@+id/placeholderText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/placeholder"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="Your conversations will show up here." />
+
+            <TextView
+                android:id="@+id/matchText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/placeholderText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:text="Swipe right to find a match!" />
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/swipeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/line" >
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvConversations"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="25dp"
-            android:layout_toRightOf="@+id/ivProfilePic"
-            android:text="My Name"
-            android:textStyle="bold" />
+            android:background="@color/oceanBlue"
+            android:paddingTop="24dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-        <TextView
-            android:id="@+id/tvNumMessages"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/tvUsername"
-            android:layout_toLeftOf="@+id/tvConversations"
-            android:text="0"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textStyle="bold" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
 
-        <TextView
-            android:id="@+id/tvConversations"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/tvUsername"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="10dp"
-            android:text="conversations" />
+                <TextView
+                    android:id="@+id/tvConversationTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="Conversations"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/babyWhite" />
+
+                <com.parse.ParseImageView
+                    android:id="@+id/ivProfilePic"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="10dp" />
+            </RelativeLayout>
+
+        </android.support.v7.widget.Toolbar>
 
         <View
-            android:id="@+id/line"
+            android:id="@+id/dropshadow"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_below="@+id/ivProfilePic"
-            android:background="@color/mediumGrey" />
-
-        <ImageView
-            android:id="@+id/placeholder"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/chatlist_placeholder" />
-
-        <TextView
-            android:id="@+id/placeholderText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/placeholder"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:text="Your conversations will show up here." />
-
-        <TextView
-            android:id="@+id/matchText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/placeholderText"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:text="Swipe right to find a match!" />
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/swipeContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/line" >
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvConversations"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="5dp"
+            android:background="@drawable/dropshadow"
+            android:layout_below="@+id/my_toolbar" />
 
     </RelativeLayout>
-
 </FrameLayout>

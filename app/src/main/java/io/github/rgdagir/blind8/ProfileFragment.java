@@ -26,7 +26,6 @@ import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
 import com.parse.ParseInstallation;
@@ -342,6 +341,7 @@ public class ProfileFragment extends Fragment {
                         mIsInCommon.add(false);
                         interestAdapter.notifyItemInserted(mInterests.size() - 1);
                     }
+                    rvInterests.smoothScrollToPosition(0);
                 } else {
                     e.printStackTrace();
                 }
