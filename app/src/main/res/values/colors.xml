@@ -7,8 +7,10 @@
     <color name="pastelPurple">#CEBCDC</color>
     <color name="pastelBlue">#99CAEC</color>
     <color name="babyWhite">#FCFFFC</color>
+    <color name="shadowWhite">#BFBFBF</color>
     <color name="offBlack">#292829</color>
     <color name="mediumGrey">#8F8E8F</color>
+    <color name="shadowMediumGrey">#767576</color>
     <color name="lightGrey">#d3d3d3</color>
     <color name="faintGrey">#ebebeb</color>
     <color name="navBarGrey">#F5F5F5</color>
@@ -17,6 +19,7 @@
     <color name="shadowBlue">#109DC0</color>
     <color name="aqua">#14FFDB</color>
     <color name="oceanBlue">#6095FF</color>
+    <color name="shadowOceanBlue">#5A83D7</color>
     <color name="superLightBlue">#a2edff</color>
     <color name="pastelRed">#EFB4B3</color>
     <color name="pastelOrange">#FFDAC1</color>
@@ -27,6 +30,6 @@
     <color name="pastelPink2">#F0C3F5</color>
     <color name="heartRed">#EF8683</color>
     <color name="transparentBlue">#0A3BCBEE</color>
-
+    <color name="transparentGrey">#6F767576</color>
     <color name="transparent">#00b8860b</color>
 </resources>

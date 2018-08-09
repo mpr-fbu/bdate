@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/lltools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
@@ -95,6 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/babyWhite"
+        android:paddingTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -104,7 +106,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:src="@mipmap/full_logo" />
+            android:src="@mipmap/full_logo"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="13dp" />
 
     </android.support.v7.widget.Toolbar>
 

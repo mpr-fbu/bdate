@@ -3,7 +3,6 @@ package io.github.rgdagir.blind8;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -63,7 +62,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             if (!conversation.getReadUser1()) {
                 Typeface boldTypeface = Typeface.defaultFromStyle(Typeface.BOLD);
                 holder.tvText.setTypeface(boldTypeface);
-                holder.tvText.setTextColor(Color.BLACK);
+                holder.tvText.setTextColor(context.getResources().getColor(R.color.offBlack));
             }
         } else {
             setConversationDetails(conversation.getUser1(), holder.tvUsername, holder.ivProfilePic,
@@ -71,7 +70,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             if (!conversation.getReadUser2()) {
                 Typeface boldTypeface = Typeface.defaultFromStyle(Typeface.BOLD);
                 holder.tvText.setTypeface(boldTypeface);
-                holder.tvText.setTextColor(Color.BLACK);
+                holder.tvText.setTextColor(context.getResources().getColor(R.color.offBlack));
             }
         }
 

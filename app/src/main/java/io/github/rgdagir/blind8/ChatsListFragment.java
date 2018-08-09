@@ -40,8 +40,6 @@ public class ChatsListFragment extends Fragment {
     private SwipeRefreshLayout swipeContainer;
 
     private ParseImageView ivProfilePic;
-    private TextView tvUsername;
-    private TextView tvNumConversations;
     private TextView placeholderText;
     private TextView matchText;
     private ImageView placeholder;
@@ -152,7 +150,6 @@ public class ChatsListFragment extends Fragment {
                         placeholderText.setVisibility(View.VISIBLE);
                         matchText.setVisibility(View.VISIBLE);
                     }
-                    tvNumConversations.setText(Integer.toString(mConversations.size()));
                 } else {
                     e.printStackTrace();
                 }
@@ -171,7 +168,6 @@ public class ChatsListFragment extends Fragment {
                     mConversations.clear();
                     // add in new items
                     mConversations.addAll(objects);
-                    tvNumConversations.setText(Integer.toString(mConversations.size()));
                     // signal refresh has finished
                     swipeContainer.setRefreshing(false);
                 } else {
@@ -204,8 +200,6 @@ public class ChatsListFragment extends Fragment {
         placeholder = view.findViewById(R.id.placeholder);
         matchText = view.findViewById(R.id.matchText);
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
-        tvUsername = view.findViewById(R.id.tvUsername);
-        tvNumConversations = view.findViewById(R.id.tvNumMessages);
         rvConversations = view.findViewById(R.id.rvConversations);
 
         // Lookup the swipe container view
@@ -240,7 +234,6 @@ public class ChatsListFragment extends Fragment {
                         }
                     });
         }
-        tvUsername.setText(currUser.getString("firstName"));
         mConversations = new ArrayList<>();
         conversationAdapter = new ConversationAdapter(mConversations);
         rvConversations.setLayoutManager(new LinearLayoutManager(context));
