@@ -35,6 +35,10 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -52,6 +56,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import io.github.rgdagir.blind8.models.Interest;
+import io.github.rgdagir.blind8.models.Milestone;
+import io.github.rgdagir.blind8.models.UserInterest;
 import io.github.rgdagir.blind8.sign_up.SignUpInterestAdapter;
 import io.github.rgdagir.blind8.utils.BitmapScaler;
 import io.github.rgdagir.blind8.utils.Utils;
@@ -70,6 +76,8 @@ public class EditProfileFragment extends Fragment {
     public final static int PICK_PHOTO_CODE = 1046;
     private ArrayList<String> images;
     private ArrayList<Interest> mInterests;
+    private ArrayList<Boolean> mIsInCommon;
+    private InterestAdapter interestAdapter;
     PickGalleryAdapter galleryAdapter;
     RecyclerView rvGalleryPicker;
 
@@ -138,7 +146,16 @@ public class EditProfileFragment extends Fragment {
         rangeDistanceSeekBar = v.findViewById(R.id.rangeDistanceSeekBar);
         displayProgress = v.findViewById(R.id.distanceProgress);
 
-        //rvEditInterests = v.findViewById(R.id.rvEditInterests);
+        rvEditInterests = v.findViewById(R.id.rvEditInterests);
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        layoutManager.setFlexWrap(FlexWrap.WRAP);
+        layoutManager.setJustifyContent(JustifyContent.FLEX_START);
+        mInterests = new ArrayList<>();
+        mIsInCommon = new ArrayList<>();
+        interestAdapter = new InterestAdapter(mInterests, mIsInCommon);
+        rvEditInterests.setLayoutManager(layoutManager);
+        rvEditInterests.setAdapter(interestAdapter);
         mAutoCompleteInterests = v.findViewById(R.id.autoCompleteInterests);
 
         setupButtonListeners();
@@ -148,7 +165,7 @@ public class EditProfileFragment extends Fragment {
         setupSpinners(v);
         setupRangeBar();
         setupCrystalSeekBar(v);
-        //fetchInterestsAndSetupRv();
+        fetchInterests();
     }
 
     private void setupAutoCompleteInterests(){
@@ -591,20 +608,20 @@ public class EditProfileFragment extends Fragment {
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
     }
 
-    private void fetchInterestsAndSetupRv() {
-        final ParseQuery<Interest> interestQuery = new Interest.Query();
-        interestQuery.findInBackground(new FindCallback<Interest>() {
+    private void fetchInterests() {
+        final UserInterest.Query interestsQuery = new UserInterest.Query();
+        interestsQuery.whereEqualTo("user", currUser);
+        interestsQuery.withUserInterest();
+        interestsQuery.findInBackground(new FindCallback<UserInterest>() {
             @Override
-            public void done(List<Interest> objects, ParseException e) {
+            public void done(List<UserInterest> objects, ParseException e) {
                 if (e == null) {
-                    mInterests = new ArrayList<>();
                     for (int i = 0; i < objects.size(); ++i) {
-                        Interest interest = objects.get(i);
+                        Interest interest = objects.get(i).getInterest();
                         mInterests.add(interest);
+                        mIsInCommon.add(false);
+                        interestAdapter.notifyItemInserted(mInterests.size() - 1);
                     }
-                    SignUpInterestAdapter iAdapter = new SignUpInterestAdapter(mInterests);
-                    rvEditInterests.setAdapter(iAdapter);
-                    rvEditInterests.setLayoutManager(new LinearLayoutManager(context));
                 } else {
                     e.printStackTrace();
                 }

@@ -205,13 +205,21 @@
                         android:layout_height="wrap_content" />
 
                     <ImageButton
-                        android:id="@+id/imageButton"
+                        android:id="@+id/addInterestImageButton"
                         android:layout_width="wrap_content"
                         android:layout_height="54dp"
-                        android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
                         android:background="@color/transparent"
                         app:srcCompat="@drawable/add_button_select" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rvEditInterests"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_below="@+id/addInterestImageButton"
+                        android:layout_marginTop="10dp" />
 
 
                 </RelativeLayout>
