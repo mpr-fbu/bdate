@@ -37,6 +37,7 @@ public class LoginInfoFragment extends Fragment {
     private EditText etPassword;
     private EditText etAlias;
     private Button btnContinue;
+    private Button fakeContinue;
     private ImageView refresh;
     private TextInputLayout tilEmail;
     private TextInputLayout tilPassword;
@@ -59,8 +60,7 @@ public class LoginInfoFragment extends Fragment {
         setupTextChangeListeners();
         int random = rng(fakeNames.size());
         etAlias.setText(fakeNames.get(random));
-        btnContinue.setEnabled(false);
-        btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_gray));
+        btnContinue.setVisibility(View.INVISIBLE);
         return view;
     }
 
@@ -98,6 +98,7 @@ public class LoginInfoFragment extends Fragment {
         etEmail = view.findViewById(R.id.etEmail);
         etPassword = view.findViewById(R.id.etPassword);
         btnContinue = view.findViewById(R.id.btnContinue);
+        fakeContinue = view.findViewById(R.id.btnFakeContinue);
         alias = view.findViewById(R.id.alias);
         aliasNote = view.findViewById(R.id.aliasNote);
         etAlias = view.findViewById(R.id.etAlias);
@@ -130,12 +131,12 @@ public class LoginInfoFragment extends Fragment {
                                       int count) {
                 if (s.length() < 6) {
                     tilPassword.setError("Password has to be at least 6 characters long");
-                    btnContinue.setEnabled(false);
-                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_gray));
+                    btnContinue.setVisibility(View.INVISIBLE);
                 } else {
                     tilPassword.setError(null);
-                    btnContinue.setEnabled(true);
-                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_style));
+                    if (etEmail.getText().length() != 0 && etAlias.getText().length() != 0) {
+                        btnContinue.setVisibility(View.VISIBLE);
+                    }
                 }
             }
             @Override
@@ -157,15 +158,35 @@ public class LoginInfoFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (!isValidEmail(s.toString())){
                     tilEmail.setError("Invalid email");
-                    btnContinue.setEnabled(false);
-                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_gray));
+                    btnContinue.setVisibility(View.INVISIBLE);
 
                 } else {
                     tilEmail.setError(null);
-                    btnContinue.setEnabled(true);
-                    btnContinue.setBackground(getResources().getDrawable(R.drawable.sign_up_button_style));
+                    if (etPassword.getText().length() != 0 && etAlias.getText().length() != 0) {
+                        btnContinue.setVisibility(View.VISIBLE);
+                    }
 
                 }
+            }
+        });
+        etAlias.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    btnContinue.setVisibility(View.INVISIBLE);
+                } else {
+                    if (etEmail.getText().length() != 0 && etPassword.getText().length() >= 6) {
+                        btnContinue.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
