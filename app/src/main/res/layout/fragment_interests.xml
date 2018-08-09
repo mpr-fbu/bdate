@@ -62,7 +62,10 @@
         android:layout_marginTop="20dp"
         android:layout_below="@+id/explanation"
         android:layout_alignLeft="@+id/explanation"
-        android:layout_alignRight="@+id/explanation" >
+        android:layout_alignRight="@+id/explanation"
+        android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@android:color/darker_gray"
+        android:scrollbarSize="5dp">
 
     </android.support.v7.widget.RecyclerView>
 

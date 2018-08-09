@@ -34,7 +34,10 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -45,7 +48,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
+import io.github.rgdagir.blind8.models.Interest;
+import io.github.rgdagir.blind8.sign_up.SignUpInterestAdapter;
 import io.github.rgdagir.blind8.utils.BitmapScaler;
 import io.github.rgdagir.blind8.utils.Utils;
 
@@ -61,7 +67,8 @@ public class EditProfileFragment extends Fragment {
     private ImageView profilePic;
     private FloatingActionButton changeProfilePic;
     public final static int PICK_PHOTO_CODE = 1046;
-    ArrayList<String> images;
+    private ArrayList<String> images;
+    private ArrayList<Interest> mInterests;
     PickGalleryAdapter galleryAdapter;
     RecyclerView rvGalleryPicker;
 
@@ -77,6 +84,7 @@ public class EditProfileFragment extends Fragment {
     private SeekBar rangeDistanceSeekBar;
     private TextView displayProgress;
     private HashMap changes;
+    private RecyclerView rvEditInterests;
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -128,12 +136,15 @@ public class EditProfileFragment extends Fragment {
         rangeDistanceSeekBar = v.findViewById(R.id.rangeDistanceSeekBar);
         displayProgress = v.findViewById(R.id.distanceProgress);
 
+        rvEditInterests = v.findViewById(R.id.rvEditInterests);
+
         setupButtonListeners();
         setupTextContainerListeners();
         setupGallery(v);
         setupSpinners(v);
         setupRangeBar();
         setupCrystalSeekBar(v);
+        fetchInterestsAndSetupRv();
     }
 
     private void setupButtonListeners() {
@@ -567,5 +578,26 @@ public class EditProfileFragment extends Fragment {
 
         // Return the file target for the photo based on filename
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
+    }
+
+    private void fetchInterestsAndSetupRv() {
+        final ParseQuery<Interest> interestQuery = new Interest.Query();
+        interestQuery.findInBackground(new FindCallback<Interest>() {
+            @Override
+            public void done(List<Interest> objects, ParseException e) {
+                if (e == null) {
+                    mInterests = new ArrayList<>();
+                    for (int i = 0; i < objects.size(); ++i) {
+                        Interest interest = objects.get(i);
+                        mInterests.add(interest);
+                    }
+                    SignUpInterestAdapter iAdapter = new SignUpInterestAdapter(mInterests);
+                    rvEditInterests.setAdapter(iAdapter);
+                    rvEditInterests.setLayoutManager(new LinearLayoutManager(context));
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

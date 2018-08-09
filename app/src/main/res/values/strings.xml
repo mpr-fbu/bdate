@@ -30,4 +30,29 @@
         <item>Female</item>
         <item>No preference</item>
     </string-array>
+    <string-array name="interests">
+        <item>Art</item>
+        <item>Music</item>
+        <item>Science</item>
+        <item>Sports</item>
+        <item>Video</item>
+        <item>Reading</item>
+        <item>Crafts</item>
+        <item>Traveling</item>
+        <item>Food</item>
+        <item>Movies</item>
+        <item>TV</item>
+        <item>Animals</item>
+        <item>Memes</item>
+        <item>Outdoors</item>
+        <item>Fitness</item>
+        <item>Photography</item>
+        <item>Cooking</item>
+        <item>Puzzles</item>
+        <item>Partying</item>
+        <item>Sports</item>
+        <item>Technology</item>
+        <item>Musical</item>
+        <item>Dance</item>
+    </string-array>
 </resources>

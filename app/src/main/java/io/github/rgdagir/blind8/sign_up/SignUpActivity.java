@@ -20,8 +20,8 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,12 +42,13 @@ public class SignUpActivity extends AppCompatActivity
     Boolean interestsSkipped = false;
     ArrayList<Interest> mInterests = new ArrayList<>();
     final FragmentManager fragmentManager = getSupportFragmentManager();
+    private int DEFAULT_RANGE = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        populateInterests();
+        fetchInterests();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.flContainer, initialFragment)
                 .commit();
@@ -98,6 +99,7 @@ public class SignUpActivity extends AppCompatActivity
         newUser.put("firstName", name);
         newUser.put("minAge", 18);
         newUser.put("maxAge", 30);
+        newUser.put("matchRange", DEFAULT_RANGE);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("interests", mInterests);
         InterestsFragment interestsFragment = new InterestsFragment();
@@ -208,22 +210,7 @@ public class SignUpActivity extends AppCompatActivity
         }
     }
 
-    private void populateInterests() {
-        final ParseQuery<Interest> interestQuery = new Interest.Query();
-        interestQuery.findInBackground(new FindCallback<Interest>() {
-            @Override
-            public void done(List<Interest> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); ++i) {
-                        Interest interest = objects.get(i);
-                        mInterests.add(interest);
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+
 
     private void launchMainActivity() {
         // default ACLs for User object
@@ -242,8 +229,27 @@ public class SignUpActivity extends AppCompatActivity
     }
 
     public void onRadioButtonClicked(View view) {
+
     }
 
     public void onCheckboxClicked(View view) {
+
+    }
+
+    private void fetchInterests() {
+        final ParseQuery<Interest> interestQuery = new Interest.Query();
+        interestQuery.findInBackground(new FindCallback<Interest>() {
+            @Override
+            public void done(List<Interest> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); ++i) {
+                        Interest interest = objects.get(i);
+                        mInterests.add(interest);
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

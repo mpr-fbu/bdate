@@ -104,9 +104,9 @@ public class SearchFragment extends Fragment {
     }
 
     public void setupListeners(){
-        // Setup any handles to view objects here
+        // Setup any handles to view objects here\
         mTvRange.setText(String.valueOf(currentUser.getInt("matchRange")) + " mi.");
-        rangeMatchBar.setProgress((Integer) currentUser.get("matchRange"));
+        rangeMatchBar.setProgress(currentUser.getInt("matchRange"));
         rangeMatchBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -532,7 +532,7 @@ public class SearchFragment extends Fragment {
     }
 
     public void drawRangeAndSetZoom(GoogleMap gMap, LatLng pin) {
-        range = Integer.parseInt(currentUser.get("matchRange").toString()); // in miles
+        range = currentUser.getInt("matchRange"); // in miles
         // Instantiates a new CircleOptions object and defines the center and radius
         CircleOptions circleOptions = new CircleOptions()
                 .center(pin)
