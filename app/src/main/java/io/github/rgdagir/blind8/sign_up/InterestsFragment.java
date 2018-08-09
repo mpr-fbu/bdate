@@ -31,11 +31,11 @@ public class InterestsFragment extends Fragment {
     private Button btnContinue;
     private Boolean skipped;
     private SignUpInterestAdapter signUpInterestAdapter;
-    RecyclerView rvInterests;
-    ArrayList<Interest> mInterests;
-    Context context;
-    ArrayList<Interest> mCheckedInterests;
-    HashMap<Interest, Boolean> checked = new HashMap();
+    private RecyclerView rvInterests;
+    private ArrayList<Interest> mInterests;
+    private Context context;
+    private ArrayList<Interest> mCheckedInterests;
+    private HashMap<Interest, Boolean> checked = new HashMap();
 
     public InterestsFragment() {
         // Required empty public constructor

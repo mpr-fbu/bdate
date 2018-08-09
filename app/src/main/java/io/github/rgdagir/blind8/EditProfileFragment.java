@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -25,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -49,7 +51,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -77,6 +81,7 @@ public class EditProfileFragment extends Fragment {
     private InterestAdapter interestAdapter;
     PickGalleryAdapter galleryAdapter;
     RecyclerView rvGalleryPicker;
+    private ImageButton addInterest;
 
     private EditText editName;
     private EditText editEmail;
@@ -92,6 +97,8 @@ public class EditProfileFragment extends Fragment {
     private HashMap changes;
     private RecyclerView rvEditInterests;
     private AutoCompleteTextView mAutoCompleteInterests;
+    private static TextInputLayout autoCompleteTxtLayout;
+    private static String[] interestsArray;
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -142,6 +149,7 @@ public class EditProfileFragment extends Fragment {
         interestedInSpinner = v.findViewById(R.id.interestedInGender);
         rangeDistanceSeekBar = v.findViewById(R.id.rangeDistanceSeekBar);
         displayProgress = v.findViewById(R.id.distanceProgress);
+        addInterest = v.findViewById(R.id.addInterestImageButton);
 
         rvEditInterests = v.findViewById(R.id.rvEditInterests);
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
@@ -155,6 +163,10 @@ public class EditProfileFragment extends Fragment {
         rvEditInterests.setAdapter(interestAdapter);
         mAutoCompleteInterests = v.findViewById(R.id.autoCompleteInterests);
 
+        autoCompleteTxtLayout = v.findViewById(R.id.autoCompleteTxtLayout);
+
+        interestsArray = context.getResources().getStringArray(R.array.interests);
+
         setupButtonListeners();
         setupTextContainerListeners();
         setupAutoCompleteInterests();
@@ -162,15 +174,21 @@ public class EditProfileFragment extends Fragment {
         setupSpinners(v);
         setupRangeBar();
         setupCrystalSeekBar(v);
+        setupAutoCompleteInterests();
         fetchInterests();
     }
 
     private void setupAutoCompleteInterests(){
-        String[] interestsArray = context.getResources().getStringArray(R.array.interests);
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, interestsArray);
         mAutoCompleteInterests.setAdapter(adapter);
     }
+
+    public boolean isValid(String str){
+        return (Arrays.asList(interestsArray).contains(str));
+    }
+
+
 
     private void setupButtonListeners() {
         // adding listeners to buttons
@@ -193,6 +211,23 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onPickPhoto(v);
+            }
+        });
+        addInterest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String strInterest = mAutoCompleteInterests.getText().toString();
+                if (isValid(strInterest) && !Arrays.asList(mInterests).contains(strInterest)){
+                    autoCompleteTxtLayout.setError(null);
+                    Interest interest = new Interest();
+                    interest.setName(String.valueOf(mAutoCompleteInterests.getText().toString()));
+                    mInterests.add(interest);
+                    mIsInCommon.add(false);
+                    interestAdapter.notifyItemInserted(mInterests.size() - 1);
+
+                } else {
+                    autoCompleteTxtLayout.setError("Invalid interest. Please select one from the list");
+                }
             }
         });
     }
