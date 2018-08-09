@@ -42,7 +42,6 @@ import com.google.android.flexbox.JustifyContent;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -56,9 +55,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import io.github.rgdagir.blind8.models.Interest;
-import io.github.rgdagir.blind8.models.Milestone;
 import io.github.rgdagir.blind8.models.UserInterest;
-import io.github.rgdagir.blind8.sign_up.SignUpInterestAdapter;
 import io.github.rgdagir.blind8.utils.BitmapScaler;
 import io.github.rgdagir.blind8.utils.Utils;
 
@@ -112,7 +109,7 @@ public class EditProfileFragment extends Fragment {
         context = getActivity();
         currUser = ParseUser.getCurrentUser();
         changes = new HashMap<String, String>();
-        View v = inflater.inflate(R.layout.new_fragment_edit_profile, container, false);
+        View v = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         setupViews(v);
         fetchCurrentUserAndLoadPage();
         return v;
