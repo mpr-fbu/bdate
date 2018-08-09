@@ -3,6 +3,7 @@ package io.github.rgdagir.blind8;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -43,6 +44,8 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -279,6 +282,10 @@ public class SearchFragment extends Fragment {
                 if (e == null) {
                     Log.d("SearchFragment", "You have joined the conversation!");
                     // start chat activity between currentUser and objects.get(i).getUser1()
+                    Intent intent = new Intent(context, ChatActivity.class);
+                    intent.putExtra("conversation", Parcels.wrap(conversation));
+                    //intent.putExtra("animation", Parcels.wrap(true));
+                    context.startActivity(intent);
                     sendConversationPushNotification(conversation);
                 } else {
                     Log.e("SearchFragment", "Error when joining conversation");

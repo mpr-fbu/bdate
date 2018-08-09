@@ -55,6 +55,7 @@ public class ChatActivity extends AppCompatActivity {
     private TextView tvUsername;
     private ParseImageView ivProfilePic;
     private ImageView defaultProfilePic;
+    private ImageView heartLogo;
     private static TextView notification;
     private static ImageButton btnSend;
     private RecyclerView rvMessages;
@@ -66,6 +67,7 @@ public class ChatActivity extends AppCompatActivity {
     Milestone milestone;
     private boolean sent;
     private boolean isUpdated;
+    private boolean animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,7 @@ public class ChatActivity extends AppCompatActivity {
         displayProfilePicture();
         setOnClickListeners();
         populateMessages();
+        //showAnimation(animation);
     }
 
     @Override
@@ -124,6 +127,13 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        final Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         // Store our shared preference
@@ -147,6 +157,7 @@ public class ChatActivity extends AppCompatActivity {
         etMessage = findViewById(R.id.etMessage);
         tvUsername = findViewById(R.id.toolbar_title);
         ivProfilePic = findViewById(R.id.ivProfilePic);
+        heartLogo = findViewById(R.id.heartLogo);
         defaultProfilePic = findViewById(R.id.defaultImageView);
         btnSend = findViewById(R.id.btnSend);
         notification = findViewById(R.id.notification);
@@ -155,6 +166,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setUpInstanceVariables() {
         conversation = Parcels.unwrap(getIntent().getParcelableExtra("conversation"));
+        //animation = Parcels.unwrap(getIntent().getParcelableExtra("animation"));
         currUser = ParseUser.getCurrentUser();
         mMessages = new ArrayList<>();
         mMessageAdapter = new MessageAdapter(mMessages, conversation);
@@ -358,6 +370,22 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+//    private void showAnimation(boolean animation) {
+//        if (animation) {
+//            heartLogo.setVisibility(View.VISIBLE);
+//            pulseAnimation(heartLogo);
+//        }
+//    }
+
+//    public void pulseAnimation(View heartLogo) {
+//        ObjectAnimator objAnim= ObjectAnimator.ofPropertyValuesHolder(heartLogo, PropertyValuesHolder.ofFloat("scaleX", 1.5f), PropertyValuesHolder.ofFloat("scaleY", 1.5f));
+//        objAnim.setDuration(300);
+//        objAnim.setRepeatMode(ObjectAnimator.REVERSE);
+//        objAnim.setRepeatCount(3);
+//        objAnim.start();
+//        heartLogo.setVisibility(View.INVISIBLE);
+//    }
 
     /* Helpers for other methods */
 
