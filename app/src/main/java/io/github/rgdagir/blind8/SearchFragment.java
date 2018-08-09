@@ -45,6 +45,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -301,6 +302,7 @@ public class SearchFragment extends Fragment {
                     newConvo.setMatchLocation(myLoc);
                 }
                 newConvo.setMatchRange(range);
+                newConvo.setLastMessageTime(new Date());
 
                 newConvo.saveInBackground(new SaveCallback() {
                     @Override
