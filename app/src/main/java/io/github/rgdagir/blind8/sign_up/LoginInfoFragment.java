@@ -162,7 +162,7 @@ public class LoginInfoFragment extends Fragment {
 
                 } else {
                     tilEmail.setError(null);
-                    if (etPassword.getText().length() != 0 && etAlias.getText().length() != 0) {
+                    if (etPassword.getError() == null && etAlias.getText().length() != 0) {
                         btnContinue.setVisibility(View.VISIBLE);
                     }
 
@@ -179,7 +179,7 @@ public class LoginInfoFragment extends Fragment {
                 if (s.length() == 0) {
                     btnContinue.setVisibility(View.INVISIBLE);
                 } else {
-                    if (etEmail.getText().length() != 0 && etPassword.getText().length() >= 6) {
+                    if (etEmail.getError() == null && etPassword.getError() == null) {
                         btnContinue.setVisibility(View.VISIBLE);
                     }
                 }

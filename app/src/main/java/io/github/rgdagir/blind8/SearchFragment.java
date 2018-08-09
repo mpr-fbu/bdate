@@ -253,7 +253,7 @@ public class SearchFragment extends Fragment {
                 for (int i = 0; i < openConversations.size(); i++) {
                     final Conversation conversation = openConversations.get(i);
                     if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results))
-                            && checkIfInRange(conversation, currentUser)
+                            //&& checkIfInRange(conversation, currentUser)
                             ) {
                         Toast.makeText(getActivity(), "Match found! Say hello to "
                                 + conversation.getUser1().getString("fakeName") + "!", Toast.LENGTH_LONG).show();

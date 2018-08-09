@@ -126,14 +126,13 @@
         android:id="@+id/tilBirthday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:errorEnabled="true"
         android:layout_alignLeft="@+id/explanation"
         android:layout_alignRight="@+id/explanation"
         android:layout_below="@+id/birthday"
         android:layout_centerHorizontal="true"
         android:ems="10"
-        app:hintEnabled="false"
-        >
+        app:errorEnabled="true"
+        app:hintEnabled="false">
 
         <EditText
             android:id="@+id/placeholderBirthday"
