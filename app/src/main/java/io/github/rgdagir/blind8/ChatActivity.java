@@ -1,8 +1,11 @@
 package io.github.rgdagir.blind8;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -38,6 +41,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SubscriptionHandling;
+import com.plattysoft.leonids.ParticleSystem;
 
 import org.parceler.Parcels;
 
@@ -71,6 +75,7 @@ public class ChatActivity extends AppCompatActivity {
     private boolean sent;
     private boolean isUpdated;
     private boolean animation;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -466,31 +471,39 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    public void showTextViewNotification(String milestone) {
+    public void showTextViewNotification(String milestone, Context context) {
         switch (milestone) {
             case "interests":
                 animateTextView(R.string.notification_interests);
+                playUnlockSound(context);
                 return;
             case "name":
                 animateTextView(R.string.notification_name);
+                playUnlockSound(context);
                 return;
             case "age":
                 animateTextView(R.string.notification_age);
+                playUnlockSound(context);
                 return;
             case "distance away":
                 animateTextView(R.string.notification_distance_away);
+                playUnlockSound(context);
                 return;
             case "occupation":
                 animateTextView(R.string.notification_occupation);
+                playUnlockSound(context);
                 return;
             case "profile picture":
                 animateTextView(R.string.notification_profile_pic);
+                playUnlockSound(context);
                 return;
             case "gallery":
                 animateTextView(R.string.notification_gallery);
+                playUnlockSound(context);
                 return;
             case "date":
                 animateTextView(R.string.notification_date);
+                playDateSoundAnimation(context);
                 return;
         }
     }
@@ -516,6 +529,41 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void playUnlockSound(final Context context) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mediaPlayer = MediaPlayer.create(context, R.raw.quite_impressed);
+                mediaPlayer.start();
+                mediaPlayer.setOnCompletionListener(onCompletionListener);
+            }
+        });
+    }
+
+    public void playDateSoundAnimation(final Context context) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mediaPlayer = MediaPlayer.create(context, R.raw.cw_final_cut);
+                mediaPlayer.start();
+                mediaPlayer.setOnCompletionListener(onCompletionListener);
+                new ParticleSystem((Activity) context, 20, R.drawable.small_heart, 1000)
+                        .setSpeedByComponentsRange(0f, 0f, 0.05f, 0.1f)
+                        .setAcceleration(0.00005f, 90)
+                        .emitWithGravity(((Activity) context).findViewById(R.id.notification), Gravity.BOTTOM,
+                                4, 3000);
+            }
+        });
+    }
+
+    public MediaPlayer.OnCompletionListener onCompletionListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    };
 
     private void unmatch() {
         conversation.deleteInBackground(new DeleteCallback() {
