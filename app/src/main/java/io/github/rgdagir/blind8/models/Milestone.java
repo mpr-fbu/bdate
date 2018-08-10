@@ -1,7 +1,11 @@
 package io.github.rgdagir.blind8.models;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.view.Gravity;
+
+import com.plattysoft.leonids.ParticleSystem;
 
 import io.github.rgdagir.blind8.ChatActivity;
 import io.github.rgdagir.blind8.R;
@@ -93,6 +97,7 @@ public class Milestone {
             playUnlockSound(context);
         } else if (currentPoints == DATE_SCORE) {
             activity.showTextViewNotification("date");
+            playRainAnimation(context);
             playDateSound(context);
         }
     }
@@ -116,4 +121,12 @@ public class Milestone {
             mediaPlayer = null;
         }
     };
+
+    private void playRainAnimation(Context context) {
+        new ParticleSystem((Activity) context, 15, R.drawable.small_heart, 1000)
+                .setSpeedByComponentsRange(0f, 0f, 0.05f, 0.1f)
+                .setAcceleration(0.00005f, 90)
+                .emitWithGravity(((Activity) context).findViewById(R.id.notification), Gravity.BOTTOM,
+                        4, 2500);
+    }
 }
