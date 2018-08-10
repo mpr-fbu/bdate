@@ -36,7 +36,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
+import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
+import com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -94,7 +96,7 @@ public class EditProfileFragment extends Fragment {
 
     private Spinner myGenderSpinner;
     private Spinner interestedInSpinner;
-    private SeekBar rangeDistanceSeekBar;
+    private CrystalSeekbar rangeDistanceSeekBar;
     private TextView displayProgress;
     private HashMap changes;
     private RecyclerView rvEditInterests;
@@ -487,22 +489,12 @@ public class EditProfileFragment extends Fragment {
 
     public void setupRangeBar(){
         displayProgress.setText(String.valueOf(currUser.getNumber("matchRange")) + " mi.");
-        rangeDistanceSeekBar.setProgress((Integer) currUser.getNumber("matchRange"));
-        rangeDistanceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        rangeDistanceSeekBar.setMinStartValue((Integer) currUser.getNumber("matchRange")).apply();
+        rangeDistanceSeekBar.setOnSeekbarChangeListener(new OnSeekbarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                displayProgress.setText(Integer.toString(progress) + " mi.");
-                changes.put("matchRange", Integer.toString(progress));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
+            public void valueChanged(Number value) {
+                displayProgress.setText(Integer.toString(value.intValue()) + " mi.");
+                changes.put("matchRange", Integer.toString(value.intValue()));
             }
         });
     }

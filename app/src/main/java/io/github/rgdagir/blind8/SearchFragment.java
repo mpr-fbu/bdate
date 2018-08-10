@@ -22,6 +22,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -63,7 +65,7 @@ public class SearchFragment extends Fragment {
     private ParseUser currentUser;
     private MapView mMapView;
     private GoogleMap mGoogleMap;
-    private SeekBar rangeMatchBar;
+    private CrystalSeekbar rangeMatchBar;
     private int range;
     private Circle circle;
     private TextView mTvRange;
@@ -107,25 +109,18 @@ public class SearchFragment extends Fragment {
     public void setupListeners(){
         // Setup any handles to view objects here\
         mTvRange.setText(String.valueOf(currentUser.getInt("matchRange")) + " mi.");
-        rangeMatchBar.setProgress(currentUser.getInt("matchRange"));
-        rangeMatchBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        rangeMatchBar.setMinStartValue(currentUser.getInt("matchRange")).apply();
+        rangeMatchBar.setOnSeekbarChangeListener(new OnSeekbarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                range = progress; // in miles
+            public void valueChanged(Number value) {
+                range = value.intValue(); // in miles
                 mTvRange.setText(String.valueOf(range) + " mi.");
-                circle.setRadius(range * 1609.4); // in meters
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
+                if (circle != null) {
+                    circle.setRadius(range * 1609.4); // in meters
+                }
             }
         });
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

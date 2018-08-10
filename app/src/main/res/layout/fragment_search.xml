@@ -70,14 +70,25 @@
                 android:text="0 mi." />
         </RelativeLayout>
 
-        <SeekBar
+        <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
             android:id="@+id/matchRangeBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:max="100"
+            android:max="25"
             android:min="1"
-            android:thumb="@drawable/range_seekbar_dot" />
+            android:thumb="@drawable/range_seekbar_dot"
+            app:bar_color="@color/lightGrey"
+            app:bar_highlight_color="@color/mediumBlue"
+            app:left_thumb_image="@drawable/ic_seekbar_dot"
+            app:right_thumb_image="@drawable/ic_seekbar_dot"
+            app:left_thumb_image_pressed="@drawable/ic_seekbar_selected_dot"
+            app:right_thumb_image_pressed="@drawable/ic_seekbar_selected_dot"
+            app:corner_radius="10"
+            app:data_type="_integer"
+            app:gap="1"
+            app:max_value="100"
+            app:min_value="1"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
