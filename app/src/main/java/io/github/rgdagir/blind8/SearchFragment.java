@@ -5,6 +5,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -14,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +36,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.DeleteCallback;
@@ -56,6 +62,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.github.rgdagir.blind8.models.Conversation;
+import io.github.rgdagir.blind8.utils.BitmapScaler;
+import io.github.rgdagir.blind8.utils.Utils;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
@@ -76,6 +84,9 @@ public class SearchFragment extends Fragment {
     private View mCustomMarkerView;
     private ImageView mMarkerImageView;
     private MediaPlayer mediaPlayer;
+    private int displayWidth;
+    private CameraPosition mCameraPosition;
+    private LatLng pin;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -100,6 +111,8 @@ public class SearchFragment extends Fragment {
         rangeMatchBar = rootView.findViewById(R.id.matchRangeBar);
         mCustomMarkerView = inflater.inflate(R.layout.map_marker, null);
         mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
+        displayWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        Log.d("DisplayWidth", String.valueOf(displayWidth));
         setupMap(savedInstanceState);
         checkIfSearching();
         getLocationPermissionsIfNeeded(rootView, savedInstanceState);
@@ -122,6 +135,7 @@ public class SearchFragment extends Fragment {
                 mTvRange.setText(String.valueOf(range) + " mi.");
                 if (circle != null) {
                     circle.setRadius(range * 1609.4); // in meters
+                    setZoom(range*1609.4);
                 }
             }
         });
@@ -138,6 +152,19 @@ public class SearchFragment extends Fragment {
                 stopSearching();
             }
         });
+    }
+
+    public void setZoom(double range) {
+        int zoomLevel;
+        if (circle != null){
+            double radius = circle.getRadius();
+            double scale = radius / 500;
+            zoomLevel = (int) (16 - Math.log(scale) / Math.log(2));
+            if (pin != null) {
+                mCameraPosition = new CameraPosition.Builder().target(pin).zoom(zoomLevel).build();
+                mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(mCameraPosition));
+            }
+        }
     }
 
     @Override
@@ -539,16 +566,24 @@ public class SearchFragment extends Fragment {
                 mGoogleMap.setMyLocationEnabled(true);
 
                 // For dropping a marker at a point on the Map
-                LatLng pin;
                 pin = new LatLng(location.getLatitude(), location.getLongitude());
 //                addCustomMarkerFromDatabase(pin);
+
+                // Setting up the marker
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(pin)
+                        .title("Me")
+                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapScaler
+                                        .scaleToFitHeight(BitmapFactory.decodeResource(context.getResources(), R.drawable.map_marker), 250)));
+                // Creating the marker on the map
+                mGoogleMap.addMarker(markerOptions);
                 mGoogleMap.setMyLocationEnabled(false);
-                drawRangeAndSetZoom(mGoogleMap, pin);
+                drawRange(pin);
             }
         });
     }
 
-    public void drawRangeAndSetZoom(GoogleMap gMap, LatLng pin) {
+    public void drawRange(LatLng pin) {
         range = currentUser.getInt("matchRange"); // in miles
         // Instantiates a new CircleOptions object and defines the center and radius
         CircleOptions circleOptions = new CircleOptions()
@@ -557,12 +592,12 @@ public class SearchFragment extends Fragment {
                 .strokeWidth(0)
                 .fillColor(R.color.transparentBlue);
         // Get back the mutable Circle
-        circle = gMap.addCircle(circleOptions);
+        circle = mGoogleMap.addCircle(circleOptions);
 
         // For zooming automatically to the location of the marker
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(pin).zoom(10).build();
-        gMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        setZoom(range *1609.4);
     }
+
 
 //    TODO - set up handlers for location request denials below
 //    // Annotate a method which explains why the permission/s is/are needed.

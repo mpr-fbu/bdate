@@ -87,7 +87,7 @@
             app:corner_radius="10"
             app:data_type="_integer"
             app:gap="1"
-            app:max_value="100"
+            app:max_value="25"
             app:min_value="1"/>
 
         <RelativeLayout
