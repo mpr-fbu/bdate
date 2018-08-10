@@ -398,11 +398,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private void checkNewUnlockedMilestones(final Conversation conversation) {
         if (Milestone.canGoOnDate(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeGallery(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeProfilePicture(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -412,13 +412,13 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
         } else if (Milestone.canSeeOccupation(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeDistanceAway(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeAge(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeName(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -426,7 +426,7 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
         } else if (Milestone.canSeeInterests(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
         }
     }
 
