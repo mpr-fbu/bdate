@@ -237,10 +237,11 @@ public class ProfileFragment extends Fragment {
 
     private void setOtherUserDetails(ParseUser user) {
         // check if they are revealed before displaying
-        String status = user.get("bio").toString();
-        if (status != null) {
+        String status = "";
+        try {
+            status = user.get("bio").toString();
             profileStatus.setText(status);
-        } else {
+        } catch (NullPointerException npe) {
             profileStatus.setVisibility(View.GONE);
         }
         if (Milestone.canSeeName(conversation)) {

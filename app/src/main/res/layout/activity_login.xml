@@ -106,14 +106,14 @@
 
     <ProgressBar
         android:id="@+id/loginProgressBar"
-        android:indeterminate="true"
-        android:layout_width="63dp"
-        android:layout_height="63dp"
-        android:layout_alignParentTop="true"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="229dp"
-        android:visibility="gone"
-        style="@android:style/Widget.ProgressBar.Large"/>
+        android:layout_marginBottom="160dp"
+        android:indeterminate="true"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/termsAndPrivacy"
