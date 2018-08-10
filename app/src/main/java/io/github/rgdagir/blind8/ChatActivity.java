@@ -58,6 +58,7 @@ public class ChatActivity extends AppCompatActivity {
     private TextView tvUsername;
     private ParseImageView ivProfilePic;
     private ImageView defaultProfilePic;
+    private ImageView heartLogo;
     private static TextView notification;
     private static ImageButton btnSend;
     private RecyclerView rvMessages;
@@ -69,6 +70,7 @@ public class ChatActivity extends AppCompatActivity {
     Milestone milestone;
     private boolean sent;
     private boolean isUpdated;
+    private boolean animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,7 @@ public class ChatActivity extends AppCompatActivity {
         displayProfilePicture();
         setOnClickListeners();
         populateMessages();
+        //showAnimation(animation);
     }
 
     @Override
@@ -131,6 +134,13 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        final Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         // Store our shared preference
@@ -154,6 +164,7 @@ public class ChatActivity extends AppCompatActivity {
         etMessage = findViewById(R.id.etMessage);
         tvUsername = findViewById(R.id.toolbar_title);
         ivProfilePic = findViewById(R.id.ivProfilePic);
+        heartLogo = findViewById(R.id.heartLogo);
         defaultProfilePic = findViewById(R.id.defaultImageView);
         btnSend = findViewById(R.id.btnSend);
         notification = findViewById(R.id.notification);
@@ -162,6 +173,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setUpInstanceVariables() {
         conversation = Parcels.unwrap(getIntent().getParcelableExtra("conversation"));
+        //animation = Parcels.unwrap(getIntent().getParcelableExtra("animation"));
         currUser = ParseUser.getCurrentUser();
         mMessages = new ArrayList<>();
         mMessageAdapter = new MessageAdapter(mMessages, conversation);
@@ -332,6 +344,14 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChatActivity.this, HolderActivity.class);
+                intent.putExtra("conversation", (Serializable) conversation);
+                startActivity(intent);
+            }
+        });
     }
 
     private void populateMessages() {
@@ -366,15 +386,31 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+//    private void showAnimation(boolean animation) {
+//        if (animation) {
+//            heartLogo.setVisibility(View.VISIBLE);
+//            pulseAnimation(heartLogo);
+//        }
+//    }
+
+//    public void pulseAnimation(View heartLogo) {
+//        ObjectAnimator objAnim= ObjectAnimator.ofPropertyValuesHolder(heartLogo, PropertyValuesHolder.ofFloat("scaleX", 1.5f), PropertyValuesHolder.ofFloat("scaleY", 1.5f));
+//        objAnim.setDuration(300);
+//        objAnim.setRepeatMode(ObjectAnimator.REVERSE);
+//        objAnim.setRepeatCount(3);
+//        objAnim.start();
+//        heartLogo.setVisibility(View.INVISIBLE);
+//    }
+
     /* Helpers for other methods */
 
     private void checkNewUnlockedMilestones(final Conversation conversation) {
         if (Milestone.canGoOnDate(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeGallery(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeProfilePicture(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -384,13 +420,13 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
         } else if (Milestone.canSeeOccupation(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeDistanceAway(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeAge(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeName(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -398,7 +434,7 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
         } else if (Milestone.canSeeInterests(conversation)) {
-            milestone.showNotification(conversation);
+            milestone.showNotification(conversation, this);
         }
     }
 
