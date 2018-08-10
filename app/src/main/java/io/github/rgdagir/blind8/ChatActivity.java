@@ -344,6 +344,14 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChatActivity.this, HolderActivity.class);
+                intent.putExtra("conversation", (Serializable) conversation);
+                startActivity(intent);
+            }
+        });
     }
 
     private void populateMessages() {

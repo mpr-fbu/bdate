@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,6 +73,7 @@ public class SearchFragment extends Fragment {
     private TextView mTvRange;
     private View mCustomMarkerView;
     private ImageView mMarkerImageView;
+    private MediaPlayer mediaPlayer;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -281,10 +283,13 @@ public class SearchFragment extends Fragment {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("SearchFragment", "You have joined the conversation!");
+                    mediaPlayer = MediaPlayer.create(context, R.raw.good_news);
+                    mediaPlayer.start();
+                    mediaPlayer.setOnCompletionListener(onCompletionListener);
                     // start chat activity between currentUser and objects.get(i).getUser1()
                     Intent intent = new Intent(context, ChatActivity.class);
                     intent.putExtra("conversation", Parcels.wrap(conversation));
-                    //intent.putExtra("animation", Parcels.wrap(true));
+                    // intent.putExtra("animation", Parcels.wrap(true));
                     context.startActivity(intent);
                     sendConversationPushNotification(conversation);
                 } else {
@@ -292,8 +297,15 @@ public class SearchFragment extends Fragment {
                 }
             }
         });
-        //goToChatList();
     }
+
+    private MediaPlayer.OnCompletionListener onCompletionListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    };
 
     private void createConversation(final ParseUser currentUser) {
         final Conversation newConvo = new Conversation();
