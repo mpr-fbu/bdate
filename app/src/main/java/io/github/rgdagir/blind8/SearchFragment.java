@@ -87,6 +87,7 @@ public class SearchFragment extends Fragment {
     private int displayWidth;
     private CameraPosition mCameraPosition;
     private LatLng pin;
+    private boolean locationBasedMatchReady;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -104,6 +105,7 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         mMapView = rootView.findViewById(R.id.mapView);
+        locationBasedMatchReady = false;
         mTvRange = rootView.findViewById(R.id.tvRange);
         searchButton = rootView.findViewById(R.id.btnSearch);
         stopSearchButton = rootView.findViewById(R.id.btnStopSearch);
@@ -281,8 +283,7 @@ public class SearchFragment extends Fragment {
                 for (int i = 0; i < openConversations.size(); i++) {
                     final Conversation conversation = openConversations.get(i);
                     if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results))
-                            //&& checkIfInRange(conversation, currentUser)
-                            ) {
+                            && checkIfInRange(conversation, currentUser)) {
                         Toast.makeText(getActivity(), "Match found! Say hello to "
                                 + conversation.getUser1().getString("fakeName") + "!", Toast.LENGTH_LONG).show();
                         addCurrentUserToConversation(conversation);
@@ -452,6 +453,9 @@ public class SearchFragment extends Fragment {
 
     public boolean checkIfInRange(Conversation conversation, ParseUser user) {
         // get distance (in miles) between user who started the conversation and the one trying to match
+        if (user.getParseGeoPoint("lastLocation") == null){
+            getLastLoc();
+        }
         double distanceFromMatch = calcDistance(conversation.getMatchLocation().getLatitude(), user.getParseGeoPoint("lastLocation").getLatitude(),
                 conversation.getMatchLocation().getLongitude(),
                 user.getParseGeoPoint("lastLocation").getLongitude(), 0, 0);
@@ -467,7 +471,14 @@ public class SearchFragment extends Fragment {
                 // GPS location can be null if GPS is switched off
                 if (location != null) {
                     myLoc = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
-                    displayMap(myLoc);
+                    currentUser.put("lastLocation", myLoc);
+                    currentUser.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            displayMap(myLoc);
+                            locationBasedMatchReady = true;
+                        }
+                    });
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
