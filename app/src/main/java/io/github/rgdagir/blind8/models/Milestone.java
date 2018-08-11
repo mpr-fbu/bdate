@@ -6,12 +6,12 @@ import io.github.rgdagir.blind8.ChatActivity;
 
 public class Milestone {
 
-    private static final int INTERESTS_SCORE = 2;
-    private static final int NAME_SCORE = 6;
-    private static final int AGE_SCORE = 8;
+    private static final int INTERESTS_SCORE = 1;
+    private static final int NAME_SCORE = 2;
+    private static final int PROFILE_PICTURE_SCORE = 4;
     private static final int DISTANCE_AWAY_SCORE = 10;
     private static final int OCCUPATION_SCORE = 12;
-    private static final int PROFILE_PICTURE_SCORE = 16;
+    private static final int AGE_SCORE = 14;
     private static final int GALLERY_SCORE = 20;
     private static final int DATE_SCORE = 24;
     private ChatActivity activity;
@@ -71,14 +71,14 @@ public class Milestone {
             activity.showTextViewNotification("interests", context);
         } else if (currentPoints == NAME_SCORE) {
             activity.showTextViewNotification("name", context);
-        } else if (currentPoints == AGE_SCORE) {
-            activity.showTextViewNotification("age", context);
+        } else if (currentPoints == PROFILE_PICTURE_SCORE) {
+            activity.showTextViewNotification("profile picture", context);
         } else if (currentPoints == DISTANCE_AWAY_SCORE) {
             activity.showTextViewNotification("distance away", context);
         } else if (currentPoints == OCCUPATION_SCORE) {
             activity.showTextViewNotification("occupation", context);
-        } else if (currentPoints == PROFILE_PICTURE_SCORE){
-            activity.showTextViewNotification("profile picture", context);
+        } else if (currentPoints == AGE_SCORE){
+            activity.showTextViewNotification("age", context);
         } else if (currentPoints == GALLERY_SCORE){
             activity.showTextViewNotification("gallery", context);
         } else if (currentPoints == DATE_SCORE) {

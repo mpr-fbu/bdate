@@ -414,6 +414,12 @@ public class ChatActivity extends AppCompatActivity {
             milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeGallery(conversation)) {
             milestone.showNotification(conversation, this);
+        } else if (Milestone.canSeeAge(conversation)) {
+            milestone.showNotification(conversation, this);
+        } else if (Milestone.canSeeOccupation(conversation)) {
+            milestone.showNotification(conversation, this);
+        } else if (Milestone.canSeeDistanceAway(conversation)) {
+            milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeProfilePicture(conversation)) {
             milestone.showNotification(conversation, this);
             runOnUiThread(new Runnable() {
@@ -424,12 +430,6 @@ public class ChatActivity extends AppCompatActivity {
                     mMessageAdapter.notifyDataSetChanged();
                 }
             });
-        } else if (Milestone.canSeeOccupation(conversation)) {
-            milestone.showNotification(conversation, this);
-        } else if (Milestone.canSeeDistanceAway(conversation)) {
-            milestone.showNotification(conversation, this);
-        } else if (Milestone.canSeeAge(conversation)) {
-            milestone.showNotification(conversation, this);
         } else if (Milestone.canSeeName(conversation)) {
             milestone.showNotification(conversation, this);
             runOnUiThread(new Runnable() {
