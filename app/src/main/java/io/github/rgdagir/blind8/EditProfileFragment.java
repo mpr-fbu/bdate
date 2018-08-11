@@ -28,7 +28,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -44,7 +43,6 @@ import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -103,6 +101,7 @@ public class EditProfileFragment extends Fragment {
     private AutoCompleteTextView mAutoCompleteInterests;
     private static TextInputLayout autoCompleteTxtLayout;
     private static String[] interestsArray;
+    private static HashMap<String, Interest> officialInterests;
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -162,6 +161,8 @@ public class EditProfileFragment extends Fragment {
         layoutManager.setJustifyContent(JustifyContent.FLEX_START);
         mInterests = new ArrayList<>();
         mIsInCommon = new ArrayList<>();
+        mStrInterests = new ArrayList<>();
+        officialInterests = new HashMap<>();
         interestAdapter = new InterestAdapter(mInterests, mIsInCommon);
         rvEditInterests.setLayoutManager(layoutManager);
         rvEditInterests.setAdapter(interestAdapter);
@@ -169,23 +170,59 @@ public class EditProfileFragment extends Fragment {
 
         autoCompleteTxtLayout = v.findViewById(R.id.autoCompleteTxtLayout);
 
-        interestsArray = context.getResources().getStringArray(R.array.interests);
+        // query for all possible interests in the database
+        final ParseQuery<Interest> interestQuery = new Interest.Query();
+        interestQuery.findInBackground(new FindCallback<Interest>() {
+            @Override
+            public void done(List<Interest> objects, ParseException e) {
+                if (e == null) {
+                    interestsArray = new String[objects.size()];
+                    for (int i = 0; i < objects.size(); ++i) {
+                        Interest interest = objects.get(i);
+                        interestsArray[i] = interest.getName();
+                        officialInterests.put(interest.getName(), interest);
+                    }
+                    setupAutoCompleteInterests();
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         setupButtonListeners();
         setupTextContainerListeners();
-        setupAutoCompleteInterests();
         setupGallery(v);
         setupSpinners(v);
         setupRangeBar();
         setupCrystalSeekBar(v);
-        setupAutoCompleteInterests();
-        fetchInterests();
+        fetchUserInterests();
+    }
+
+    private void fetchUserInterests() {
+        final UserInterest.Query interestsQuery = new UserInterest.Query();
+        interestsQuery.whereEqualTo("user", currUser);
+        interestsQuery.withUserInterest();
+        interestsQuery.findInBackground(new FindCallback<UserInterest>() {
+            @Override
+            public void done(List<UserInterest> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); ++i) {
+                        Interest interest = objects.get(i).getInterest();
+                        mStrInterests.add(interest.getName());
+                        mInterests.add(interest);
+                        mIsInCommon.add(false);
+                        interestAdapter.notifyItemInserted(mInterests.size() - 1);
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void setupAutoCompleteInterests(){
-        mStrInterests = new ArrayList<String>();
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, interestsArray);
+                new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, interestsArray);
         mAutoCompleteInterests.setThreshold(0);
         mAutoCompleteInterests.setAdapter(adapter);
     }
@@ -193,8 +230,6 @@ public class EditProfileFragment extends Fragment {
     public boolean isValid(String str){
         return (Arrays.asList(interestsArray).contains(str));
     }
-
-
 
     private void setupButtonListeners() {
         // adding listeners to buttons
@@ -226,8 +261,7 @@ public class EditProfileFragment extends Fragment {
                     if (!mStrInterests.contains(strInterest)) {
                         mStrInterests.add(strInterest);
                         autoCompleteTxtLayout.setError(null);
-                        Interest interest = new Interest();
-                        interest.setName(String.valueOf(mAutoCompleteInterests.getText().toString()));
+                        Interest interest = officialInterests.get(mAutoCompleteInterests.getText().toString());
                         mInterests.add(interest);
                         mIsInCommon.add(false);
                         interestAdapter.notifyItemInserted(mInterests.size() - 1);
@@ -672,27 +706,5 @@ public class EditProfileFragment extends Fragment {
 
         // Return the file target for the photo based on filename
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
-    }
-
-    private void fetchInterests() {
-        final UserInterest.Query interestsQuery = new UserInterest.Query();
-        interestsQuery.whereEqualTo("user", currUser);
-        interestsQuery.withUserInterest();
-        interestsQuery.findInBackground(new FindCallback<UserInterest>() {
-            @Override
-            public void done(List<UserInterest> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); ++i) {
-                        Interest interest = objects.get(i).getInterest();
-                        mStrInterests.add(interest.getName());
-                        mInterests.add(interest);
-                        mIsInCommon.add(false);
-                        interestAdapter.notifyItemInserted(mInterests.size() - 1);
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 }

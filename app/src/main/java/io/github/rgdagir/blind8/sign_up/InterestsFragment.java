@@ -54,7 +54,7 @@ public class InterestsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_interests, container, false);
         setupViews(view);
         setupButtonListeners();
-        //populateInterests();
+        // populateInterests();
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             ArrayList<Interest> received = bundle.getParcelableArrayList("interests");
