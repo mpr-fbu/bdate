@@ -200,15 +200,15 @@ public class ProfileFragment extends Fragment {
         } catch (NullPointerException npe){
             npe.printStackTrace();
         }
-        Object occupation = new Object();
+        String occupation = null;
         try {
-            occupation = user.get("occupation");
+            occupation = user.get("occupation").toString();
         } catch (NullPointerException npe){
             npe.printStackTrace();
         }
-        Object education = new Object();
+        String education = null;
         try {
-            education = user.get("education");
+            education = user.get("education").toString();
         } catch (NullPointerException npe){
             npe.printStackTrace();
         }
