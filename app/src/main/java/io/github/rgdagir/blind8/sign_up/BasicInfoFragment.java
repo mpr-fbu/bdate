@@ -132,16 +132,15 @@ public class BasicInfoFragment extends Fragment {
         autoFill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etName.setText("Demo");
+                etName.setText("Alice");
             }
         });
-
     }
 
     private void getDateFromPicker() {
         DatePickerFragment dateFragment = new DatePickerFragment();
         // Set up current date Into dialog
-        Calendar cal /* go stanford! */ = Calendar.getInstance();
+        Calendar cal /* go stanford! (angery) */ = Calendar.getInstance();
         Bundle args = new Bundle();
         args.putInt("year", 1990);
         args.putInt("month", cal.get(Calendar.MONTH));

@@ -566,10 +566,20 @@ public class ChatActivity extends AppCompatActivity {
     };
 
     private void unmatch() {
+        ParseQuery<Message> messageQuery = ParseQuery.getQuery("Message");
+        messageQuery.whereEqualTo("conversation", conversation);
+        messageQuery.findInBackground(new FindCallback<Message>() {
+            @Override
+            public void done(List<Message> objects, ParseException e) {
+                for (Message message : objects) {
+                    message.deleteInBackground();
+                }
+            }
+        });
         conversation.deleteInBackground(new DeleteCallback() {
             @Override
             public void done(ParseException e) {
-                Intent intent =new Intent(ChatActivity.this, MainActivity.class);
+                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });

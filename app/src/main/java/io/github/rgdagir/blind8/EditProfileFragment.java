@@ -25,11 +25,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -42,9 +44,11 @@ import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -102,6 +106,7 @@ public class EditProfileFragment extends Fragment {
     private static TextInputLayout autoCompleteTxtLayout;
     private static String[] interestsArray;
     private static HashMap<String, Interest> officialInterests;
+    private Button deleteAccountBtn;
 
     public EditProfileFragment(){
         // Required empty public constructor
@@ -153,6 +158,7 @@ public class EditProfileFragment extends Fragment {
         rangeDistanceSeekBar = v.findViewById(R.id.rangeDistanceSeekBar);
         displayProgress = v.findViewById(R.id.distanceProgress);
         addInterest = v.findViewById(R.id.addInterestImageButton);
+        deleteAccountBtn = v.findViewById(R.id.deleteAccountButton);
 
         rvEditInterests = v.findViewById(R.id.rvEditInterests);
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
@@ -272,6 +278,13 @@ public class EditProfileFragment extends Fragment {
                 } else {
                     autoCompleteTxtLayout.setError("Invalid interest. Please select one from the list");
                 }
+            }
+        });
+
+        deleteAccountBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetDemoUser();
             }
         });
     }
@@ -706,5 +719,40 @@ public class EditProfileFragment extends Fragment {
 
         // Return the file target for the photo based on filename
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
+    }
+
+    private void resetDemoUser() {
+        // delete all interests associated w/ demo user
+        ParseQuery<UserInterest> interestQuery = ParseQuery.getQuery("UserInterest");
+        interestQuery.whereEqualTo("user", currUser);
+        interestQuery.findInBackground(new FindCallback<UserInterest>() {
+            @Override
+            public void done(List<UserInterest> objects, ParseException e) {
+                if (e == null) {
+                    for (UserInterest interest : objects) {
+                        interest.deleteInBackground();
+                    }
+                    Toast.makeText(context, "Demo's interests deleted successfully!", Toast.LENGTH_SHORT).show();
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+        // delete demo user
+        currUser.deleteInBackground(new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(context, "Demo user deleted successfully!", Toast.LENGTH_SHORT).show();
+                    Intent goToLogin = new Intent(context, LoginActivity.class);
+                    goToLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    // set current user on installation to null
+                    ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                    installation.put("currentUserId", "");
+                    installation.saveInBackground();
+                    startActivity(goToLogin);
+                }
+            }
+        });
     }
 }

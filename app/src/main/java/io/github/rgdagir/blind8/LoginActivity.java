@@ -13,12 +13,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.util.List;
+
+import io.github.rgdagir.blind8.models.Conversation;
+import io.github.rgdagir.blind8.models.Message;
 import io.github.rgdagir.blind8.sign_up.SignUpActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -35,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button autoFill;
     private Context context;
     private ProgressBar progressBar = null;
+    private Conversation dateConvo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void findViews() {
-        progressBar = (ProgressBar) findViewById(R.id.loginProgressBar);
+        progressBar = findViewById(R.id.loginProgressBar);
         termsAndPrivacy = findViewById(R.id.termsAndPrivacy);
         slogan = findViewById(R.id.slogan);
         appName = findViewById(R.id.appName);
@@ -63,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginButton);
         toSignUpBtn = findViewById(R.id.toSignUpButton);
         autoFill = findViewById(R.id.autoFill);
+        logo = findViewById(R.id.logo);
     }
 
     private void setOnClickListeners() {
@@ -94,11 +104,60 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+
         autoFill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 etLoginEmail.setText("test@gmail.com");
                 etLoginPassword.setText("asdf");
+            }
+        });
+
+        logo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetDateConversation();
+            }
+        });
+    }
+
+    private void resetDateConversation() {
+        // reset last message and exchange count in conversation to go on a date
+        ParseQuery<Conversation> query2 = ParseQuery.getQuery("Conversation");
+        query2.whereEqualTo("objectId", "jvpmHiCipP");
+        query2.whereGreaterThan("exchanges", 23);
+        query2.findInBackground(new FindCallback<Conversation>() {
+            public void done(List<Conversation> conversations, ParseException e) {
+                if (e == null) {
+                    if (conversations.size() > 0) {
+                        dateConvo = conversations.get(0);
+                        Message lastMessage = dateConvo.getLastMessage();
+                        lastMessage.deleteInBackground(new DeleteCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                Toast.makeText(context, "Raul's last message deleted successfully!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        ParseQuery<Message> messageQuery = ParseQuery.getQuery("Message");
+                        messageQuery.whereEqualTo("objectId", "okeGyHAGrw");
+                        messageQuery.findInBackground(new FindCallback<Message>() {
+                            @Override
+                            public void done(List<Message> objects, ParseException e) {
+                                Message message = objects.get(0);
+                                dateConvo.setLastMessage(message);
+                                dateConvo.setExchanges(23);
+                                dateConvo.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        Toast.makeText(context, "Sarah's last message reset successfully!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                } else {
+                    e.printStackTrace();
+                }
             }
         });
     }

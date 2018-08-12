@@ -513,6 +513,34 @@
                         android:foreground="?android:attr/selectableItemBackground"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                         android:textColor="@color/babyWhite" />
+
+                    <TextView
+                        android:id="@+id/tvDeleteLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/changePasswordButton"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:text="Delete Account" />
+
+                    <Button
+                        android:id="@+id/deleteAccountButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_below="@+id/tvDeleteLabel"
+                        android:background="@drawable/sign_up_button_style"
+                        android:minHeight="0dp"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:text="Delete My Account"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/babyWhite" />
+
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
