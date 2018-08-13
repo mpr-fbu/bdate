@@ -133,6 +133,14 @@ public class BasicInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 etName.setText("Alice");
+                genderPicked = true;
+                genderOptions.check(R.id.gender_female);
+                gender = "Female";
+                checkCanContinue();
+                preferencePicked = true;
+                preferenceOptions.check(R.id.prefer_men);
+                interestedIn = "Male";
+                checkCanContinue();
             }
         });
     }
