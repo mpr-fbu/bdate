@@ -125,7 +125,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             holder.level.setTextColor(context.getResources().getColor(R.color.pastelRed));
             holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
                     R.color.pastelRed));
-        } else if (Milestone.canSeeProfilePicture(conversation)) {
+        } else if (Milestone.canSeeAge(conversation)) {
             holder.level.setText("6");
             holder.level.setTextColor(context.getResources().getColor(R.color.pastelOrange));
             holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
@@ -140,7 +140,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             holder.level.setTextColor(context.getResources().getColor(R.color.pastelGreen));
             holder.levelCircle.setColorFilter(ContextCompat.getColor(context,
                     R.color.pastelGreen));
-        } else if (Milestone.canSeeAge(conversation)) {
+        } else if (Milestone.canSeeProfilePicture(conversation)) {
             holder.level.setText("3");
             holder.level.setTextColor(context.getResources().getColor(R.color.pastelBlue2));
             holder.levelCircle.setColorFilter(ContextCompat.getColor(context,

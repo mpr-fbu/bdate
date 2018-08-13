@@ -25,7 +25,8 @@ import io.github.rgdagir.blind8.R;
 public class LoginInfoFragment extends Fragment {
 
     private LoginInfoFragment.OnFragmentInteractionListener mListener;
-    private List<String> fakeNames = new ArrayList<>(Arrays.asList("Anonymous Anon", "Mysterious Stranger", "An old chair", "Roonil Wazlib", "Ash Ketchum"));
+    private List<String> fakeNames = new ArrayList<>(Arrays.asList("Anonymous Anon", "Secret Admirer", "An old chair", "Roonil Wazlib", "Ash Ketchum", "Blind8Master",
+            "Text me ;)", "Love Finder", "Romeo", "Juliet", "Eren Jaeger", "Naruto"));
 
     private TextView title;
     private TextView explanation;
