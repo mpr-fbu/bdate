@@ -104,17 +104,6 @@
             android:textSize="12sp" />
     </RelativeLayout>
 
-    <ProgressBar
-        android:id="@+id/loginProgressBar"
-        style="@android:style/Widget.ProgressBar.Large"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="160dp"
-        android:indeterminate="true"
-        android:visibility="gone" />
-
     <TextView
         android:id="@+id/termsAndPrivacy"
         android:layout_width="225dp"
