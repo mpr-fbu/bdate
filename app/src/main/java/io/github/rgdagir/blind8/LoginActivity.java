@@ -1,8 +1,10 @@
 package io.github.rgdagir.blind8;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -87,11 +89,15 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
+                final ProgressDialog pd = new ProgressDialog(context);
+                pd.setTitle("Logging you in...");
+                pd.setMessage("Please wait :)");
+                pd.setCancelable(false);
+                pd.show();
                 ParseUser.logInInBackground(etLoginEmail.getText().toString(), etLoginPassword.getText().toString(), new LogInCallback() {
                     public void done(ParseUser user, ParseException e) {
                         if (user != null) {
-                            progressBar.setVisibility(View.INVISIBLE);
+                            pd.dismiss();
                             launchMainActivity();
                         } else {
                             // Sign in failed. Look at the ParseException to see what happened.

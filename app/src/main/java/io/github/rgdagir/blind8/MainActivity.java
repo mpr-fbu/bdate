@@ -1,5 +1,7 @@
 package io.github.rgdagir.blind8;
 
+import android.app.Notification;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.net.Uri;
@@ -155,9 +157,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void goBackToProfile() {
+        ProgressDialog pd = new ProgressDialog(this);
+        pd.setTitle("Saving the new information...");
+        pd.setMessage("Please wait :)");
+        pd.setCancelable(false);
+        pd.show();
         viewPager.setVisibility(View.VISIBLE);
-        viewPager.getAdapter().notifyDataSetChanged();
         flContainer.setVisibility(View.INVISIBLE);
         viewPager.setCurrentItem(2);
+        pd.dismiss();
     }
 }

@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
@@ -244,7 +245,7 @@ public class SearchFragment extends Fragment {
                 if (e == null) {
                     // objects has list of open conversations
                     if (hasOpenConvo(currentUser, objects)) {
-                        Toast.makeText(context, "Still searching...", Toast.LENGTH_LONG).show();
+                        // Toast.makeText(context, "Still searching...", Toast.LENGTH_LONG).show();
                         return;
                     }
                     searchForMatches(objects, currentUser);
@@ -284,14 +285,17 @@ public class SearchFragment extends Fragment {
                     final Conversation conversation = openConversations.get(i);
                     if (checkNotAlreadyMatched(conversation.getUser1(), listAlreadyMatched(currentUser, results))
                             && checkIfInRange(conversation, currentUser)) {
-                        Toast.makeText(getActivity(), "Match found! Say hello to "
+                         Toast.makeText(getActivity(), "Match found! Say hello to "
                                 + conversation.getUser1().getString("fakeName") + "!", Toast.LENGTH_LONG).show();
+//                        Snackbar.make(getView(), "Match found! Say hello to "
+//                                        + conversation.getUser1().getString("fakeName") + "!", Snackbar.LENGTH_LONG)
+//                                .show(); // Don’t forget to show!
                         addCurrentUserToConversation(conversation);
                         return;
                     }
                 }
                 // create new convo if there does not already exist open convo with only current user
-                Toast.makeText(getContext(), "Searching for matches...", Toast.LENGTH_LONG).show();
+                // Toast.makeText(getContext(), "Searching for matches...", Toast.LENGTH_LONG).show();
                 createConversation(currentUser);
             }
         });
@@ -411,7 +415,7 @@ public class SearchFragment extends Fragment {
                         public void done(ParseException e) {
                             if (e == null) {
                                 searchButton.setVisibility(View.VISIBLE);
-                                Toast.makeText(getContext(), "Stopped searching for matches", Toast.LENGTH_LONG).show();
+                                // Toast.makeText(getContext(), "Stopped searching for matches", Toast.LENGTH_LONG).show();
                             } else {
                                 Log.e("SearchFragment", "Error deleting open conversation.");
                             }
