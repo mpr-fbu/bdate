@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -15,20 +15,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arsy.maps_library.MapRipple;
 import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -42,6 +40,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,7 +63,6 @@ import java.util.List;
 
 import io.github.rgdagir.blind8.models.Conversation;
 import io.github.rgdagir.blind8.utils.BitmapScaler;
-import io.github.rgdagir.blind8.utils.Utils;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
@@ -88,6 +86,8 @@ public class SearchFragment extends Fragment {
     private int displayWidth;
     private CameraPosition mCameraPosition;
     private LatLng pin;
+    private Marker mMarker;
+    private MapRipple mMapRipple;
     private boolean locationBasedMatchReady;
 
     public SearchFragment() {
@@ -135,10 +135,14 @@ public class SearchFragment extends Fragment {
             @Override
             public void valueChanged(Number value) {
                 range = value.intValue(); // in miles
+                // setup mapRipple distance when changed
+                if (mMapRipple != null) {
+                    mMapRipple.withDistance(range * 2 * 1609.4);
+                }
                 mTvRange.setText(String.valueOf(range) + " mi.");
                 if (circle != null) {
                     circle.setRadius(range * 1609.4); // in meters
-                    setZoom(range*1609.4);
+                    setZoom(range * 1609.4);
                 }
             }
         });
@@ -147,12 +151,14 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 searchForOpenConversations();
+                mMapRipple.startRippleMapAnimation();
             }
         });
         stopSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stopSearching();
+                mMapRipple.stopRippleMapAnimation();
             }
         });
     }
@@ -210,6 +216,14 @@ public class SearchFragment extends Fragment {
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mMapRipple.isAnimationRunning()) {
+            mMapRipple.stopRippleMapAnimation();
+        }
     }
 
     public interface OnFragmentInteractionListener {
@@ -318,6 +332,9 @@ public class SearchFragment extends Fragment {
                     intent.putExtra("conversation", Parcels.wrap(conversation));
                     // intent.putExtra("animation", Parcels.wrap(true));
                     context.startActivity(intent);
+                    if (mMapRipple.isAnimationRunning()) {
+                        mMapRipple.stopRippleMapAnimation();
+                    }
                     sendConversationPushNotification(conversation);
                 } else {
                     Log.e("SearchFragment", "Error when joining conversation");
@@ -582,17 +599,25 @@ public class SearchFragment extends Fragment {
 
                 // For dropping a marker at a point on the Map
                 pin = new LatLng(location.getLatitude(), location.getLongitude());
-//                addCustomMarkerFromDatabase(pin);
+                // addCustomMarkerFromDatabase(pin);
 
                 // Setting up the marker
                 MarkerOptions markerOptions = new MarkerOptions()
                         .position(pin)
                         .title("Me")
                         .icon(BitmapDescriptorFactory.fromBitmap(BitmapScaler
-                                        .scaleToFitHeight(BitmapFactory.decodeResource(context.getResources(), R.drawable.map_marker), 250)));
+                                        .scaleToFitHeight(BitmapFactory.decodeResource(context.getResources(),
+                                                R.drawable.map_marker), 250)));
                 // Creating the marker on the map
-                mGoogleMap.addMarker(markerOptions);
+                mMarker = mGoogleMap.addMarker(markerOptions);
                 mGoogleMap.setMyLocationEnabled(false);
+                mMapRipple = new MapRipple(mGoogleMap, pin, context);
+                mMapRipple.withDistance(range * 2 * 1609.4);
+                mMapRipple.withTransparency(0.5f);
+                mMapRipple.withFillColor(R.color.oceanBlue);
+                mMapRipple.withRippleDuration(2000);
+                mMapRipple.withStrokeColor(Color.TRANSPARENT);
+
                 drawRange(pin);
             }
         });
@@ -612,7 +637,6 @@ public class SearchFragment extends Fragment {
         // For zooming automatically to the location of the marker
         setZoom(range *1609.4);
     }
-
 
 //    TODO - set up handlers for location request denials below
 //    // Annotate a method which explains why the permission/s is/are needed.

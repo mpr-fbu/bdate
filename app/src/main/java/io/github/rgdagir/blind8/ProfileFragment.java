@@ -298,8 +298,8 @@ public class ProfileFragment extends Fragment {
     private void setProfilePicture(ParseUser user) {
         Glide.with(context).load(user.getParseFile("profilePic").getUrl())
                 .asBitmap().centerCrop().dontAnimate()
-                .placeholder(R.drawable.ic_action_name)
-                .error(R.drawable.ic_action_name)
+                .placeholder(R.mipmap.ic_picture)
+                .error(R.mipmap.ic_picture)
                 .into(new BitmapImageViewTarget(profilePic) {
                     @Override
                     protected void setResource(Bitmap resource) {

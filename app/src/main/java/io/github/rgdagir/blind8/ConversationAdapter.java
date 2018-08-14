@@ -206,8 +206,8 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             if (user.getParseFile("profilePic") != null) {
                 Glide.with(context).load(user.getParseFile("profilePic").getUrl())
                         .asBitmap().centerCrop().dontAnimate()
-                        .placeholder(R.drawable.ic_action_name)
-                        .error(R.drawable.ic_action_name)
+                        .placeholder(R.mipmap.ic_picture)
+                        .error(R.mipmap.ic_picture)
                         .into(new BitmapImageViewTarget(ivProfilePic) {
                             @Override
                             protected void setResource(Bitmap resource) {
