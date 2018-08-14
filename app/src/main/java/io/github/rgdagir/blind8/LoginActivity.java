@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -64,7 +63,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void findViews() {
-        progressBar = findViewById(R.id.loginProgressBar);
         termsAndPrivacy = findViewById(R.id.termsAndPrivacy);
         slogan = findViewById(R.id.slogan);
         appName = findViewById(R.id.appName);
