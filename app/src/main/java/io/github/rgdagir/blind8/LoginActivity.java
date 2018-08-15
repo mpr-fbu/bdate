@@ -64,7 +64,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void findViews() {
-        progressBar = findViewById(R.id.loginProgressBar);
         termsAndPrivacy = findViewById(R.id.termsAndPrivacy);
         slogan = findViewById(R.id.slogan);
         appName = findViewById(R.id.appName);
