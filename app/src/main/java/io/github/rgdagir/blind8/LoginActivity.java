@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,9 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etLoginPassword;
     private Button loginBtn;
     private Button toSignUpBtn;
-    private Button autoFill;
     private Context context;
-    private ProgressBar progressBar = null;
     private Conversation dateConvo;
 
     @Override
@@ -71,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
         etLoginPassword = findViewById(R.id.loginPassword);
         loginBtn = findViewById(R.id.loginButton);
         toSignUpBtn = findViewById(R.id.toSignUpButton);
-        autoFill = findViewById(R.id.autoFill);
         logo = findViewById(R.id.logo);
     }
 
@@ -102,18 +98,9 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(ACTIVITY_TAG, "Login failed :(");
                             e.printStackTrace();
                             Toast.makeText(context, "Login failed, please try again.", Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
                 });
-            }
-        });
-
-        autoFill.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etLoginEmail.setText("test@gmail.com");
-                etLoginPassword.setText("asdf");
             }
         });
 

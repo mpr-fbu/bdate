@@ -46,6 +46,7 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
@@ -732,7 +733,7 @@ public class EditProfileFragment extends Fragment {
                     for (UserInterest interest : objects) {
                         interest.deleteInBackground();
                     }
-                    Toast.makeText(context, "Demo's interests deleted successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "User's interests deleted successfully!", Toast.LENGTH_SHORT).show();
                 } else {
                     e.printStackTrace();
                 }
@@ -743,15 +744,20 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Toast.makeText(context, "Demo user deleted successfully!", Toast.LENGTH_SHORT).show();
-                    Intent goToLogin = new Intent(context, LoginActivity.class);
-                    goToLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    // set current user on installation to null
-                    ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-                    installation.put("currentUserId", "");
-                    installation.saveInBackground();
-                    startActivity(goToLogin);
+                    Toast.makeText(context, "User deleted successfully!", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        currUser.logOutInBackground(new LogOutCallback() {
+            @Override
+            public void done(ParseException e) {
+                Intent goToLogin = new Intent(context, LoginActivity.class);
+                goToLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                // set current user on installation to null
+                ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                installation.put("currentUserId", "");
+                installation.saveInBackground();
+                startActivity(goToLogin);
             }
         });
     }

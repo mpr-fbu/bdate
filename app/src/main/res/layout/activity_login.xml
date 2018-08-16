@@ -114,15 +114,4 @@
         android:gravity="center"
         android:text="@string/terms_and_privacy" />
 
-    <Button
-        android:id="@+id/autoFill"
-        android:layout_width="339dp"
-        android:layout_height="83dp"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/toSignUpButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="63dp"
-        android:background="@android:color/transparent"
-        android:foreground="@android:color/transparent" />
-
 </RelativeLayout>
