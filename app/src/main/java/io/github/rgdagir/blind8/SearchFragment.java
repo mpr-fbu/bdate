@@ -1,8 +1,6 @@
 package io.github.rgdagir.blind8;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -91,7 +89,6 @@ public class SearchFragment extends Fragment {
     private Marker mMarker;
     private MapRipple mMapRipple;
     private boolean locationBasedMatchReady;
-    private ImageView heartLogo;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -118,7 +115,6 @@ public class SearchFragment extends Fragment {
         mCustomMarkerView = inflater.inflate(R.layout.map_marker, null);
         mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
         displayWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-        heartLogo = rootView.findViewById(R.id.heartLogo);
         Log.d("DisplayWidth", String.valueOf(displayWidth));
         setupMap(savedInstanceState);
         checkIfSearching();
@@ -308,11 +304,6 @@ public class SearchFragment extends Fragment {
 //                        Snackbar.make(getView(), "Match found! Say hello to "
 //                                        + conversation.getUser1().getString("fakeName") + "!", Snackbar.LENGTH_LONG)
 //                                .show(); // Don’t forget to show!
-//                        ObjectAnimator objAnim= ObjectAnimator.ofPropertyValuesHolder(heartLogo, PropertyValuesHolder.ofFloat("scaleX", 1.5f), PropertyValuesHolder.ofFloat("scaleY", 1.5f));
-//                        objAnim.setDuration(300);
-//                        objAnim.setRepeatMode(ObjectAnimator.REVERSE);
-//                        objAnim.setRepeatCount(3);
-//                        objAnim.start();
                         addCurrentUserToConversation(conversation);
                         return;
                     }
