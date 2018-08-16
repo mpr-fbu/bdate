@@ -131,8 +131,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         try {
             Glide.with(getApplicationContext()).load(otherUser.fetchIfNeeded().getParseFile("profilePic").getUrl())
                     .asBitmap().centerCrop().dontAnimate()
-                    .placeholder(R.drawable.ic_action_name)
-                    .error(R.drawable.ic_action_name)
+                    .placeholder(R.mipmap.ic_picture)
+                    .error(R.mipmap.ic_picture)
                     .into(new BitmapImageViewTarget(otherProfilePic) {
                         @Override
                         protected void setResource(Bitmap resource) {
