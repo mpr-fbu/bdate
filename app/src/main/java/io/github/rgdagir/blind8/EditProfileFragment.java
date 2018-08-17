@@ -732,7 +732,7 @@ public class EditProfileFragment extends Fragment {
                     for (UserInterest interest : objects) {
                         interest.deleteInBackground();
                     }
-                    Toast.makeText(context, "Demo's interests deleted successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "User's interests deleted successfully!", Toast.LENGTH_SHORT).show();
                 } else {
                     e.printStackTrace();
                 }
@@ -743,7 +743,8 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Toast.makeText(context, "Demo user deleted successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "User deleted successfully!", Toast.LENGTH_SHORT).show();
+                    currUser.logOutInBackground();
                     Intent goToLogin = new Intent(context, LoginActivity.class);
                     goToLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     // set current user on installation to null

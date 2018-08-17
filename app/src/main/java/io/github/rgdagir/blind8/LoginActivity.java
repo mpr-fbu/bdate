@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         toSignUpBtn = findViewById(R.id.toSignUpButton);
         autoFill = findViewById(R.id.autoFill);
         logo = findViewById(R.id.logo);
+        autoFill.setVisibility(View.INVISIBLE);
     }
 
     private void setOnClickListeners() {
