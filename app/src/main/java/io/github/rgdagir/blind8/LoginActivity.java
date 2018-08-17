@@ -1,5 +1,6 @@
 package io.github.rgdagir.blind8;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -88,6 +89,12 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // set up login failure alert
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                alertDialogBuilder.setTitle("Login failed :(");
+                alertDialogBuilder.setMessage("Please try again.");
+                final AlertDialog alertDialog = alertDialogBuilder.create();
+                // set up login progress dialog
                 final ProgressDialog pd = new ProgressDialog(context);
                 pd.setTitle("Logging you in...");
                 pd.setMessage("Please wait :)");
@@ -100,10 +107,10 @@ public class LoginActivity extends AppCompatActivity {
                             launchMainActivity();
                         } else {
                             // Sign in failed. Look at the ParseException to see what happened.
+                            pd.dismiss();
+                            alertDialog.show();
                             Log.d(ACTIVITY_TAG, "Login failed :(");
                             e.printStackTrace();
-                            Toast.makeText(context, "Login failed, please try again.", Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
                 });

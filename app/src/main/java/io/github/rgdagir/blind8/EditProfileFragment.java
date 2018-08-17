@@ -722,6 +722,24 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void resetDemoUser() {
+        final Thread thread = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000); // As I am using LENGTH_LONG in Toast
+                    currUser.logOutInBackground();
+                    Intent goToLogin = new Intent(context, LoginActivity.class);
+                    goToLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    // set current user on installation to null
+                    ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                    installation.put("currentUserId", "");
+                    installation.saveInBackground();
+                    startActivity(goToLogin);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         // delete all interests associated w/ demo user
         ParseQuery<UserInterest> interestQuery = ParseQuery.getQuery("UserInterest");
         interestQuery.whereEqualTo("user", currUser);
@@ -744,14 +762,7 @@ public class EditProfileFragment extends Fragment {
             public void done(ParseException e) {
                 if (e == null) {
                     Toast.makeText(context, "User deleted successfully!", Toast.LENGTH_SHORT).show();
-                    currUser.logOutInBackground();
-                    Intent goToLogin = new Intent(context, LoginActivity.class);
-                    goToLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    // set current user on installation to null
-                    ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-                    installation.put("currentUserId", "");
-                    installation.saveInBackground();
-                    startActivity(goToLogin);
+                    thread.start();
                 }
             }
         });
